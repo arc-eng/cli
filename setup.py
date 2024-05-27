@@ -17,6 +17,6 @@ setup(
     url='https://github.com/PR-Pilot-AI/pr-pilot-cli',
     entry_points='''
         [console_scripts]
-        pilot=cli:main
+        pilot=cli.cli:main
     ''',
 )
