@@ -10,6 +10,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        pr-pilot=cli:main
+        pilot=cli:main
     ''',
 )
