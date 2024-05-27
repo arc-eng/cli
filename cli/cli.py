@@ -30,7 +30,7 @@ def load_config():
 @click.option('--wait', is_flag=True, help='Wait for the result.')
 @click.argument('repo')
 @click.argument('prompt', nargs=-1)
-def pilot_command(wait, repo, prompt):
+def main(wait, repo, prompt):
     prompt = ' '.join(prompt)
     config = load_config()
     if not os.getenv("PR_PILOT_API_KEY"):
@@ -54,4 +54,4 @@ def pilot_command(wait, repo, prompt):
 
 
 if __name__ == '__main__':
-    pilot_command()
+    main()

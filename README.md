@@ -21,10 +21,13 @@ It allows users to quickly hand over work to PR Pilot from the command line.
 - **Dashboard Link**: For tasks that are not awaited, the CLI provides a link to the task's dashboard for further monitoring.
 
 ## Installation
+
+ > Make sure you have PR Pilot [installed in your repository](https://github.com/apps/pr-pilot-ai/installations/new)
+
 To install the CLI, run the following command:
 
 ```bash
-pip install pr-pilot-cli
+pip install --upgrade pr-pilot-cli
 ```
 
 ## Usage
