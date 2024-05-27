@@ -21,25 +21,24 @@ It allows users to quickly hand over work to PR Pilot from the command line.
 - **Dashboard Link**: For tasks that are not awaited, the CLI provides a link to the task's dashboard for further monitoring.
 
 ## Installation
-To use the PR Pilot CLI, users need to install it on their system. The installation process typically involves cloning the repository and setting up the necessary dependencies.
-
-## Usage
 To install the CLI, run the following command:
 
 ```bash
 pip install pr-pilot-cli
 ```
 
-After installation, users can create tasks using the following command:
+## Usage
+
+After installation, create tasks using the following command:
 
 ```bash
-pr-pilot <repo> <prompt>
+pr-pilot --wait <repo> <prompt>
 ```
 
 Replace `<repo>` and `<prompt>` with the appropriate repository and task prompt.
 
 ## Configuration
-The configuration file is located at `~/.pr-pilot.yaml`. Users need to ensure that their API key is correctly configured to use the CLI effectively.
+The configuration file is located at `~/.pr-pilot.yaml`.
 
 ## Contributing
 Contributors are welcome to improve the CLI by submitting pull requests or reporting issues. For more details, check the project's GitHub repository.
