@@ -1,0 +1,35 @@
+name: "🚀 Initialize Project"
+
+on:
+  workflow_dispatch:
+    inputs:
+      programming-language:
+        description: 'The programming language of the project.'
+        required: true
+      framework:
+        description: 'The framework to be used (optional).'
+        required: false
+      project-description:
+        description: 'A brief description of the project.'
+        required: true
+
+jobs:
+  setup_project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Project Instructions
+        uses: PR-Pilot-AI/smart-actions/quick-task@v1
+        with:
+          api-key: ${{ secrets.PR_PILOT_API_KEY }}
+          gpt-model: gpt-4
+          agent-instructions: |
+            This is an empty project and we want to initialize it.
+
+            Programming language: ${{ github.event.inputs.programming-language }}
+            Framework (optional): ${{ github.event.inputs.framework }}
+            Project description:
+            ${{ github.event.inputs.project-description }}
+            
+            1. Use the programming language and framework (if provided) to search the internet for information on how to start a project with these specifications.
+            2. Compile the information into concise, actionable instructions for starting the project, including a list of initial files that need to be created.
+            3. Create a Github issue in the repository with the compiled instructions and detailed list of files to create. Label the issue `needs-refinement`.

@@ -1,0 +1,48 @@
+name: 🔄 Import Smart Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      workflow-id:
+        description: ID of the workflow to import
+        required: true
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR-Pilot-AI/smart-workflows
+        uses: actions/checkout@v2
+        with:
+          repository: PR-Pilot-AI/smart-workflows
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Determine workflow file path
+        id: filepath
+        run: |
+          if [ -f tools/${{ github.event.inputs.workflow-id }}/workflow.yaml ]; then
+            echo "::set-output name=path::tools/${{ github.event.inputs.workflow-id }}/workflow.yaml"
+          elif [ -f automations/${{ github.event.inputs.workflow-id }}/workflow.yaml ]; then
+            echo "::set-output name=path::automations/${{ github.event.inputs.workflow-id }}/workflow.yaml"
+          else
+            echo "Path not found" && exit 1
+          fi
+      - name: Copy workflow file
+        id: print-workflow
+        run: |
+          workflow=$(cat ${{ steps.filepath.outputs.path }})
+          echo "WORKFLOW<<EOF"$'\n'"$workflow"$'\n'EOF >> "$GITHUB_OUTPUT"
+
+      - name: Import Workflow
+        uses: PR-Pilot-AI/smart-actions/quick-task@v1
+        with:
+          api-key: ${{ secrets.PR_PILOT_API_KEY }}
+          agent-instructions: |
+            Create a new file in `.github/workflows/` for the following workflow:
+
+            ---
+            
+            ${{ steps.print-workflow.outputs.WORKFLOW }}
+
+            ---
+            
+            Respond with suggestions on how the user may customize the workflow to fit their project.
