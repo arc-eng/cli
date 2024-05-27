@@ -1,7 +1,18 @@
+<div align="center">
+<img src="https://avatars.githubusercontent.com/ml/17635?s=140&v=" width="100" alt="PR Pilot Logo">
+</div>
+
+<p align="center">
+  <a href="https://github.com/apps/pr-pilot-ai/installations/new"><b>Install</b></a> |
+  <a href="https://docs.pr-pilot.ai">Documentation</a> | 
+  <a href="https://www.pr-pilot.ai/blog">Blog</a> | 
+  <a href="https://www.pr-pilot.ai">Website</a>
+</p>
+
 # PR Pilot CLI
 
-## Overview
-The PR Pilot CLI is a command-line interface tool designed to interact with the PR Pilot API. It allows users to automate tasks related to pull requests and issue management on GitHub repositories.
+The PR Pilot CLI is a command-line interface tool designed to interact with the PR Pilot API. 
+It allows users to quickly hand over work to PR Pilot from the command line.
 
 ## Features
 - **Configuration Management**: Automatically manages API key configuration by prompting the user to input their API key if not already configured.
@@ -13,10 +24,16 @@ The PR Pilot CLI is a command-line interface tool designed to interact with the 
 To use the PR Pilot CLI, users need to install it on their system. The installation process typically involves cloning the repository and setting up the necessary dependencies.
 
 ## Usage
-To use the CLI, run the following command:
+To install the CLI, run the following command:
 
 ```bash
-python cli.py --wait <repo> <prompt>
+pip install pr-pilot-cli
+```
+
+After installation, users can create tasks using the following command:
+
+```bash
+pr-pilot <repo> <prompt>
 ```
 
 Replace `<repo>` and `<prompt>` with the appropriate repository and task prompt.
@@ -28,4 +45,4 @@ The configuration file is located at `~/.pr-pilot.yaml`. Users need to ensure th
 Contributors are welcome to improve the CLI by submitting pull requests or reporting issues. For more details, check the project's GitHub repository.
 
 ## License
-The PR Pilot CLI is open-source software licensed under the MIT license.
+The PR Pilot CLI is open-source software licensed under the GPL-3 license.
