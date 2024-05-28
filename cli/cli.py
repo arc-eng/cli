@@ -32,8 +32,9 @@ def load_config():
 @click.option('--wait/--no-wait', is_flag=True, default=True, help='Wait for the result.')
 @click.option('--repo', help='Github repository in the format owner/repo.', required=False)
 @click.option('--chatty', is_flag=True, default=False, help='Print more information.')
+@click.option('--raw', is_flag=True, default=False, help='For piping. No pretty-print, no status indicator.')
 @click.argument('prompt', nargs=-1)
-def main(wait, repo, chatty, prompt):
+def main(wait, repo, chatty, raw, prompt):
     prompt = ' '.join(prompt)
     config = load_config()
     if not os.getenv("PR_PILOT_API_KEY"):
@@ -50,6 +51,12 @@ def main(wait, repo, chatty, prompt):
     if not prompt:
         click.echo("Please provide a prompt.")
         return
+
+    if raw:
+        task = create_task(repo, prompt, log=False)
+        result = wait_for_result(task, log=False)
+        print(result)
+        return
     with yaspin(text=f"Creating new task for repository {repo}", color="cyan") as sp:
         task = create_task(repo, prompt)
         dashboard_url = f"https://app.pr-pilot.ai/dashboard/tasks/{task.id}/"
@@ -65,7 +72,10 @@ def main(wait, repo, chatty, prompt):
                     sp.hide()
                 console = Console()
                 console.line()
-                console.print(Markdown(result))
+                if raw:
+                    console.print(result)
+                else:
+                    console.print(Markdown(result))
             except Exception as e:
                 sp.fail("💥")
                 click.echo(f"Error: {e}")
