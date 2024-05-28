@@ -30,15 +30,32 @@ To install the CLI, run the following command:
 pip install --upgrade pr-pilot-cli
 ```
 
+By default, the CLI will prompt you to input your API key if it is not already configured.
+
 ## Usage
 
-After installation, create tasks using the following command:
+After installation, open a terminal and `ls` into a repository you have installed PR Pilot in and talk to PR Pilot:
 
 ```bash
-pr-pilot --wait <repo> <prompt>
+pilot Translate the README file into German.
 ```
 
-Replace `<repo>` and `<prompt>` with the appropriate repository and task prompt.
+### Options and Parameters
+
+You can change the default settings with parameters and options:
+
+```bash
+Usage: pilot [OPTIONS] [PROMPT]...
+
+Options:
+  --wait / --no-wait  Wait for the result.
+  --repo TEXT         Github repository in the format owner/repo.
+  --chatty            Print more information.
+  --help              Show this message and exit.
+```
+
+
+
 
 ## Configuration
 The configuration file is located at `~/.pr-pilot.yaml`.

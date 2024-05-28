@@ -7,6 +7,8 @@ from rich.console import Console
 from rich.markdown import Markdown
 from yaspin import yaspin
 
+from cli.detect_repository import detect_repository
+
 CONFIG_LOCATION = os.path.expanduser('~/.pr-pilot.yaml')
 CONFIG_API_KEY = "api_key"
 
@@ -27,31 +29,46 @@ def load_config():
 
 
 @click.command()
-@click.option('--wait', is_flag=True, help='Wait for the result.')
-@click.argument('repo')
+@click.option('--wait/--no-wait', is_flag=True, default=True, help='Wait for the result.')
+@click.option('--repo', help='Github repository in the format owner/repo.', required=False)
+@click.option('--chatty', is_flag=True, default=False, help='Print more information.')
 @click.argument('prompt', nargs=-1)
-def main(wait, repo, prompt):
+def main(wait, repo, chatty, prompt):
     prompt = ' '.join(prompt)
     config = load_config()
     if not os.getenv("PR_PILOT_API_KEY"):
         os.environ["PR_PILOT_API_KEY"] = config[CONFIG_API_KEY]
-    with yaspin(text="Creating new task", color="cyan") as sp:
+    if not repo:
+        # No repository provided, try to detect it
+        repo = detect_repository()
+    if not repo:
+        # Current directory is not a git repository, see if there is a default repo in the config
+        repo = config.get("default_repo")
+    if not repo:
+        click.echo(f"No Github repository provided. Use --repo or set 'default_repo' in {CONFIG_LOCATION}.")
+        return
+    if not prompt:
+        click.echo("Please provide a prompt.")
+        return
+    with yaspin(text=f"Creating new task for repository {repo}", color="cyan") as sp:
         task = create_task(repo, prompt)
         dashboard_url = f"https://app.pr-pilot.ai/dashboard/tasks/{task.id}/"
-        sp.write(f"✅ Task created: {dashboard_url}")
+        if chatty:
+            sp.write(f"✅ Task created: {dashboard_url}")
         if wait:
-            sp.text = "Waiting for the result"
+            sp.text = f"I'm working on it :) Track my progress in the dashboard: {dashboard_url}"
             try:
                 result = wait_for_result(task)
-                sp.ok("✅")
+                if chatty:
+                    sp.ok("✅")
+                else:
+                    sp.hide()
                 console = Console()
+                console.line()
                 console.print(Markdown(result))
             except Exception as e:
                 sp.fail("💥")
                 click.echo(f"Error: {e}")
-        else:
-            click.echo(f"Task created: {dashboard_url}")
-
 
 if __name__ == '__main__':
     main()
