@@ -53,8 +53,10 @@ def main(wait, repo, chatty, raw, model, debug, prompt):
         click.echo(f"No Github repository provided. Use --repo or set 'default_repo' in {CONFIG_LOCATION}.")
         return
     if not prompt:
-        click.echo("Please provide a prompt.")
-        return
+        prompt = click.edit("", extension=".md")
+        if not prompt:
+            click.echo("No prompt provided.")
+            return
 
     if raw:
         task = create_task(repo, prompt, log=False, gpt_model=model)
