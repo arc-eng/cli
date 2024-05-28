@@ -2,7 +2,7 @@ import os
 
 import click
 import yaml
-from pr_pilot.util import create_task, wait_for_result
+from pr_pilot.util import create_task, wait_for_result, get_task
 from rich.console import Console
 from rich.markdown import Markdown
 from yaspin import yaspin
@@ -33,10 +33,14 @@ def load_config():
 @click.option('--repo', help='Github repository in the format owner/repo.', required=False)
 @click.option('--chatty', is_flag=True, default=False, help='Print more information.')
 @click.option('--raw', is_flag=True, default=False, help='For piping. No pretty-print, no status indicator.')
+@click.option('--model', help='GPT model to use.', default='gpt-4-turbo')
+@click.option('--debug', is_flag=True, default=False, help='Display debug information.')
 @click.argument('prompt', nargs=-1)
-def main(wait, repo, chatty, raw, prompt):
+def main(wait, repo, chatty, raw, model, debug, prompt):
     prompt = ' '.join(prompt)
     config = load_config()
+    if debug:
+        chatty = True
     if not os.getenv("PR_PILOT_API_KEY"):
         os.environ["PR_PILOT_API_KEY"] = config[CONFIG_API_KEY]
     if not repo:
@@ -53,15 +57,19 @@ def main(wait, repo, chatty, raw, prompt):
         return
 
     if raw:
-        task = create_task(repo, prompt, log=False)
+        task = create_task(repo, prompt, log=False, gpt_model=model)
         result = wait_for_result(task, log=False)
         print(result)
         return
+
+    console = Console()
     with yaspin(text=f"Creating new task for repository {repo}", color="cyan") as sp:
-        task = create_task(repo, prompt)
+        task = create_task(repo, prompt, gpt_model=model)
         dashboard_url = f"https://app.pr-pilot.ai/dashboard/tasks/{task.id}/"
         if chatty:
             sp.write(f"✅ Task created: {dashboard_url}")
+            if debug:
+                console.print(task)
         if wait:
             sp.text = f"I'm working on it :) Track my progress in the dashboard: {dashboard_url}"
             try:
@@ -70,8 +78,11 @@ def main(wait, repo, chatty, raw, prompt):
                     sp.ok("✅")
                 else:
                     sp.hide()
-                console = Console()
+
                 console.line()
+                if debug:
+                    console.print(get_task(task.id))
+                    console.line()
                 if raw:
                     console.print(result)
                 else:

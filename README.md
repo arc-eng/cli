@@ -65,6 +65,8 @@ Options:
   --repo TEXT         Github repository in the format owner/repo.
   --chatty            Print more information.
   --raw               For piping. No pretty-print, no status indicator.
+  --model TEXT        GPT model to use.
+  --debug             Display debug information.
   --help              Show this message and exit.
 ```
 
