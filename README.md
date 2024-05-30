@@ -13,7 +13,30 @@
 
 PR Pilot gives you a natural language interface for your Github projects.
 Given a prompt, it uses LLMs (Large Language Models) to autonomously fulfill tasks by interacting with your code base
-and Github issues, enabling a wide variety of ground-breaking AI-assisted automation use cases.
+and Github issues.
+
+Using templates, you can create powerful, reusable commands that can be executed by PR Pilot. Here is how it works:
+
+Write a template file:
+
+```markdown
+Take a look at our test results:
+
+---
+{{ sh('pytest') }}
+---
+
+Understand why the tests are failing by reading the relevant code files. 
+Give a short, concise, structured analysis of the test results.
+```
+
+Execute the file:
+
+`pilot -f analyze_test_results.md.jinja2`
+
+For more examples, check out the [prompts](./prompts) directory in this repository.
+
+### 
 
 ## Installation
 
@@ -66,9 +89,12 @@ Options:
   --chatty            Print more information.
   --raw               For piping. No pretty-print, no status indicator.
   --code              Disable formatting, enable RAW mode, use GPT-4 model.
+  -f, --file PATH     Load prompt from a file.
+  -o, --output PATH   Output file for the result.
   --model TEXT        GPT model to use.
   --debug             Display debug information.
   --help              Show this message and exit.
+
 
 ```
 

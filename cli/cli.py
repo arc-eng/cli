@@ -8,6 +8,8 @@ from rich.markdown import Markdown
 from yaspin import yaspin
 
 from cli.detect_repository import detect_repository
+from cli.task_handler import TaskHandler
+from cli.templating import render_prompt_template
 
 CONFIG_LOCATION = os.path.expanduser('~/.pr-pilot.yaml')
 CONFIG_API_KEY = "api_key"
@@ -36,10 +38,12 @@ def load_config():
 @click.option('--chatty', is_flag=True, default=False, help='Print more information.')
 @click.option('--raw', is_flag=True, default=False, help='For piping. No pretty-print, no status indicator.')
 @click.option('--code', is_flag=True, default=False, help='Disable formatting, enable RAW mode, use GPT-4 model.')
+@click.option('--file', '-f', type=click.Path(exists=True), help='Load prompt from a file.')
+@click.option('--output', '-o', type=click.Path(exists=False), help='Output file for the result.')
 @click.option('--model', help='GPT model to use.', default='gpt-4-turbo')
 @click.option('--debug', is_flag=True, default=False, help='Display debug information.')
 @click.argument('prompt', nargs=-1)
-def main(wait, repo, chatty, raw, code, model, debug, prompt):
+def main(wait, repo, chatty, raw, code, file, output, model, debug, prompt):
     prompt = ' '.join(prompt)
     config = load_config()
 
@@ -56,6 +60,8 @@ def main(wait, repo, chatty, raw, code, model, debug, prompt):
     if not repo:
         click.echo(f"No Github repository provided. Use --repo or set 'default_repo' in {CONFIG_LOCATION}.")
         return
+    if file:
+        prompt = render_prompt_template(file, repo, model)
     if not prompt:
         prompt = click.edit("", extension=".md")
         if not prompt:
@@ -66,40 +72,16 @@ def main(wait, repo, chatty, raw, code, model, debug, prompt):
         prompt += "\n\nONLY respond with the code, no other text. Do not wrap it in triple backticks."
         model = CODE_MODEL
 
-    if raw:
-        task = create_task(repo, prompt, log=False, gpt_model=model)
-        result = wait_for_result(task, log=False, poll_interval=POLL_INTERVAL)
-        print(result)
+    task = create_task(repo, prompt, log=False, gpt_model=model)
+
+    if not wait:
+        if chatty:
+            click.echo(f"✅ Task created: https://app.pr-pilot.ai/dashboard/tasks/{task.id}")
         return
 
-    console = Console()
-    with yaspin(text=f"Creating new task for repository {repo}", color="cyan") as sp:
-        task = create_task(repo, prompt, gpt_model=model)
-        dashboard_url = f"https://app.pr-pilot.ai/dashboard/tasks/{task.id}/"
-        if chatty:
-            sp.write(f"✅ Task created: {dashboard_url}")
-            if debug:
-                console.print(task)
-        if wait:
-            sp.text = f"I'm working on it :) Track my progress in the dashboard: {dashboard_url}"
-            try:
-                result = wait_for_result(task)
-                if chatty:
-                    sp.ok("✅")
-                else:
-                    sp.hide()
+    task_handler = TaskHandler(task, show_spinner=not raw)
+    task_handler.wait_for_result(output, raw)
 
-                console.line()
-                if debug:
-                    console.print(get_task(task.id))
-                    console.line()
-                if raw:
-                    console.print(result)
-                else:
-                    console.print(Markdown(result))
-            except Exception as e:
-                sp.fail("💥")
-                click.echo(f"Error: {e}")
 
 if __name__ == '__main__':
     main()
