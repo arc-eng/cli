@@ -9,7 +9,7 @@
   <a href="https://www.pr-pilot.ai">Website</a>
 </p>
 
-# PR Pilot CLI
+# 🚀 PR Pilot CLI
 
 PR Pilot gives you a natural language interface for your Github projects.
 Given a prompt, it uses LLMs (Large Language Models) to autonomously fulfill tasks by interacting with your code base
@@ -38,7 +38,7 @@ For more examples, check out the [prompts](./prompts) directory in this reposito
 
 ### 
 
-## Installation
+## 📦 Installation
 
  > Make sure you have PR Pilot [installed in your repository](https://github.com/apps/pr-pilot-ai/installations/new)
 
@@ -50,7 +50,7 @@ pip install --upgrade pr-pilot-cli
 
 By default, the CLI will prompt you to input your API key if it is not already configured.
 
-## Usage
+## 🛠 Usage
 
 After installation, open a terminal and `ls` into a repository you have installed PR Pilot in and talk to PR Pilot:
 
@@ -99,18 +99,18 @@ Options:
 ```
 
 
-## Features
+## 🌟 Features
 - **Configuration Management**: Automatically manages API key configuration by prompting the user to input their API key if not already configured.
 - **Task Creation**: Users can create tasks by specifying a repository and a prompt. The CLI handles task creation and optionally waits for the result.
 - **Result Retrieval**: If the `--wait` option is used, the CLI waits for the task to complete and displays the result directly in the terminal.
 - **Dashboard Link**: For tasks that are not awaited, the CLI provides a link to the task's dashboard for further monitoring.
 
 
-## Configuration
+## ⚙️ Configuration
 The configuration file is located at `~/.pr-pilot.yaml`.
 
-## Contributing
+## 🤝 Contributing
 Contributors are welcome to improve the CLI by submitting pull requests or reporting issues. For more details, check the project's GitHub repository.
 
-## License
+## 📜 License
 The PR Pilot CLI is open-source software licensed under the GPL-3 license.
