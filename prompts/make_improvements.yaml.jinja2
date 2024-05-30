@@ -1,9 +1,10 @@
+### prompts/make_improvements.yaml.jinja2
 {# Generate improvement suggestions for each file in a directory and render them in YAML #}
 
 {% set directory = 'cli/' %}
 
-{# Run shell command to list all files in the directory #}
-{% set files = sh("find " ~ directory ~ " -type f -maxdepth 1").split('\n') %}
+{# Use Python to list all files in the directory #}
+{% set files = directory | list_files %}
 
 {# Generate YAML content #}
 ---
