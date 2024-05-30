@@ -1,0 +1,15 @@
+{# Generate improvement suggestions for each file in a directory and render them in YAML #}
+
+{% set directory = 'cli/' %}
+
+{# Run shell command to list all files in the directory #}
+{% set files = sh("find " ~ directory ~ " -type f -maxdepth 1").split('\n') %}
+
+{# Generate YAML content #}
+---
+suggested_improvements:
+{%- for file in files if file %}
+  - name: {{ file }}
+    task: |
+    {{ subtask("Read the file `" ~ file ~ "` and identify one potential improvement that improves readability or architecture. Respond with short, high-level bullet points of what should be improved and why.") | indent(6) }}
+{%- endfor %}

@@ -22,11 +22,11 @@ def load_config():
     ask user to enter API key and save config."""
     if not os.path.exists(CONFIG_LOCATION):
         api_key_url = "https://app.pr-pilot.ai/dashboard/api-keys/"
-        click.echo(f"Configuration file not found. Please create an API key at {api_key_url}.")
+        console.print(f"Configuration file not found. Please create an API key at {api_key_url}.")
         api_key = click.prompt("PR Pilot API key")
         with open(CONFIG_LOCATION, "w") as f:
             f.write(f"{CONFIG_API_KEY}: {api_key}")
-        click.echo(f"Configuration saved in {CONFIG_LOCATION}")
+        console.print(f"Configuration saved in {CONFIG_LOCATION}")
     with open(CONFIG_LOCATION) as f:
         config = yaml.safe_load(f)
     return config
@@ -38,14 +38,17 @@ def load_config():
 @click.option('--chatty', is_flag=True, default=False, help='Print more information.')
 @click.option('--raw', is_flag=True, default=False, help='For piping. No pretty-print, no status indicator.')
 @click.option('--code', is_flag=True, default=False, help='Disable formatting, enable RAW mode, use GPT-4 model.')
-@click.option('--file', '-f', type=click.Path(exists=True), help='Load prompt from a file.')
+@click.option('--file', '-f', type=click.Path(exists=True), help='Load prompt from a template file.')
+@click.option('--direct', is_flag=True, default=False,
+              help='Do not use the rendered template as a prompt for PR Pilot, but render it directly as output.')
 @click.option('--output', '-o', type=click.Path(exists=False), help='Output file for the result.')
 @click.option('--model', help='GPT model to use.', default='gpt-4-turbo')
 @click.option('--debug', is_flag=True, default=False, help='Display debug information.')
 @click.argument('prompt', nargs=-1)
-def main(wait, repo, chatty, raw, code, file, output, model, debug, prompt):
+def main(wait, repo, chatty, raw, code, file, direct, output, model, debug, prompt):
     prompt = ' '.join(prompt)
     config = load_config()
+    console = Console()
 
     if debug:
         chatty = True
@@ -58,25 +61,33 @@ def main(wait, repo, chatty, raw, code, file, output, model, debug, prompt):
         # Current directory is not a git repository, see if there is a default repo in the config
         repo = config.get("default_repo")
     if not repo:
-        click.echo(f"No Github repository provided. Use --repo or set 'default_repo' in {CONFIG_LOCATION}.")
+        console.print(f"No Github repository provided. Use --repo or set 'default_repo' in {CONFIG_LOCATION}.")
         return
     if file:
         prompt = render_prompt_template(file, repo, model)
     if not prompt:
         prompt = click.edit("", extension=".md")
         if not prompt:
-            click.echo("No prompt provided.")
+            console.print("No prompt provided.")
             return
     if code:
         raw = True
         prompt += "\n\nONLY respond with the code, no other text. Do not wrap it in triple backticks."
         model = CODE_MODEL
 
+    if direct:
+        # Do not send the prompt, just return it as the result
+        if output:
+            with open(output, "w") as f:
+                f.write(prompt)
+            console.print(Markdown(f"Rendered template `{file}` into `{output}`"))
+            return
+
     task = create_task(repo, prompt, log=False, gpt_model=model)
 
     if not wait:
         if chatty:
-            click.echo(f"✅ Task created: https://app.pr-pilot.ai/dashboard/tasks/{task.id}")
+            console.print(f"✅ Task created: https://app.pr-pilot.ai/dashboard/tasks/{task.id}")
         return
 
     task_handler = TaskHandler(task, show_spinner=not raw)

@@ -89,13 +89,13 @@ Options:
   --chatty            Print more information.
   --raw               For piping. No pretty-print, no status indicator.
   --code              Disable formatting, enable RAW mode, use GPT-4 model.
-  -f, --file PATH     Load prompt from a file.
+  -f, --file PATH     Load prompt from a template file.
+  --direct            Do not use the rendered template as a prompt for PR
+                      Pilot, but render it directly as output.
   -o, --output PATH   Output file for the result.
   --model TEXT        GPT model to use.
   --debug             Display debug information.
   --help              Show this message and exit.
-
-
 ```
 
 
