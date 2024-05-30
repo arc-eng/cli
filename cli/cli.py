@@ -11,6 +11,8 @@ from cli.detect_repository import detect_repository
 
 CONFIG_LOCATION = os.path.expanduser('~/.pr-pilot.yaml')
 CONFIG_API_KEY = "api_key"
+CODE_MODEL = "gpt-4"
+POLL_INTERVAL = 2
 
 
 def load_config():
@@ -33,12 +35,14 @@ def load_config():
 @click.option('--repo', help='Github repository in the format owner/repo.', required=False)
 @click.option('--chatty', is_flag=True, default=False, help='Print more information.')
 @click.option('--raw', is_flag=True, default=False, help='For piping. No pretty-print, no status indicator.')
+@click.option('--code', is_flag=True, default=False, help='Disable formatting, enable RAW mode, use GPT-4 model.')
 @click.option('--model', help='GPT model to use.', default='gpt-4-turbo')
 @click.option('--debug', is_flag=True, default=False, help='Display debug information.')
 @click.argument('prompt', nargs=-1)
-def main(wait, repo, chatty, raw, model, debug, prompt):
+def main(wait, repo, chatty, raw, code, model, debug, prompt):
     prompt = ' '.join(prompt)
     config = load_config()
+
     if debug:
         chatty = True
     if not os.getenv("PR_PILOT_API_KEY"):
@@ -57,10 +61,14 @@ def main(wait, repo, chatty, raw, model, debug, prompt):
         if not prompt:
             click.echo("No prompt provided.")
             return
+    if code:
+        raw = True
+        prompt += "\n\nONLY respond with the code, no other text. Do not wrap it in triple backticks."
+        model = CODE_MODEL
 
     if raw:
         task = create_task(repo, prompt, log=False, gpt_model=model)
-        result = wait_for_result(task, log=False)
+        result = wait_for_result(task, log=False, poll_interval=POLL_INTERVAL)
         print(result)
         return
 
