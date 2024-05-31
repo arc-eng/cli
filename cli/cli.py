@@ -21,9 +21,13 @@ def load_config():
     """Load the configuration from the default location. If it doesn't exist,
     ask user to enter API key and save config."""
     if not os.path.exists(CONFIG_LOCATION):
-        api_key_url = "https://app.pr-pilot.ai/dashboard/api-keys/"
-        click.echo(f"Configuration file not found. Please create an API key at {api_key_url}.")
-        api_key = click.prompt("PR Pilot API key")
+        if os.getenv("PR_PILOT_API_KEY"):
+            click.echo("Using API key from environment variable.")
+            api_key = os.getenv("PR_PILOT_API_KEY")
+        else:
+            api_key_url = "https://app.pr-pilot.ai/dashboard/api-keys/"
+            click.echo(f"Configuration file not found. Please create an API key at {api_key_url}.")
+            api_key = click.prompt("PR Pilot API key")
         with open(CONFIG_LOCATION, "w") as f:
             f.write(f"{CONFIG_API_KEY}: {api_key}")
         click.echo(f"Configuration saved in {CONFIG_LOCATION}")
