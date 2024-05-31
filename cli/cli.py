@@ -2,19 +2,18 @@ import os
 
 import click
 import yaml
-from pr_pilot.util import create_task, wait_for_result, get_task
+from pr_pilot.util import create_task
 from rich.console import Console
 from rich.markdown import Markdown
-from yaspin import yaspin
 
 from cli.detect_repository import detect_repository
+from cli.prompt_template import PromptTemplate
 from cli.status_indicator import StatusIndicator
 from cli.task_handler import TaskHandler
-from cli.prompt_template import PromptTemplate
 
 CONFIG_LOCATION = os.path.expanduser('~/.pr-pilot.yaml')
 CONFIG_API_KEY = "api_key"
-CODE_MODEL = "gpt-4"
+CODE_MODEL = "gpt-4o"
 POLL_INTERVAL = 2
 
 
@@ -40,6 +39,7 @@ def load_config():
 @click.command()
 @click.option('--wait/--no-wait', is_flag=True, default=True, help='Wait for the result.')
 @click.option('--repo', help='Github repository in the format owner/repo.', required=False)
+@click.option('--spinner/--no-spinner', is_flag=True, default=True, help='Display a loading indicator')
 @click.option('--quiet', is_flag=True, default=False, help='No pretty-print, no status indicator or messages.')
 @click.option('--code', is_flag=True, default=False, help='Optimize prompt and settings for generating code')
 @click.option('--file', '-f', type=click.Path(exists=True), help='Load prompt from a template file.')
@@ -49,12 +49,12 @@ def load_config():
 @click.option('--model', help='GPT model to use.', default='gpt-4-turbo')
 @click.option('--debug', is_flag=True, default=False, help='Display debug information.')
 @click.argument('prompt', nargs=-1)
-def main(wait, repo, quiet, code, file, direct, output, model, debug, prompt):
+def main(wait, repo, spinner, quiet, code, file, direct, output, model, debug, prompt):
     prompt = ' '.join(prompt)
     config = load_config()
     console = Console()
-    status = StatusIndicator(visible=not quiet)
-    status.start()
+    show_spinner = spinner and not quiet
+    status = StatusIndicator(spinner=show_spinner, messages=not quiet, console=console)
 
     if not os.getenv("PR_PILOT_API_KEY"):
         os.environ["PR_PILOT_API_KEY"] = config[CONFIG_API_KEY]
@@ -68,6 +68,7 @@ def main(wait, repo, quiet, code, file, direct, output, model, debug, prompt):
         console.print(f"No Github repository provided. Use --repo or set 'default_repo' in {CONFIG_LOCATION}.")
         return
     if file:
+        status.start()
         renderer = PromptTemplate(file, repo, model, status)
         prompt = renderer.render()
     if not prompt:
@@ -88,15 +89,16 @@ def main(wait, repo, quiet, code, file, direct, output, model, debug, prompt):
             if not quiet:
                 console.print(Markdown(f"Rendered template `{file}` into `{output}`"))
             return
+    status.start()
     status.update("Creating new task")
     task = create_task(repo, prompt, log=False, gpt_model=model)
     status.update(f"Task created: https://app.pr-pilot.ai/dashboard/tasks/{task.id}")
     status.success()
     if debug:
         console.print(task)
-
-    task_handler = TaskHandler(task, status)
-    task_handler.wait_for_result(output, quiet)
+    if wait:
+        task_handler = TaskHandler(task, status)
+        task_handler.wait_for_result(output, quiet)
     status.stop()
     if debug:
         console.print(task)

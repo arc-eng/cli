@@ -30,11 +30,13 @@ class TaskHandler:
         self.status.start()
         try:
             start_time = time.time()
+            task_title = None
             while self.task.status not in ["completed", "failed"]:
                 if time.time() - start_time > MAX_RESULT_WAIT_TIME:
                     raise TimeoutError("The task took too long to complete.")
                 self.task = get_task(self.task.id)
-                if self.task.title and not self.task.title == "A title":
+                if self.task.title and not self.task.title == "A title" and not task_title == self.task.title:
+                    task_title = self.task.title
                     self.status.update(self.task.title)
                 time.sleep(POLL_INTERVAL)
             if self.task.status == "failed":
