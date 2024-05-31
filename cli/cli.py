@@ -9,7 +9,7 @@ from yaspin import yaspin
 
 from cli.detect_repository import detect_repository
 from cli.task_handler import TaskHandler
-from cli.templating import render_prompt_template
+from cli.prompt_template import PromptTemplate
 
 CONFIG_LOCATION = os.path.expanduser('~/.pr-pilot.yaml')
 CONFIG_API_KEY = "api_key"
@@ -22,11 +22,11 @@ def load_config():
     ask user to enter API key and save config."""
     if not os.path.exists(CONFIG_LOCATION):
         api_key_url = "https://app.pr-pilot.ai/dashboard/api-keys/"
-        console.print(f"Configuration file not found. Please create an API key at {api_key_url}.")
+        click.echo(f"Configuration file not found. Please create an API key at {api_key_url}.")
         api_key = click.prompt("PR Pilot API key")
         with open(CONFIG_LOCATION, "w") as f:
             f.write(f"{CONFIG_API_KEY}: {api_key}")
-        console.print(f"Configuration saved in {CONFIG_LOCATION}")
+        click.echo(f"Configuration saved in {CONFIG_LOCATION}")
     with open(CONFIG_LOCATION) as f:
         config = yaml.safe_load(f)
     return config
@@ -64,7 +64,8 @@ def main(wait, repo, chatty, raw, code, file, direct, output, model, debug, prom
         console.print(f"No Github repository provided. Use --repo or set 'default_repo' in {CONFIG_LOCATION}.")
         return
     if file:
-        prompt = render_prompt_template(file, repo, model)
+        renderer = PromptTemplate(file, repo, model)
+        prompt = renderer.render(show_spinner=not raw)
     if not prompt:
         prompt = click.edit("", extension=".md")
         if not prompt:
