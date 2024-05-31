@@ -41,10 +41,10 @@ def load_config():
 @click.option('--wait/--no-wait', is_flag=True, default=True, help='Wait for the result.')
 @click.option('--repo', help='Github repository in the format owner/repo.', required=False)
 @click.option('--quiet', is_flag=True, default=False, help='No pretty-print, no status indicator or messages.')
-@click.option('--code', is_flag=True, default=False, help='Disable formatting, enable RAW mode, use GPT-4 model.')
+@click.option('--code', is_flag=True, default=False, help='Optimize prompt and settings for generating code')
 @click.option('--file', '-f', type=click.Path(exists=True), help='Load prompt from a template file.')
 @click.option('--direct', is_flag=True, default=False,
-              help='Do not use the rendered template as a prompt for PR Pilot, but render it directly as output.')
+              help='Do not feed the rendered template as a prompt into PR Pilot, but render it directly as output.')
 @click.option('--output', '-o', type=click.Path(exists=False), help='Output file for the result.')
 @click.option('--model', help='GPT model to use.', default='gpt-4-turbo')
 @click.option('--debug', is_flag=True, default=False, help='Display debug information.')
