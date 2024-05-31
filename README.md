@@ -58,17 +58,18 @@ You can change the default settings with parameters and options:
 Usage: python -m cli.cli [OPTIONS] [PROMPT]...
 
 Options:
-  --wait / --no-wait  Wait for the result.
-  --repo TEXT         Github repository in the format owner/repo.
-  --quiet             No pretty-print, no status indicator or messages.
-  --code              Disable formatting, enable RAW mode, use GPT-4 model.
-  -f, --file PATH     Load prompt from a template file.
-  --direct            Do not use the rendered template as a prompt for PR
-                      Pilot, but render it directly as output.
-  -o, --output PATH   Output file for the result.
-  --model TEXT        GPT model to use.
-  --debug             Display debug information.
-  --help              Show this message and exit.
+  --wait / --no-wait        Wait for the result.
+  --repo TEXT               Github repository in the format owner/repo.
+  --spinner / --no-spinner  Display a loading indicator
+  --quiet                   No pretty-print, no status indicator or messages.
+  --code                    Optimize prompt and settings for generating code
+  -f, --file PATH           Load prompt from a template file.
+  --direct                  Do not feed the rendered template as a prompt into
+                            PR Pilot, but render it directly as output.
+  -o, --output PATH         Output file for the result.
+  --model TEXT              GPT model to use.
+  --debug                   Display debug information.
+  --help                    Show this message and exit.
 
 ```
 
