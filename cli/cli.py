@@ -8,6 +8,7 @@ from rich.markdown import Markdown
 from yaspin import yaspin
 
 from cli.detect_repository import detect_repository
+from cli.status_indicator import StatusIndicator
 from cli.task_handler import TaskHandler
 from cli.prompt_template import PromptTemplate
 
@@ -39,8 +40,7 @@ def load_config():
 @click.command()
 @click.option('--wait/--no-wait', is_flag=True, default=True, help='Wait for the result.')
 @click.option('--repo', help='Github repository in the format owner/repo.', required=False)
-@click.option('--chatty', is_flag=True, default=False, help='Print more information.')
-@click.option('--raw', is_flag=True, default=False, help='For piping. No pretty-print, no status indicator.')
+@click.option('--quiet', is_flag=True, default=False, help='No pretty-print, no status indicator or messages.')
 @click.option('--code', is_flag=True, default=False, help='Disable formatting, enable RAW mode, use GPT-4 model.')
 @click.option('--file', '-f', type=click.Path(exists=True), help='Load prompt from a template file.')
 @click.option('--direct', is_flag=True, default=False,
@@ -49,13 +49,13 @@ def load_config():
 @click.option('--model', help='GPT model to use.', default='gpt-4-turbo')
 @click.option('--debug', is_flag=True, default=False, help='Display debug information.')
 @click.argument('prompt', nargs=-1)
-def main(wait, repo, chatty, raw, code, file, direct, output, model, debug, prompt):
+def main(wait, repo, quiet, code, file, direct, output, model, debug, prompt):
     prompt = ' '.join(prompt)
     config = load_config()
     console = Console()
+    status = StatusIndicator(visible=not quiet)
+    status.start()
 
-    if debug:
-        chatty = True
     if not os.getenv("PR_PILOT_API_KEY"):
         os.environ["PR_PILOT_API_KEY"] = config[CONFIG_API_KEY]
     if not repo:
@@ -68,35 +68,38 @@ def main(wait, repo, chatty, raw, code, file, direct, output, model, debug, prom
         console.print(f"No Github repository provided. Use --repo or set 'default_repo' in {CONFIG_LOCATION}.")
         return
     if file:
-        renderer = PromptTemplate(file, repo, model)
-        prompt = renderer.render(show_spinner=not raw)
+        renderer = PromptTemplate(file, repo, model, status)
+        prompt = renderer.render()
     if not prompt:
         prompt = click.edit("", extension=".md")
         if not prompt:
             console.print("No prompt provided.")
             return
     if code:
-        raw = True
         prompt += "\n\nONLY respond with the code, no other text. Do not wrap it in triple backticks."
-        model = CODE_MODEL
+        if not model:
+            model = CODE_MODEL
 
     if direct:
         # Do not send the prompt, just return it as the result
         if output:
             with open(output, "w") as f:
                 f.write(prompt)
-            console.print(Markdown(f"Rendered template `{file}` into `{output}`"))
+            if not quiet:
+                console.print(Markdown(f"Rendered template `{file}` into `{output}`"))
             return
-
+    status.update("Creating new task")
     task = create_task(repo, prompt, log=False, gpt_model=model)
+    status.update(f"Task created: https://app.pr-pilot.ai/dashboard/tasks/{task.id}")
+    status.success()
+    if debug:
+        console.print(task)
 
-    if not wait:
-        if chatty:
-            console.print(f"✅ Task created: https://app.pr-pilot.ai/dashboard/tasks/{task.id}")
-        return
-
-    task_handler = TaskHandler(task, show_spinner=not raw)
-    task_handler.wait_for_result(output, raw)
+    task_handler = TaskHandler(task, status)
+    task_handler.wait_for_result(output, quiet)
+    status.stop()
+    if debug:
+        console.print(task)
 
 
 if __name__ == '__main__':

@@ -60,8 +60,7 @@ Usage: python -m cli.cli [OPTIONS] [PROMPT]...
 Options:
   --wait / --no-wait  Wait for the result.
   --repo TEXT         Github repository in the format owner/repo.
-  --chatty            Print more information.
-  --raw               For piping. No pretty-print, no status indicator.
+  --quiet             No pretty-print, no status indicator or messages.
   --code              Disable formatting, enable RAW mode, use GPT-4 model.
   -f, --file PATH     Load prompt from a template file.
   --direct            Do not use the rendered template as a prompt for PR
