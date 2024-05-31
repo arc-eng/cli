@@ -43,7 +43,6 @@ class TaskHandler:
                 raise ValueError(f"Task failed: {self.task.result}")
 
             result = self.task.result
-            self.status.success()
 
             if output_file:
                 with open(output_file, "w") as f:

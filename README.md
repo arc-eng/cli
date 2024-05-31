@@ -62,6 +62,7 @@ Options:
   --repo TEXT               Github repository in the format owner/repo.
   --spinner / --no-spinner  Display a loading indicator
   --quiet                   No pretty-print, no status indicator or messages.
+  --cheap                   Use the cheapest GPT model (gpt-3.5-turbo)
   --code                    Optimize prompt and settings for generating code
   -f, --file PATH           Load prompt from a template file.
   --direct                  Do not feed the rendered template as a prompt into

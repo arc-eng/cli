@@ -14,6 +14,7 @@ from cli.task_handler import TaskHandler
 CONFIG_LOCATION = os.path.expanduser('~/.pr-pilot.yaml')
 CONFIG_API_KEY = "api_key"
 CODE_MODEL = "gpt-4o"
+CHEAP_MODEL = "gpt-3.5-turbo"
 POLL_INTERVAL = 2
 
 
@@ -41,6 +42,7 @@ def load_config():
 @click.option('--repo', help='Github repository in the format owner/repo.', required=False)
 @click.option('--spinner/--no-spinner', is_flag=True, default=True, help='Display a loading indicator')
 @click.option('--quiet', is_flag=True, default=False, help='No pretty-print, no status indicator or messages.')
+@click.option('--cheap', is_flag=True, default=False, help=f'Use the cheapest GPT model ({CHEAP_MODEL})')
 @click.option('--code', is_flag=True, default=False, help='Optimize prompt and settings for generating code')
 @click.option('--file', '-f', type=click.Path(exists=True), help='Load prompt from a template file.')
 @click.option('--direct', is_flag=True, default=False,
@@ -49,7 +51,7 @@ def load_config():
 @click.option('--model', help='GPT model to use.', default='gpt-4-turbo')
 @click.option('--debug', is_flag=True, default=False, help='Display debug information.')
 @click.argument('prompt', nargs=-1)
-def main(wait, repo, spinner, quiet, code, file, direct, output, model, debug, prompt):
+def main(wait, repo, spinner, quiet, cheap, code, file, direct, output, model, debug, prompt):
     prompt = ' '.join(prompt)
     config = load_config()
     console = Console()
@@ -76,6 +78,8 @@ def main(wait, repo, spinner, quiet, code, file, direct, output, model, debug, p
         if not prompt:
             console.print("No prompt provided.")
             return
+    if cheap:
+        model = CHEAP_MODEL
     if code:
         prompt += "\n\nONLY respond with the code, no other text. Do not wrap it in triple backticks."
         if not model:
