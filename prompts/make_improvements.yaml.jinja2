@@ -1,6 +1,6 @@
 {# Generate improvement suggestions for each file in a directory and render them in YAML #}
 
-{% set directory = 'cli/' %}
+{% set directory = 'prompts/' %}
 
 {# Run shell command to list all files in the directory #}
 {% set files = sh("find " ~ directory ~ " -type f -maxdepth 1").split('\n') %}
