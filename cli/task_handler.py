@@ -14,8 +14,7 @@ class TaskHandler:
         self.dashboard_url = f"https://app.pr-pilot.ai/dashboard/tasks/{task.id}"
         self.console = Console()
         self.spinner = yaspin()
-        if not show_spinner:
-            self.spinner.hide()
+        self.show_spinner = show_spinner
 
     def wait_for_result(self, output_file=None, raw=False) -> str:
         """
@@ -24,8 +23,9 @@ class TaskHandler:
         :param raw: If true, print the raw result without formatting or status indicator.
         :return:
         """
-        self.spinner.start()
-        self.spinner.text = f"Running task: {self.dashboard_url}"
+        if self.show_spinner:
+            self.spinner.start()
+            self.spinner.text = f"Running task: {self.dashboard_url}"
         try:
             result = wait_for_result(self.task, poll_interval=POLL_INTERVAL)
 
@@ -41,8 +41,9 @@ class TaskHandler:
             self.console.line()
             return result
         except Exception as e:
-            self.spinner.fail("💥")
+            if self.show_spinner:
+                self.spinner.fail("💥")
             self.console.print(f"Error: {e}")
         finally:
-            self.spinner.stop()
-            self.spinner.hide()
+            if self.show_spinner:
+                self.spinner.stop()
