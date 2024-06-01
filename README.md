@@ -82,9 +82,20 @@ Options:
 
 ## Installation
 
-I't simple:
+Prerequisites:
 1. **[Install the PR Pilot app](https://github.com/apps/pr-pilot-ai/installations/new)** on your Github repository
 2. **[Generate an API key](https://app.pr-pilot.ai/dashboard/api-keys/)** in the dashboard
+
+Install via pip:
+```
+pip install --upgrade pr-pilot-cli
+```
+
+Install via Homebrew:
+```
+brew tap PR-Pilot-AI/pr-pilot-homebrew
+brew install pr-pilot-cli
+```
 
 ## Configuration
 The configuration file is located at `~/.pr-pilot.yaml`.
