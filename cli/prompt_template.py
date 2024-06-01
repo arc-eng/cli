@@ -43,6 +43,17 @@ class PromptTemplate:
     def render(self):
 
         def subtask(prompt, status):
+            # Treat prompt as a file path and read the content if the file exists
+            # The file name will be relative to the current jinja template
+            full_template_path = os.path.join(os.getcwd(), self.template_file_path)
+            current_template_path = os.path.dirname(full_template_path)
+            potential_file_path = os.path.join(current_template_path, prompt)
+            if os.path.exists(potential_file_path):
+                with open(potential_file_path, 'r') as f:
+                    status.update(f"Loaded prompt from file: {prompt}")
+                    status.success()
+                    prompt = f.read()
+
             try:
                 status.update("Creating sub-task ...")
                 task = create_task(self.repo, prompt, log=False, gpt_model=self.model)
