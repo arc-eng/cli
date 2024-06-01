@@ -1,14 +1,11 @@
 import os
 import subprocess
-import time
 
 import click
 import jinja2
 from pr_pilot.util import create_task
-from yaspin import yaspin
 
 from cli.task_handler import TaskHandler
-
 
 
 def sh(shell_command, status):

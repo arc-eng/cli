@@ -27,7 +27,7 @@ Open a terminal and `ls` into a repository you have [installed](https://github.c
 You can run a prompt directly on the command line:
 
 ```bash
-pilot --raw "translate the README into German" > README_German.md
+pilot -o README_German.md "translate the README into German"
 ```
 
 Generate code quickly:
@@ -40,6 +40,12 @@ Get an organized view of your Github issues:
 
 ```bash
 pilot "Find all open Github issues labeled as 'bug', categorize and prioritize them"
+```
+
+Get some advice on your code:
+
+```bash
+pilot "The 'TaskEngine' class is too complex. Read it and suggest refactoring options."
 ```
 
 Generate parts of your README with a [template](./prompts/README.md.jinja2):
@@ -73,6 +79,12 @@ Options:
   --help                    Show this message and exit.
 
 ```
+
+## Installation
+
+I't simple:
+1. **[Install the PR Pilot app](https://github.com/apps/pr-pilot-ai/installations/new)** on your Github repository
+2. **[Generate an API key](https://app.pr-pilot.ai/dashboard/api-keys/)** in the dashboard
 
 ## Configuration
 The configuration file is located at `~/.pr-pilot.yaml`.
