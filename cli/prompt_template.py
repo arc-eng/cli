@@ -44,10 +44,10 @@ class PromptTemplate:
 
         def subtask(prompt, status):
             try:
-                status.update("Creating new task")
+                status.update("Creating sub-task ...")
                 task = create_task(self.repo, prompt, log=False, gpt_model=self.model)
                 task_handler = TaskHandler(task, status)
-                return task_handler.wait_for_result()
+                return task_handler.wait_for_result(quiet=True)
             except Exception as e:
                 return f"Error: {e}"
 
