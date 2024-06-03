@@ -18,16 +18,22 @@ and Github issues.
 Using [Jinja templates](https://jinja.palletsprojects.com/en/3.1.x/), you can create powerful,
 reusable commands that can be executed by PR Pilot.
 
-## Usage
+## 🛠️ Usage
 
 Open a terminal and `ls` into a repository you have [installed](https://github.com/apps/pr-pilot-ai/installations/new) PR Pilot.
 
-### Examples
+### 📋 Examples
 
 You can run a prompt directly on the command line:
 
 ```bash
-pilot --code "translate the README into German" -o README_German.md
+pilot "Tell me about this project!"
+```
+
+Ask PR Pilot to edit a file for you:
+
+```bash
+pilot --edit cli/cli.py "Make sure all functions and classes have docstrings."
 ```
 
 Generate code quickly:
@@ -56,18 +62,21 @@ pilot --direct -f prompts/README.md.jinja2 -o README.md
 
 For more examples, check out the [prompts](./prompts) directory in this repository.
 
-### Options and Parameters
+### ⚙️ Options and Parameters
 
 You can change the default settings with parameters and options:
 
 ```bash
 Usage: python -m cli.cli [OPTIONS] [PROMPT]...
 
+  Main function to handle the CLI commands and options.
+
 Options:
   --wait / --no-wait        Wait for the result.
   --repo TEXT               Github repository in the format owner/repo.
   --snap                    Adds a part of your screen as an image to the
                             task.
+  -e, --edit PATH           Let PR Pilot edit a file for you.
   --spinner / --no-spinner  Display a loading indicator
   --quiet                   No pretty-print, no status indicator or messages.
   --cheap                   Use the cheapest GPT model (gpt-3.5-turbo)
@@ -76,17 +85,17 @@ Options:
   --direct                  Do not feed the rendered template as a prompt into
                             PR Pilot, but render it directly as output.
   -o, --output PATH         Output file for the result.
-  --model TEXT              GPT model to use.
+  -m, --model TEXT          GPT model to use.
   --debug                   Display debug information.
   --help                    Show this message and exit.
 
 ```
 
-## Configuration
+## ⚙️ Configuration
 The configuration file is located at `~/.pr-pilot.yaml`.
 
-## Contributing
+## 🤝 Contributing
 Contributors are welcome to improve the CLI by submitting pull requests or reporting issues. For more details, check the project's GitHub repository.
 
-## License
+## 📜 License
 The PR Pilot CLI is open-source software licensed under the GPL-3 license.

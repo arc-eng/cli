@@ -17,6 +17,8 @@ CONFIG_API_KEY = "api_key"
 CODE_MODEL = "gpt-4o"
 CHEAP_MODEL = "gpt-3.5-turbo"
 POLL_INTERVAL = 2
+CODE_PRIMER = "Do not write anything to file, but ONLY respond with the code/content, no other text. Do not wrap it in triple backticks."
+DEFAULT_MODEL = "gpt-4o"
 
 
 def load_config():
@@ -48,6 +50,7 @@ def take_screenshot():
 @click.option('--wait/--no-wait', is_flag=True, default=True, help='Wait for the result.')
 @click.option('--repo', help='Github repository in the format owner/repo.', required=False)
 @click.option('--snap', is_flag=True, help='Adds a part of your screen as an image to the task.')
+@click.option('--edit', '-e', type=click.Path(exists=True), help='Let PR Pilot edit a file for you.')
 @click.option('--spinner/--no-spinner', is_flag=True, default=True, help='Display a loading indicator')
 @click.option('--quiet', is_flag=True, default=False, help='No pretty-print, no status indicator or messages.')
 @click.option('--cheap', is_flag=True, default=False, help=f'Use the cheapest GPT model ({CHEAP_MODEL})')
@@ -56,10 +59,11 @@ def take_screenshot():
 @click.option('--direct', is_flag=True, default=False,
               help='Do not feed the rendered template as a prompt into PR Pilot, but render it directly as output.')
 @click.option('--output', '-o', type=click.Path(exists=False), help='Output file for the result.')
-@click.option('--model', help='GPT model to use.', default='gpt-4-turbo')
+@click.option('--model', '-m', help='GPT model to use.', default=DEFAULT_MODEL)
 @click.option('--debug', is_flag=True, default=False, help='Display debug information.')
 @click.argument('prompt', nargs=-1)
-def main(wait, repo, snap, spinner, quiet, cheap, code, file, direct, output, model, debug, prompt):
+def main(wait, repo, snap, edit, spinner, quiet, cheap, code, file, direct, output, model, debug, prompt):
+    """Main function to handle the CLI commands and options."""
     prompt = ' '.join(prompt)
     config = load_config()
     console = Console()
@@ -87,10 +91,19 @@ def main(wait, repo, snap, spinner, quiet, cheap, code, file, direct, output, mo
         if not prompt:
             console.print("No prompt provided.")
             return
+
+    if edit:
+        file_content = Path(edit).read_text()
+        user_prompt = prompt
+        prompt = f"I have the following file content:\n\n---\n{file_content}\n---\n\n"
+        prompt += f"Please edit the file content above in the following way:\n\n{user_prompt}\n\n{CODE_PRIMER}"
+        if not output:
+            output = edit
+
     if cheap:
         model = CHEAP_MODEL
     if code:
-        prompt += "\n\nONLY respond with the code, no other text. Do not wrap it in triple backticks."
+        prompt += "\n\n" + CODE_PRIMER
         if not model:
             model = CODE_MODEL
 
