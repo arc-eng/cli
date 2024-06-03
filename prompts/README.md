@@ -111,11 +111,11 @@ The lifecycle of a task within PR Pilot involves several key components: `TaskEn
 
 ## Domain Model
 
-{{ include('domain_model.md.jinja2') }}
+{{ subtask('domain_model.md.jinja2') }}
 
 ## Task Lifecycle
 
-{{ include('task_lifecycle.md.jinja2') }}
+{{ subtask('task_lifecycle.md.jinja2') }}
 ```
 You can then run this prompt template using the CLI:
 
