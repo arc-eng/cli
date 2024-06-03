@@ -20,11 +20,14 @@ Follow these guidelines:
 Generate an technical specification as a YAML file:
 
 ```yaml
-feature: <name>
+name: <name>
+prompt: |
+  <high-level description of the feature>
 tasks:
   - name: <task1>
-    file: <file_path>
-    description: |
+    output_file: <file_path>
+    code: true
+    prompt: |
       We are building <... relevant context ...>
 
       You need to implement <file_path> to <... description ...>.
@@ -33,7 +36,8 @@ tasks:
         2. <step2>
         n. <stepn>
     - name: <task2>
-      file: <file_path>
-      description: |
+      output_file: <file_path>
+      code: true
+      prompt: |
         etc...
 ```

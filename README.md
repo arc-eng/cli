@@ -65,7 +65,7 @@ For more examples, check out the [prompts](./prompts) directory in this reposito
 You can customize your interact with PR Pilot using parameters and options:
 
 ```bash
-Usage: python -m cli.cli [OPTIONS] [PROMPT]...
+Usage: pilot [OPTIONS] [PROMPT]...
 
   Create a new task for PR Pilot - https://docs.pr-pilot.ai
 
@@ -74,6 +74,8 @@ Options:
   --repo TEXT               Github repository in the format owner/repo.
   --snap                    Select a portion of your screen to add as an image
                             to the task.
+  -p, --plan PATH           Path to YAML file containing step-by-step plan for
+                            PR Pilot.
   -e, --edit PATH           Let PR Pilot edit a file for you.
   --spinner / --no-spinner  Display a loading indicator.
   --quiet                   Disable all output on the terminal.
@@ -90,7 +92,7 @@ Options:
 ```
 
 ## ⚙️ Configuration
-The configuration file is located at `~/.pr-pilot.yaml`. 
+The configuration file is located at `~/.pr-pilot.yaml`.
 
 ```yaml
 # Your API Key from https://app.pr-pilot.ai/dashboard/api-keys/

@@ -1,6 +1,9 @@
 import click
+from rich.console import Console
 
+from cli.plan_executor import PlanExecutor
 from cli.constants import CHEAP_MODEL, DEFAULT_MODEL
+from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
 
 
@@ -8,7 +11,7 @@ from cli.task_runner import TaskRunner
 @click.option('--wait/--no-wait', is_flag=True, default=True, help='Wait for PR Pilot to finish the task.')
 @click.option('--repo', help='Github repository in the format owner/repo.', required=False)
 @click.option('--snap', is_flag=True, help='Select a portion of your screen to add as an image to the task.')
-@click.option('--batch', '-b', type=click.Path(exists=True), help='Path to YAML file containing a list of tasks for PR Pilot.')
+@click.option('--plan', '-p', type=click.Path(exists=True), help='Path to YAML file containing step-by-step plan for PR Pilot.')
 @click.option('--edit', '-e', type=click.Path(exists=True), help='Let PR Pilot edit a file for you.')
 @click.option('--spinner/--no-spinner', is_flag=True, default=True, help='Display a loading indicator.')
 @click.option('--quiet', is_flag=True, default=False, help='Disable all output on the terminal.')
@@ -21,10 +24,20 @@ from cli.task_runner import TaskRunner
 @click.option('--model', '-m', help='GPT model to use.', default=DEFAULT_MODEL)
 @click.option('--debug', is_flag=True, default=False, help='Display debug information.')
 @click.argument('prompt', nargs=-1)
-def main(wait, repo, snap, batch, edit, spinner, quiet, cheap, code, file, direct, output, model, debug, prompt):
+def main(wait, repo, snap, plan, edit, spinner, quiet, cheap, code, file, direct, output, model, debug, prompt):
     """Create a new task for PR Pilot - https://docs.pr-pilot.ai"""
-    runner = TaskRunner()
-    runner.run_task(wait, repo, snap, edit, spinner, quiet, cheap, code, file, direct, output, model, debug, prompt)
+
+    console = Console()
+    show_spinner = spinner and not quiet
+    status_indicator = StatusIndicator(spinner=show_spinner, messages=not quiet, console=console)
+
+    if plan is not None:
+        runner = PlanExecutor(plan, status_indicator)
+        runner.run(wait, repo, edit, quiet, model, debug, prompt)
+        return
+
+    runner = TaskRunner(status_indicator)
+    runner.run_task(wait, repo, snap, edit, quiet, cheap, code, file, direct, output, model, debug, prompt)
 
 
 if __name__ == '__main__':

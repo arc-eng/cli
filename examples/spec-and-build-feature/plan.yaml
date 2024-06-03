@@ -1,51 +1,74 @@
-feature: Weather CLI
-tasks:
-  - name: Create the main CLI module
-    file: weather_cli.py
-    description: |
-      We are building a Python CLI for getting weather reports using click and rich.
+name: Weather CLI Feature
+prompt: |
+  We are building a Python module that provides a simple CLI for getting weather reports.
 
-      You need to implement weather_cli.py to provide the main functionality of the CLI.
+  Functional Requirements:
+  - The user can get the weather report for a specific location.
+  - If not specified, the CLI asks for the location
+  - There should be options to get the weather report in Celsius or Fahrenheit
+
+  Non-functional Requirements:
+  - The CLI is implemented in Python using click and rich
+  - The CLI should be easy to use.
+  - It should use a free weather API.
+  - The CLI should be able to handle errors gracefully.
+  - There should be a file with pytests for the CLI's main functionality 
+  - There should be a README.md file with instructions on how to use the CLI
+
+steps:
+  - name: Implement CLI
+    output_file: weather_cli.py
+    code: true
+    prompt: |
+      We are building a Python module that provides a simple CLI for getting weather reports.
+
+      You need to implement `weather_cli.py` to provide the main CLI functionality.
       Follow these steps:
-        1. Import necessary libraries: click for CLI commands, rich for enhanced terminal output, and requests for API calls.
-        2. Define a function to fetch weather data from a free weather API (e.g., OpenWeatherMap).
-        3. Create a click command to get the weather report for a specific location.
-        4. Add options for temperature units (Celsius or Fahrenheit).
-        5. Implement error handling for API errors and invalid inputs.
-        6. Use rich to format and display the weather report in a user-friendly manner.
+        1. Import necessary libraries: `click` for CLI commands, `requests` for API calls, and `rich` for rich text formatting.
+        2. Define a function `get_weather` that takes a location and a unit (Celsius or Fahrenheit) as arguments and returns the weather report using a free weather API (e.g., OpenWeatherMap).
+        3. Define a function `print_weather` that takes the weather data and prints it using `rich`.
+        4. Define the main CLI command using `click`. This command should:
+           - Accept a location as an argument (optional).
+           - Accept a unit option (Celsius or Fahrenheit).
+           - If the location is not provided, prompt the user to enter it.
+           - Call `get_weather` with the provided location and unit.
+           - Call `print_weather` to display the weather report.
+        5. Add error handling to manage API errors, invalid locations, and other potential issues gracefully.
 
-  - name: Create a configuration file for the API key
-    file: config.py
-    description: |
-      We need a configuration file to store the API key for the weather service.
+  - name: Implement Tests
+    output_file: test_weather_cli.py
+    code: true
+    prompt: |
+      We are building a Python module that provides a simple CLI for getting weather reports.
+      
+      Content of `weather_cli.py`:
+      ```python
+      {{ sh('cat weather_cli.py') }}
+      ```
 
-      You need to implement config.py to manage the API key.
+      You need to implement `test_weather_cli.py` to provide tests for the CLI's main functionality.
       Follow these steps:
-        1. Create a function to read the API key from an environment variable or a configuration file.
-        2. Ensure the function returns the API key for use in API calls.
-        3. Add error handling for missing or invalid API keys.
+        1. Import necessary libraries: `pytest` for testing and `click.testing` for testing Click commands.
+        2. Write tests for the `get_weather` function to ensure it correctly fetches weather data for valid locations and handles errors for invalid locations.
+        3. Write tests for the main CLI command to ensure it correctly handles user input, calls `get_weather`, and prints the weather report.
+        4. Use fixtures to mock API responses for testing purposes.
 
-  - name: Create a test file for the CLI
-    file: test_weather_cli.py
-    description: |
-      We need a test file to ensure the CLI's main functionality works as expected.
+  - name: Write README
+    output_file: README.md
+    code: true
+    prompt: |
+      We are building a Python module that provides a simple CLI for getting weather reports.
 
-      You need to implement test_weather_cli.py to provide pytest-based tests for the CLI.
+      You need to implement `README.md` to provide instructions on how to use the CLI.
+      
+      Content of `weather_cli.py`:
+      ```python
+      {{ sh('cat weather_cli.py') }}
+      ```
+      
       Follow these steps:
-        1. Import pytest and necessary modules from weather_cli.py.
-        2. Write tests for fetching weather data, including valid and invalid inputs.
-        3. Write tests for the CLI commands, including different temperature units and error handling.
-        4. Use pytest fixtures to mock API responses for consistent test results.
-
-  - name: Create a README file with usage instructions
-    file: README.md
-    description: |
-      We need a README file to provide instructions on how to use the CLI.
-
-      You need to implement README.md to document the CLI usage.
-      Follow these steps:
-        1. Write an introduction to the Weather CLI and its purpose.
-        2. Provide installation instructions, including dependencies.
-        3. Explain how to set up the API key.
-        4. Provide examples of how to use the CLI to get weather reports.
-        5. Include information on how to run the tests.
+        1. Write a brief introduction to the CLI and its functionality.
+        2. Provide installation instructions, including any necessary dependencies.
+        3. Provide usage instructions, including examples of how to get weather reports for specific locations and how to specify the unit (Celsius or Fahrenheit).
+        4. Include a section on error handling and how the CLI manages potential issues.
+        5. Provide instructions for running the tests.
