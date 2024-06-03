@@ -9,43 +9,41 @@
   <a href="https://www.pr-pilot.ai">Website</a>
 </p>
 
-# PR Pilot CLI
+# PR Pilot Command-Line Interface
 
-PR Pilot gives you a natural language interface for your Github projects.
+[PR Pilot](https://docs.pr-pilot.ai) gives you a natural language interface for your Github projects.
 Given a prompt, it uses LLMs (Large Language Models) to autonomously fulfill tasks by interacting with your code base
 and Github issues.
 
-Using [Jinja templates](https://jinja.palletsprojects.com/en/3.1.x/), you can create powerful,
+Using [prompt templates](./prompts), you can create powerful,
 reusable commands that can be executed by PR Pilot.
 
 ## 🛠️ Usage
 
 Open a terminal and `ls` into a repository you have [installed](https://github.com/apps/pr-pilot-ai/installations/new) PR Pilot.
 
-### 📋 Examples
-
-You can run a prompt directly on the command line:
+In your repository, use the `pilot` command:
 
 ```bash
 pilot "Tell me about this project!"
 ```
 
-**📝 Ask PR Pilot to edit a file for you:**
+**📝 Ask PR Pilot to edit a local file for you:**
 
 ```bash
 pilot --edit cli/cli.py "Make sure all functions and classes have docstrings."
 ```
 
-**⚡ Generate code quickly:**
+**⚡ Generate code quickly and save it as a file:**
 
 ```bash
 pilot -o test_utils.py --code "Write some unit tests for the utils.py file."
 ```
 
-**🔍 Ask about something on your screen:**
+**🔍 Capture part of your screen and add it to a prompt:**
 
 ```bash
-pilot --snap "What is this code doing?"
+pilot -o component.html --code --snap "Write a Bootstrap5 component that looks like this."
 ```
 
 **📊 Get an organized view of your Github issues:**
@@ -54,7 +52,7 @@ pilot --snap "What is this code doing?"
 pilot "Find all open Github issues labeled as 'bug', categorize and prioritize them"
 ```
 
-**📝 Generate parts of your README with a [template](./prompts/README.md.jinja2):**
+**📝 Generate parts of your documentation with a [template](./prompts/README.md.jinja2):**
 
 ```bash
 pilot --direct -f prompts/README.md.jinja2 -o README.md
@@ -64,7 +62,7 @@ For more examples, check out the [prompts](./prompts) directory in this reposito
 
 ### ⚙️ Options and Parameters
 
-You can change the default settings with parameters and options:
+You can customize your interact with PR Pilot using parameters and options:
 
 ```bash
 Usage: python -m cli.cli [OPTIONS] [PROMPT]...
@@ -92,7 +90,11 @@ Options:
 ```
 
 ## ⚙️ Configuration
-The configuration file is located at `~/.pr-pilot.yaml`.
+The configuration file is located at `~/.pr-pilot.yaml`. At the moment, it only contains the API key for PR Pilot:
+
+```yaml
+api_key: YOUR_API_KEY
+```
 
 ## 🤝 Contributing
 Contributors are welcome to improve the CLI by submitting pull requests or reporting issues. For more details, check the project's GitHub repository.
