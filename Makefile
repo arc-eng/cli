@@ -1,2 +1,2 @@
 readme:
-	pilot --direct -f prompts/README.md.jinja2 -o README.md
+	python -m cli.cli --direct -f prompts/README.md.jinja2 -o README.md

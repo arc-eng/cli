@@ -47,7 +47,7 @@ def take_screenshot():
 @click.command()
 @click.option('--wait/--no-wait', is_flag=True, default=True, help='Wait for the result.')
 @click.option('--repo', help='Github repository in the format owner/repo.', required=False)
-@click.option('--snap', is_flag=True, help='Adds a screenshot of a portion of your screen to the task.')
+@click.option('--snap', is_flag=True, help='Adds a part of your screen as an image to the task.')
 @click.option('--spinner/--no-spinner', is_flag=True, default=True, help='Display a loading indicator')
 @click.option('--quiet', is_flag=True, default=False, help='No pretty-print, no status indicator or messages.')
 @click.option('--cheap', is_flag=True, default=False, help=f'Use the cheapest GPT model ({CHEAP_MODEL})')
@@ -99,8 +99,11 @@ def main(wait, repo, snap, spinner, quiet, cheap, code, file, direct, output, mo
         if output:
             with open(output, "w") as f:
                 f.write(prompt)
+            status.stop()
             if not quiet:
+                console.line()
                 console.print(Markdown(f"Rendered template `{file}` into `{output}`"))
+                console.line()
             return
     status.start()
     status.update("Creating new task")

@@ -27,7 +27,7 @@ Open a terminal and `ls` into a repository you have [installed](https://github.c
 You can run a prompt directly on the command line:
 
 ```bash
-pilot -o README_German.md "translate the README into German"
+pilot --code "translate the README into German" -o README_German.md
 ```
 
 Generate code quickly:
@@ -36,16 +36,16 @@ Generate code quickly:
 pilot -o test_utils.py --code "Write some unit tests for the utils.py file."
 ```
 
+Ask about something on your screen:
+
+```bash
+pilot --snap "What is this code doing?"
+```
+
 Get an organized view of your Github issues:
 
 ```bash
 pilot "Find all open Github issues labeled as 'bug', categorize and prioritize them"
-```
-
-Get some advice on your code:
-
-```bash
-pilot "The 'TaskEngine' class is too complex. Read it and suggest refactoring options."
 ```
 
 Generate parts of your README with a [template](./prompts/README.md.jinja2):
@@ -66,6 +66,8 @@ Usage: python -m cli.cli [OPTIONS] [PROMPT]...
 Options:
   --wait / --no-wait        Wait for the result.
   --repo TEXT               Github repository in the format owner/repo.
+  --snap                    Adds a part of your screen as an image to the
+                            task.
   --spinner / --no-spinner  Display a loading indicator
   --quiet                   No pretty-print, no status indicator or messages.
   --cheap                   Use the cheapest GPT model (gpt-3.5-turbo)
@@ -78,23 +80,6 @@ Options:
   --debug                   Display debug information.
   --help                    Show this message and exit.
 
-```
-
-## Installation
-
-Prerequisites:
-1. **[Install the PR Pilot app](https://github.com/apps/pr-pilot-ai/installations/new)** on your Github repository
-2. **[Generate an API key](https://app.pr-pilot.ai/dashboard/api-keys/)** in the dashboard
-
-Install via pip:
-```
-pip install --upgrade pr-pilot-cli
-```
-
-Install via Homebrew:
-```
-brew tap PR-Pilot-AI/pr-pilot-homebrew
-brew install pr-pilot-cli
 ```
 
 ## Configuration
