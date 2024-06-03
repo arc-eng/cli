@@ -50,6 +50,7 @@ def take_screenshot():
 @click.option('--wait/--no-wait', is_flag=True, default=True, help='Wait for PR Pilot to finish the task.')
 @click.option('--repo', help='Github repository in the format owner/repo.', required=False)
 @click.option('--snap', is_flag=True, help='Select a portion of your screen to add as an image to the task.')
+@click.option('--batch', '-b', type=click.Path(exists=True), help='Path to YAML file containing a list of tasks for PR Pilot.')
 @click.option('--edit', '-e', type=click.Path(exists=True), help='Let PR Pilot edit a file for you.')
 @click.option('--spinner/--no-spinner', is_flag=True, default=True, help='Display a loading indicator.')
 @click.option('--quiet', is_flag=True, default=False, help='Disable all output on the terminal.')
@@ -62,7 +63,7 @@ def take_screenshot():
 @click.option('--model', '-m', help='GPT model to use.', default=DEFAULT_MODEL)
 @click.option('--debug', is_flag=True, default=False, help='Display debug information.')
 @click.argument('prompt', nargs=-1)
-def main(wait, repo, snap, edit, spinner, quiet, cheap, code, file, direct, output, model, debug, prompt):
+def main(wait, repo, snap, batch, edit, spinner, quiet, cheap, code, file, direct, output, model, debug, prompt):
     """Create a new task for PR Pilot - https://docs.pr-pilot.ai"""
     prompt = ' '.join(prompt)
     config = load_config()

@@ -34,25 +34,26 @@ def wrap_function_with_status(func, status):
 
 
 class PromptTemplate:
-    def __init__(self, template_file_path, repo, model, status):
+    def __init__(self, template_file_path, repo, model, status, **kwargs):
         self.template_file_path = template_file_path
         self.repo = repo
         self.model = model
         self.status = status
+        self.variables = kwargs
 
     def render(self):
 
-        def subtask(prompt, status):
+        def subtask(prompt, status, **kwargs):
             # Treat prompt as a file path and read the content if the file exists
             # The file name will be relative to the current jinja template
             full_template_path = os.path.join(os.getcwd(), self.template_file_path)
             current_template_path = os.path.dirname(full_template_path)
             potential_file_path = os.path.join(current_template_path, prompt)
             if os.path.exists(potential_file_path):
-                with open(potential_file_path, 'r') as f:
-                    status.update(f"Loaded prompt from file: {prompt}")
-                    status.success()
-                    prompt = f.read()
+                status.update(f"Loading prompt from file: {prompt}")
+                sub_template = PromptTemplate(potential_file_path, self.repo, self.model, status, **kwargs)
+                prompt = sub_template.render()
+                status.success()
 
             try:
                 status.update("Creating sub-task ...")
@@ -67,4 +68,4 @@ class PromptTemplate:
         env.globals.update(subtask=wrap_function_with_status(subtask, self.status))
         env.globals.update(sh=wrap_function_with_status(sh, self.status))
         template = env.get_template(self.template_file_path)
-        return template.render()
+        return template.render(self.variables)

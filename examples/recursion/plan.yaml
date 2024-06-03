@@ -1,0 +1,51 @@
+feature: Weather CLI
+tasks:
+  - name: Create the main CLI module
+    file: weather_cli.py
+    description: |
+      We are building a Python CLI for getting weather reports using click and rich.
+
+      You need to implement weather_cli.py to provide the main functionality of the CLI.
+      Follow these steps:
+        1. Import necessary libraries: click for CLI commands, rich for enhanced terminal output, and requests for API calls.
+        2. Define a function to fetch weather data from a free weather API (e.g., OpenWeatherMap).
+        3. Create a click command to get the weather report for a specific location.
+        4. Add options for temperature units (Celsius or Fahrenheit).
+        5. Implement error handling for API errors and invalid inputs.
+        6. Use rich to format and display the weather report in a user-friendly manner.
+
+  - name: Create a configuration file for the API key
+    file: config.py
+    description: |
+      We need a configuration file to store the API key for the weather service.
+
+      You need to implement config.py to manage the API key.
+      Follow these steps:
+        1. Create a function to read the API key from an environment variable or a configuration file.
+        2. Ensure the function returns the API key for use in API calls.
+        3. Add error handling for missing or invalid API keys.
+
+  - name: Create a test file for the CLI
+    file: test_weather_cli.py
+    description: |
+      We need a test file to ensure the CLI's main functionality works as expected.
+
+      You need to implement test_weather_cli.py to provide pytest-based tests for the CLI.
+      Follow these steps:
+        1. Import pytest and necessary modules from weather_cli.py.
+        2. Write tests for fetching weather data, including valid and invalid inputs.
+        3. Write tests for the CLI commands, including different temperature units and error handling.
+        4. Use pytest fixtures to mock API responses for consistent test results.
+
+  - name: Create a README file with usage instructions
+    file: README.md
+    description: |
+      We need a README file to provide instructions on how to use the CLI.
+
+      You need to implement README.md to document the CLI usage.
+      Follow these steps:
+        1. Write an introduction to the Weather CLI and its purpose.
+        2. Provide installation instructions, including dependencies.
+        3. Explain how to set up the API key.
+        4. Provide examples of how to use the CLI to get weather reports.
+        5. Include information on how to run the tests.
