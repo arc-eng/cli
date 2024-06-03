@@ -7,36 +7,18 @@ from pr_pilot.util import create_task
 from rich.console import Console
 from rich.markdown import Markdown
 
+from cli.constants import CODE_PRIMER, CHEAP_MODEL, CODE_MODEL, CONFIG_LOCATION, CONFIG_API_KEY
 from cli.detect_repository import detect_repository
 from cli.prompt_template import PromptTemplate
 from cli.status_indicator import StatusIndicator
 from cli.task_handler import TaskHandler
+from cli.util import load_config
 
 
 class TaskRunner:
-    def __init__(self, config_location, config_api_key, code_model, cheap_model, code_primer, default_model):
-        self.config_location = config_location
-        self.config_api_key = config_api_key
-        self.code_model = code_model
-        self.cheap_model = cheap_model
-        self.code_primer = code_primer
-        self.default_model = default_model
+    def __init__(self):
+        self.config = load_config()
 
-    def load_config(self):
-        if not os.path.exists(self.config_location):
-            if os.getenv("PR_PILOT_API_KEY"):
-                click.echo("Using API key from environment variable.")
-                api_key = os.getenv("PR_PILOT_API_KEY")
-            else:
-                api_key_url = "https://app.pr-pilot.ai/dashboard/api-keys/"
-                click.echo(f"Configuration file not found. Please create an API key at {api_key_url}.")
-                api_key = click.prompt("PR Pilot API key")
-            with open(self.config_location, "w") as f:
-                f.write(f"{self.config_api_key}: {api_key}")
-            click.echo(f"Configuration saved in {self.config_location}")
-        with open(self.config_location) as f:
-            config = yaml.safe_load(f)
-        return config
 
     def take_screenshot(self):
         screenshot_command = "screencapture -i /tmp/screenshot.png"
@@ -45,20 +27,20 @@ class TaskRunner:
 
     def run_task(self, wait, repo, snap, edit, spinner, quiet, cheap, code, file, direct, output, model, debug, prompt):
         prompt = ' '.join(prompt)
-        config = self.load_config()
+
         console = Console()
         show_spinner = spinner and not quiet
         status = StatusIndicator(spinner=show_spinner, messages=not quiet, console=console)
         screenshot = self.take_screenshot() if snap else None
 
         if not os.getenv("PR_PILOT_API_KEY"):
-            os.environ["PR_PILOT_API_KEY"] = config[self.config_api_key]
+            os.environ["PR_PILOT_API_KEY"] = self.config[CONFIG_API_KEY]
         if not repo:
             repo = detect_repository()
         if not repo:
-            repo = config.get("default_repo")
+            repo = self.config.get("default_repo")
         if not repo:
-            console.print(f"No Github repository provided. Use --repo or set 'default_repo' in {self.config_location}.")
+            console.print(f"No Github repository provided. Use --repo or set 'default_repo' in {CONFIG_LOCATION}.")
             return
         if file:
             status.start()
@@ -74,16 +56,16 @@ class TaskRunner:
             file_content = Path(edit).read_text()
             user_prompt = prompt
             prompt = f"I have the following file content:\n\n---\n{file_content}\n---\n\n"
-            prompt += f"Please edit the file content above in the following way:\n\n{user_prompt}\n\n{self.code_primer}"
+            prompt += f"Please edit the file content above in the following way:\n\n{user_prompt}\n\n{CODE_PRIMER}"
             if not output:
                 output = edit
 
         if cheap:
-            model = self.cheap_model
+            model = CHEAP_MODEL
         if code:
-            prompt += "\n\n" + self.code_primer
+            prompt += "\n\n" + CODE_PRIMER
             if not model:
-                model = self.code_model
+                model = CODE_MODEL
 
         if direct:
             if output:

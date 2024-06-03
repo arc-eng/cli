@@ -7,6 +7,8 @@ from pr_pilot.util import create_task
 
 from cli.task_handler import TaskHandler
 
+MAX_RECURSION_LEVEL = 3
+
 
 def sh(shell_command, status):
     status.update(f"Running shell command: {shell_command}")
@@ -34,12 +36,14 @@ def wrap_function_with_status(func, status):
 
 
 class PromptTemplate:
-    def __init__(self, template_file_path, repo, model, status, **kwargs):
+
+    def __init__(self, template_file_path, repo, model, status, recursion_level=0, **kwargs):
         self.template_file_path = template_file_path
         self.repo = repo
         self.model = model
         self.status = status
         self.variables = kwargs
+        self.recursion_level = recursion_level
 
     def render(self):
 
@@ -50,8 +54,14 @@ class PromptTemplate:
             current_template_path = os.path.dirname(full_template_path)
             potential_file_path = os.path.join(current_template_path, prompt)
             if os.path.exists(potential_file_path):
-                status.update(f"Loading prompt from file: {prompt}")
-                sub_template = PromptTemplate(potential_file_path, self.repo, self.model, status, **kwargs)
+
+                if self.recursion_level >= MAX_RECURSION_LEVEL:
+                    status.update(f"Abort loading {prompt}. Maximum recursion level reached.")
+                    status.success()
+                    return ""
+                recursion_str = f"(Recursion level {self.recursion_level})" if self.recursion_level > 0 else ""
+                status.update(f"Loading prompt from file: {prompt} {recursion_str}")
+                sub_template = PromptTemplate(potential_file_path, self.repo, self.model, status, self.recursion_level-1, **kwargs)
                 prompt = sub_template.render()
                 status.success()
 
