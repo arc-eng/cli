@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import click
 import yaml
@@ -36,10 +37,17 @@ def load_config():
         config = yaml.safe_load(f)
     return config
 
+def take_screenshot():
+    """Take a screenshot of a portion of the screen."""
+    screenshot_command = "screencapture -i /tmp/screenshot.png"
+    os.system(screenshot_command)
+    return Path("/tmp/screenshot.png")
+
 
 @click.command()
 @click.option('--wait/--no-wait', is_flag=True, default=True, help='Wait for the result.')
 @click.option('--repo', help='Github repository in the format owner/repo.', required=False)
+@click.option('--snap', is_flag=True, help='Adds a screenshot of a portion of your screen to the task.')
 @click.option('--spinner/--no-spinner', is_flag=True, default=True, help='Display a loading indicator')
 @click.option('--quiet', is_flag=True, default=False, help='No pretty-print, no status indicator or messages.')
 @click.option('--cheap', is_flag=True, default=False, help=f'Use the cheapest GPT model ({CHEAP_MODEL})')
@@ -51,12 +59,13 @@ def load_config():
 @click.option('--model', help='GPT model to use.', default='gpt-4-turbo')
 @click.option('--debug', is_flag=True, default=False, help='Display debug information.')
 @click.argument('prompt', nargs=-1)
-def main(wait, repo, spinner, quiet, cheap, code, file, direct, output, model, debug, prompt):
+def main(wait, repo, snap, spinner, quiet, cheap, code, file, direct, output, model, debug, prompt):
     prompt = ' '.join(prompt)
     config = load_config()
     console = Console()
     show_spinner = spinner and not quiet
     status = StatusIndicator(spinner=show_spinner, messages=not quiet, console=console)
+    screenshot = take_screenshot() if snap else None
 
     if not os.getenv("PR_PILOT_API_KEY"):
         os.environ["PR_PILOT_API_KEY"] = config[CONFIG_API_KEY]
@@ -95,7 +104,7 @@ def main(wait, repo, spinner, quiet, cheap, code, file, direct, output, model, d
             return
     status.start()
     status.update("Creating new task")
-    task = create_task(repo, prompt, log=False, gpt_model=model)
+    task = create_task(repo, prompt, log=False, gpt_model=model, image=screenshot)
     status.update(f"Task created: https://app.pr-pilot.ai/dashboard/tasks/{task.id}")
     status.success()
     if debug:
