@@ -40,11 +40,6 @@ steps:
     code: true
     prompt: |
       We are building a Python module that provides a simple CLI for getting weather reports.
-      
-      Content of `weather_cli.py`:
-      ```python
-      {{ sh('cat weather_cli.py') }}
-      ```
 
       You need to implement `test_weather_cli.py` to provide tests for the CLI's main functionality.
       Follow these steps:
@@ -60,11 +55,6 @@ steps:
       We are building a Python module that provides a simple CLI for getting weather reports.
 
       You need to implement `README.md` to provide instructions on how to use the CLI.
-      
-      Content of `weather_cli.py`:
-      ```python
-      {{ sh('cat weather_cli.py') }}
-      ```
       
       Follow these steps:
         1. Write a brief introduction to the CLI and its functionality.

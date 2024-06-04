@@ -31,13 +31,18 @@ def main(wait, repo, snap, plan, edit, spinner, quiet, cheap, code, file, direct
     show_spinner = spinner and not quiet
     status_indicator = StatusIndicator(spinner=show_spinner, messages=not quiet, console=console)
 
-    if plan is not None:
-        runner = PlanExecutor(plan, status_indicator)
-        runner.run(wait, repo, edit, quiet, model, debug, prompt)
-        return
+    try:
+        if plan is not None:
+            runner = PlanExecutor(plan, status_indicator)
+            runner.run(wait, repo, edit, quiet, model, debug, prompt)
+            return
 
-    runner = TaskRunner(status_indicator)
-    runner.run_task(wait, repo, snap, edit, quiet, cheap, code, file, direct, output, model, debug, prompt)
+        runner = TaskRunner(status_indicator)
+        runner.run_task(wait, repo, snap, edit, quiet, cheap, code, file, direct, output, model, debug, prompt)
+        status_indicator.stop()
+    except Exception as e:
+        status_indicator.fail()
+        console.print(f"[bold red]An error occurred:[/bold red] {type(e)} {str(e)}")
 
 
 if __name__ == '__main__':
