@@ -58,7 +58,34 @@ pilot "Find all open Github issues labeled as 'bug', categorize and prioritize t
 pilot --direct -f prompts/README.md.jinja2 -o README.md
 ```
 
-For more examples, check out the [prompts](./prompts) directory in this repository.
+To learn more about templates, check out the [prompts](./prompts) directory.
+
+**📝 Execute a step-by-step plan:**
+
+Break down more complex tasks into smaller steps with a plan:
+
+```yaml
+# document_cli.yaml
+
+name: Document the CLI
+prompt: |
+  The CLI is great, but we need a comprehensive user documentation.
+  The documentation should be stored as Markdown files in the repository.
+
+steps:
+  - name: Identify documentation needs
+    output_file: doc_instructions.md
+    prompt: |
+      1. Read `cli/cli.py`
+      2. Identify the key features of the CLI and how it works
+      3. List the documentation files that need to be created and outline their content
+      4. Create step-by-step instructions for creating the documentation
+
+  - name: Document the CLI
+    template: doc_instructions.md
+```
+
+Run it with `pilot --plan document_cli.yaml`.
 
 ### ⚙️ Options and Parameters
 
