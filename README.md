@@ -134,3 +134,35 @@ Contributors are welcome to improve the CLI by submitting pull requests or repor
 
 ## 📜 License
 The PR Pilot CLI is open-source software licensed under the GPL-3 license.
+
+## 📦 Poetry
+
+This project uses [Poetry](https://python-poetry.org/) for dependency management and packaging.
+
+### Installation
+
+If you don't have Poetry installed, you can install it using the following command:
+
+```bash
+curl -sSL https://install.python-poetry.org | python3 -
+```
+
+### Usage
+
+To install the dependencies and setup the virtual environment, run:
+
+```bash
+poetry install
+```
+
+To activate the virtual environment, use:
+
+```bash
+poetry shell
+```
+
+To run the CLI, use:
+
+```bash
+poetry run pilot "Tell me about this project!"
+```
