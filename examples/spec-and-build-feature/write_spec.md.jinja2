@@ -1,0 +1,43 @@
+We want to build a new feature:
+
+---
+{{ sh('cat feature_description.md') }}
+---
+
+You need to create a technical specification for the feature. The specification should be in the form of a
+list of all files that need to be created.
+
+For each file:
+- Explain its purpose and how it fits into the feature.
+- Explain step-by-step how to implement the file.
+- Include any relevant context or information.
+
+Follow these guidelines:
+- Be as detailed and specific as possible without writing code
+- List all frameworks, APIs and libraries and how they will be used
+- consider edge cases and error handling
+
+Generate an technical specification as a YAML file:
+
+```yaml
+name: <name>
+prompt: |
+  <high-level description of the feature>
+tasks:
+  - name: <task1>
+    output_file: <file_path>
+    code: true
+    prompt: |
+      We are building <... relevant context ...>
+
+      You need to implement <file_path> to <... description ...>.
+      Follow these steps:
+        1. <step1>
+        2. <step2>
+        n. <stepn>
+    - name: <task2>
+      output_file: <file_path>
+      code: true
+      prompt: |
+        etc...
+```

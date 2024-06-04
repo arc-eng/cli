@@ -58,14 +58,41 @@ pilot "Find all open Github issues labeled as 'bug', categorize and prioritize t
 pilot --direct -f prompts/README.md.jinja2 -o README.md
 ```
 
-For more examples, check out the [prompts](./prompts) directory in this repository.
+To learn more about templates, check out the [prompts](./prompts) directory.
+
+**📝 Execute a step-by-step plan:**
+
+Break down more complex tasks into smaller steps with a plan:
+
+```yaml
+# document_cli.yaml
+
+name: Document the CLI
+prompt: |
+  The CLI is great, but we need a comprehensive user documentation.
+  The documentation should be stored as Markdown files in the repository.
+
+steps:
+  - name: Identify documentation needs
+    output_file: doc_instructions.md
+    prompt: |
+      1. Read `cli/cli.py`
+      2. Identify the key features of the CLI and how it works
+      3. List the documentation files that need to be created and outline their content
+      4. Create step-by-step instructions for creating the documentation
+
+  - name: Document the CLI
+    template: doc_instructions.md
+```
+
+Run it with `pilot --plan document_cli.yaml`.
 
 ### ⚙️ Options and Parameters
 
 You can customize your interact with PR Pilot using parameters and options:
 
 ```bash
-Usage: python -m cli.cli [OPTIONS] [PROMPT]...
+Usage: pilot [OPTIONS] [PROMPT]...
 
   Create a new task for PR Pilot - https://docs.pr-pilot.ai
 
@@ -74,6 +101,8 @@ Options:
   --repo TEXT               Github repository in the format owner/repo.
   --snap                    Select a portion of your screen to add as an image
                             to the task.
+  -p, --plan PATH           Path to YAML file containing step-by-step plan for
+                            PR Pilot.
   -e, --edit PATH           Let PR Pilot edit a file for you.
   --spinner / --no-spinner  Display a loading indicator.
   --quiet                   Disable all output on the terminal.
@@ -90,10 +119,14 @@ Options:
 ```
 
 ## ⚙️ Configuration
-The configuration file is located at `~/.pr-pilot.yaml`. At the moment, it only contains the API key for PR Pilot:
+The configuration file is located at `~/.pr-pilot.yaml`.
 
 ```yaml
+# Your API Key from https://app.pr-pilot.ai/dashboard/api-keys/
 api_key: YOUR_API_KEY
+
+# Default Github repository if not running CLI in a repository directory
+default_repo: owner/repo
 ```
 
 ## 🤝 Contributing
