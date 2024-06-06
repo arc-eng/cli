@@ -1,3 +1,4 @@
+### README.md
 <div align="center">
 <img src="https://avatars.githubusercontent.com/ml/17635?s=140&v=" width="100" alt="PR Pilot Logo">
 </div>
@@ -9,7 +10,7 @@
   <a href="https://www.pr-pilot.ai">Website</a>
 </p>
 
-# PR Pilot Command-Line Interface
+# 🚀 PR Pilot Command-Line Interface
 
 [PR Pilot](https://docs.pr-pilot.ai) gives you a natural language interface for your Github projects.
 Given a prompt, it uses LLMs (Large Language Models) to autonomously fulfill tasks by interacting with your code base
