@@ -24,7 +24,7 @@ class TaskRunner:
         os.system(screenshot_command)
         return Path("/tmp/screenshot.png")
 
-    def run_task(self, wait, repo, snap, edit, quiet, cheap, code, file, direct, output, model, debug, prompt):
+    def run_task(self, wait, repo, snap, edit, quiet, cheap, code, file, direct, output, model, debug, prompt, branch=None):
         prompt = ' '.join(prompt)
 
         console = Console()
@@ -76,7 +76,7 @@ class TaskRunner:
                 return
         self.status_indicator.start()
         self.status_indicator.update("Creating new task")
-        task = create_task(repo, prompt, log=False, gpt_model=model, image=screenshot)
+        task = create_task(repo, prompt, log=False, gpt_model=model, image=screenshot, branch=branch)
         self.status_indicator.update(f"Task created: https://app.pr-pilot.ai/dashboard/tasks/{task.id}")
         self.status_indicator.success()
         if debug:
