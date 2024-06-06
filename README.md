@@ -113,6 +113,9 @@ Options:
                             PR Pilot, but render it directly as output.
   -o, --output PATH         Output file for the result.
   -m, --model TEXT          GPT model to use.
+  -b, --branch TEXT         Run the task on a specific branch.
+  --sync                    Run task on your current branch and pull PR
+                            Pilot's changes when done.
   --debug                   Display debug information.
   --help                    Show this message and exit.
 

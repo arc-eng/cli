@@ -28,7 +28,7 @@ class TaskHandler:
         :return:
         """
 
-        self.status.update("Waiting for task result")
+        self.status.update("Generating a task title ...")
         self.status.start()
         try:
             start_time = time.time()
@@ -46,6 +46,13 @@ class TaskHandler:
 
             result = self.task.result
 
+            # Task created a PR
+            if self.task.pr_number and not quiet:
+                pr_url = f"https://github.com/{self.task.github_project}/pull/{self.task.pr_number}"
+                self.status.success()
+                self.status.update(f"Opened Pull Request: {pr_url}")
+
+            # User wants output in a file
             if output_file:
                 with open(output_file, "w") as f:
                     if code:
