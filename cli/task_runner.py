@@ -15,6 +15,25 @@ from cli.util import load_config
 
 
 class TaskConfig:
+    """
+    Configuration class for task settings.
+
+    Attributes:
+        wait (bool): Whether to wait for the task to complete.
+        repo (str): The repository to run the task on.
+        snap (bool): Whether to take a screenshot.
+        edit (str): Path to the file to edit.
+        quiet (bool): Whether to suppress output.
+        cheap (bool): Whether to use a cheaper model.
+        code (bool): Whether the task involves code.
+        file (str): Path to the file to use for the task.
+        direct (bool): Whether to directly output the prompt.
+        output (str): Path to the output file.
+        model (str): The model to use for the task.
+        debug (bool): Whether to enable debug mode.
+        prompt (list): The prompt for the task.
+        branch (str, optional): The branch to use for the task.
+    """
     def __init__(self, wait, repo, snap, edit, quiet, cheap, code, file, direct, output, model, debug, prompt, branch=None):
         self.wait = wait
         self.repo = repo
@@ -33,16 +52,34 @@ class TaskConfig:
 
 
 class TaskRunner:
+    """
+    Class to run tasks based on the provided configuration.
+
+    Attributes:
+        status_indicator (StatusIndicator): An instance of StatusIndicator to show task status.
+    """
     def __init__(self, status_indicator: StatusIndicator):
         self.config = load_config()
         self.status_indicator = status_indicator
 
     def take_screenshot(self):
+        """
+        Takes a screenshot and saves it to a temporary location.
+
+        Returns:
+            Path: The path to the screenshot file.
+        """
         screenshot_command = "screencapture -i /tmp/screenshot.png"
         os.system(screenshot_command)
         return Path("/tmp/screenshot.png")
 
     def run_task(self, config: TaskConfig):
+        """
+        Runs a task based on the provided configuration.
+
+        Args:
+            config (TaskConfig): The configuration for the task.
+        """
         prompt = ' '.join(config.prompt)
 
         console = Console()
