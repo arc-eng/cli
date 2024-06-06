@@ -14,6 +14,24 @@ from cli.task_handler import TaskHandler
 from cli.util import load_config
 
 
+class TaskConfig:
+    def __init__(self, wait, repo, snap, edit, quiet, cheap, code, file, direct, output, model, debug, prompt, branch=None):
+        self.wait = wait
+        self.repo = repo
+        self.snap = snap
+        self.edit = edit
+        self.quiet = quiet
+        self.cheap = cheap
+        self.code = code
+        self.file = file
+        self.direct = direct
+        self.output = output
+        self.model = model
+        self.debug = debug
+        self.prompt = prompt
+        self.branch = branch
+
+
 class TaskRunner:
     def __init__(self, status_indicator: StatusIndicator):
         self.config = load_config()
@@ -24,24 +42,24 @@ class TaskRunner:
         os.system(screenshot_command)
         return Path("/tmp/screenshot.png")
 
-    def run_task(self, wait, repo, snap, edit, quiet, cheap, code, file, direct, output, model, debug, prompt, branch=None):
-        prompt = ' '.join(prompt)
+    def run_task(self, config: TaskConfig):
+        prompt = ' '.join(config.prompt)
 
         console = Console()
-        screenshot = self.take_screenshot() if snap else None
+        screenshot = self.take_screenshot() if config.snap else None
 
         if not os.getenv("PR_PILOT_API_KEY"):
             os.environ["PR_PILOT_API_KEY"] = self.config[CONFIG_API_KEY]
-        if not repo:
-            repo = detect_repository()
-        if not repo:
-            repo = self.config.get("default_repo")
-        if not repo:
+        if not config.repo:
+            config.repo = detect_repository()
+        if not config.repo:
+            config.repo = self.config.get("default_repo")
+        if not config.repo:
             console.print(f"No Github repository provided. Use --repo or set 'default_repo' in {CONFIG_LOCATION}.")
             return
-        if file:
+        if config.file:
             self.status_indicator.start()
-            renderer = PromptTemplate(file, repo, model, self.status_indicator)
+            renderer = PromptTemplate(config.file, config.repo, config.model, self.status_indicator)
             prompt = renderer.render()
         if not prompt:
             prompt = click.edit("", extension=".md")
@@ -49,43 +67,43 @@ class TaskRunner:
                 console.print("No prompt provided.")
                 return
 
-        if edit:
-            file_content = Path(edit).read_text()
+        if config.edit:
+            file_content = Path(config.edit).read_text()
             user_prompt = prompt
             prompt = f"I have the following file content:\n\n---\n{file_content}\n---\n\n"
             prompt += f"Please edit the file content above in the following way:\n\n{user_prompt}\n\n{CODE_PRIMER}"
-            if not output:
-                output = edit
+            if not config.output:
+                config.output = config.edit
 
-        if cheap:
-            model = CHEAP_MODEL
-        if code:
+        if config.cheap:
+            config.model = CHEAP_MODEL
+        if config.code:
             prompt += "\n\n" + CODE_PRIMER
-            if not model:
-                model = CODE_MODEL
+            if not config.model:
+                config.model = CODE_MODEL
 
-        if direct:
-            if output:
-                with open(output, "w") as f:
+        if config.direct:
+            if config.output:
+                with open(config.output, "w") as f:
                     f.write(prompt)
                 self.status_indicator.stop()
-                if not quiet:
+                if not config.quiet:
                     console.line()
-                    console.print(Markdown(f"Rendered template `{file}` into `{output}`"))
+                    console.print(Markdown(f"Rendered template `{config.file}` into `{config.output}`"))
                     console.line()
                 return
         self.status_indicator.start()
 
-        branch_str = f"on branch {branch}" if branch else ""
-        self.status_indicator.update(f"Creating new task for {repo} {branch_str} ...")
-        task = create_task(repo, prompt, log=False, gpt_model=model, image=screenshot, branch=branch)
+        branch_str = f"on branch {config.branch}" if config.branch else ""
+        self.status_indicator.update(f"Creating new task for {config.repo} {branch_str} ...")
+        task = create_task(config.repo, prompt, log=False, gpt_model=config.model, image=screenshot, branch=config.branch)
         self.status_indicator.update(f"Task created: https://app.pr-pilot.ai/dashboard/tasks/{task.id}")
         self.status_indicator.success()
-        if debug:
+        if config.debug:
             console.print(task)
-        if wait:
+        if config.wait:
             task_handler = TaskHandler(task, self.status_indicator)
-            task_handler.wait_for_result(output, quiet)
+            task_handler.wait_for_result(config.output, config.quiet)
         self.status_indicator.stop()
-        if debug:
+        if config.debug:
             console.print(task)
