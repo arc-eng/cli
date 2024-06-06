@@ -46,11 +46,13 @@ class TaskHandler:
 
             result = self.task.result
 
+            # Task created a PR
             if self.task.pr_number and not quiet:
                 pr_url = f"https://github.com/{self.task.github_project}/pull/{self.task.pr_number}"
                 self.status.update(f"PR Created: {pr_url}")
                 self.status.success()
 
+            # User wants output in a file
             if output_file:
                 with open(output_file, "w") as f:
                     if code:

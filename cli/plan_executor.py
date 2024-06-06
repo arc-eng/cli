@@ -54,6 +54,7 @@ class PlanExecutor:
             cheap = task.get('cheap', False)
             code = task.get('code', False)
             direct = task.get('direct', False)
+            branch = task.get('branch', None)
             snap = False
 
             wrapped_prompt = (f"We are working on a main task that contains a list of sub-tasks. This is sub-task {current_task} / {num_tasks}\n\n---\n\n"
@@ -63,4 +64,4 @@ class PlanExecutor:
 
             prompt = task.get('prompt')
             task_runner = TaskRunner(self.status_indicator)
-            task_runner.run_task(wait, repo, snap, edit, quiet, cheap, code, template_file_path, direct, output_file, model, debug, wrapped_prompt)
+            task_runner.run_task(wait, repo, snap, edit, quiet, cheap, code, template_file_path, direct, output_file, model, debug, wrapped_prompt, branch)

@@ -22,9 +22,10 @@ from cli.task_runner import TaskRunner
               help='Do not feed the rendered template as a prompt into PR Pilot, but render it directly as output.')
 @click.option('--output', '-o', type=click.Path(exists=False), help='Output file for the result.')
 @click.option('--model', '-m', help='GPT model to use.', default=DEFAULT_MODEL)
+@click.option('--branch', '-b', help='Run the task on a specific branch.', required=False, default=None)
 @click.option('--debug', is_flag=True, default=False, help='Display debug information.')
 @click.argument('prompt', nargs=-1)
-def main(wait, repo, snap, plan, edit, spinner, quiet, cheap, code, file, direct, output, model, debug, prompt):
+def main(wait, repo, snap, plan, edit, spinner, quiet, cheap, code, file, direct, output, model, branch, debug, prompt):
     """Create a new task for PR Pilot - https://docs.pr-pilot.ai"""
 
     console = Console()
@@ -38,7 +39,7 @@ def main(wait, repo, snap, plan, edit, spinner, quiet, cheap, code, file, direct
             return
 
         runner = TaskRunner(status_indicator)
-        runner.run_task(wait, repo, snap, edit, quiet, cheap, code, file, direct, output, model, debug, prompt)
+        runner.run_task(wait, repo, snap, edit, quiet, cheap, code, file, direct, output, model, debug, prompt, branch=branch)
         status_indicator.stop()
     except Exception as e:
         status_indicator.fail()
