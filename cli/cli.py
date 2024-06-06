@@ -1,3 +1,5 @@
+import os
+
 import click
 from rich.console import Console
 
@@ -23,9 +25,10 @@ from cli.task_runner import TaskRunner
 @click.option('--output', '-o', type=click.Path(exists=False), help='Output file for the result.')
 @click.option('--model', '-m', help='GPT model to use.', default=DEFAULT_MODEL)
 @click.option('--branch', '-b', help='Run the task on a specific branch.', required=False, default=None)
+@click.option('--follow', is_flag=True, default=False, help='Run task on current branch and pull changes when done.')
 @click.option('--debug', is_flag=True, default=False, help='Display debug information.')
 @click.argument('prompt', nargs=-1)
-def main(wait, repo, snap, plan, edit, spinner, quiet, cheap, code, file, direct, output, model, branch, debug, prompt):
+def main(wait, repo, snap, plan, edit, spinner, quiet, cheap, code, file, direct, output, model, branch, follow, debug, prompt):
     """Create a new task for PR Pilot - https://docs.pr-pilot.ai"""
 
     console = Console()
@@ -38,9 +41,16 @@ def main(wait, repo, snap, plan, edit, spinner, quiet, cheap, code, file, direct
             runner.run(wait, repo, edit, quiet, model, debug, prompt)
             return
 
+        if follow and not branch:
+            # Get current branch from git
+            branch = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
+
         runner = TaskRunner(status_indicator)
         runner.run_task(wait, repo, snap, edit, quiet, cheap, code, file, direct, output, model, debug, prompt, branch=branch)
+        status_indicator.update(f"Pulling latest changes from {branch}")
+        status_indicator.success()
         status_indicator.stop()
+
     except Exception as e:
         status_indicator.fail()
         console.print(f"[bold red]An error occurred:[/bold red] {type(e)} {str(e)}")

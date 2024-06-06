@@ -75,8 +75,8 @@ class TaskRunner:
                     console.line()
                 return
         self.status_indicator.start()
-        if branch:
-            branch_str = f"on branch {branch}"
+
+        branch_str = f"on branch {branch}" if branch else ""
         self.status_indicator.update(f"Creating new task for {repo} {branch_str} ...")
         task = create_task(repo, prompt, log=False, gpt_model=model, image=screenshot, branch=branch)
         self.status_indicator.update(f"Task created: https://app.pr-pilot.ai/dashboard/tasks/{task.id}")
