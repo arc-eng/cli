@@ -4,23 +4,23 @@ from yaspin import yaspin
 
 class StatusIndicator:
     """
-    A class to display status indicators using spinners and console messages.
+    Eine Klasse zur Anzeige von Statusindikatoren mit Spinners und Konsolennachrichten.
 
-    Attributes:
-        spinner (yaspin.yaspin): The spinner object for displaying a spinner.
-        visible (bool): Flag to control the visibility of the spinner.
-        messages (bool): Flag to control the visibility of messages.
-        console (rich.console.Console): The console object for displaying messages.
+    Attribute:
+        spinner (yaspin.yaspin): Das Spinner-Objekt zur Anzeige eines Spinners.
+        visible (bool): Flag zur Steuerung der Sichtbarkeit des Spinners.
+        messages (bool): Flag zur Steuerung der Sichtbarkeit von Nachrichten.
+        console (rich.console.Console): Das Konsolenobjekt zur Anzeige von Nachrichten.
     """
 
     def __init__(self, spinner=True, messages=True, console=None):
         """
-        Initializes the StatusIndicator with optional spinner and message visibility.
+        Initialisiert den StatusIndicator mit optionaler Spinner- und Nachrichtensichtbarkeit.
 
         Args:
-            spinner (bool): Whether to display the spinner. Defaults to True.
-            messages (bool): Whether to display messages. Defaults to True.
-            console (rich.console.Console, optional): The console object for displaying messages. Defaults to None.
+            spinner (bool): Ob der Spinner angezeigt werden soll. Standardmäßig True.
+            messages (bool): Ob Nachrichten angezeigt werden sollen. Standardmäßig True.
+            console (rich.console.Console, optional): Das Konsolenobjekt zur Anzeige von Nachrichten. Standardmäßig None.
         """
         self.spinner = yaspin("Let's go", timer=True)
         self.visible = spinner
@@ -29,10 +29,10 @@ class StatusIndicator:
 
     def update(self, text):
         """
-        Updates the spinner text or prints a message to the console.
+        Aktualisiert den Spinner-Text oder druckt eine Nachricht auf die Konsole.
 
         Args:
-            text (str): The text to update the spinner with or print to the console.
+            text (str): Der Text, mit dem der Spinner aktualisiert oder der auf der Konsole gedruckt wird.
         """
         if self.visible:
             self.spinner.text = text
@@ -41,7 +41,7 @@ class StatusIndicator:
 
     def success(self):
         """
-        Marks the spinner as successful and restarts it.
+        Markiert den Spinner als erfolgreich und startet ihn neu.
         """
         if self.visible:
             self.spinner.ok("✅ ")
@@ -49,7 +49,7 @@ class StatusIndicator:
 
     def fail(self):
         """
-        Marks the spinner as failed and stops it.
+        Markiert den Spinner als fehlgeschlagen und stoppt ihn.
         """
         if self.visible:
             self.spinner.fail("❌ ")
@@ -57,14 +57,14 @@ class StatusIndicator:
 
     def start(self):
         """
-        Starts the spinner.
+        Startet den Spinner.
         """
         if self.visible:
             self.spinner.start()
 
     def stop(self):
         """
-        Stops the spinner.
+        Stoppt den Spinner.
         """
         if self.visible:
             self.spinner.stop()
