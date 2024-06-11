@@ -18,6 +18,7 @@ class TaskHandler:
         self.dashboard_url = f"https://app.pr-pilot.ai/dashboard/tasks/{task.id}"
         self.console = Console()
         self.status = status_indicator
+        self.task_runs_on_pr = self.task.pr_number is not None
 
     def wait_for_result(self, output_file=None, quiet=False, code=False) -> str:
         """
@@ -49,8 +50,9 @@ class TaskHandler:
             # Task created a PR
             if self.task.pr_number and not quiet:
                 pr_url = f"https://github.com/{self.task.github_project}/pull/{self.task.pr_number}"
-                self.status.success()
-                self.status.update(f"Opened Pull Request: {pr_url}")
+                if not self.task_runs_on_pr:
+                    # We found a new PR number, let the user know
+                    self.status.update(f"Opened Pull Request: {pr_url}")
 
             # User wants output in a file
             if output_file:

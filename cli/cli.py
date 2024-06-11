@@ -8,6 +8,7 @@ from cli.plan_executor import PlanExecutor
 from cli.constants import CHEAP_MODEL, DEFAULT_MODEL
 from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
+from cli.util import pull_branch_changes
 
 
 @click.command()
@@ -40,6 +41,8 @@ def main(wait, repo, snap, plan, edit, spinner, quiet, cheap, code, file, direct
         if plan is not None:
             runner = PlanExecutor(plan, status_indicator)
             runner.run(wait, repo, edit, quiet, model, debug, prompt)
+            if sync:
+                pull_branch_changes(status_indicator, console, branch, debug)
             return
 
         if sync and not branch:
@@ -49,21 +52,7 @@ def main(wait, repo, snap, plan, edit, spinner, quiet, cheap, code, file, direct
         runner = TaskRunner(status_indicator)
         runner.run_task(wait, repo, snap, edit, quiet, cheap, code, file, direct, output, model, debug, prompt, branch=branch)
         if sync:
-            status_indicator.update(f"Pull latest changes from {branch}")
-            try:
-                # Capture output of git pull
-                result = subprocess.run(['git', 'pull', 'origin', branch], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                output = result.stdout
-                error = result.stderr
-                status_indicator.success()
-                if debug:
-                    console.line()
-                    console.print(output)
-                    console.line()
-            except Exception as e:
-                status_indicator.fail()
-                console.print(f"[bold red]An error occurred:[/bold red] {type(e)} {str(e)}\n\n{error if error else ''}")
-                return
+            pull_branch_changes(status_indicator, console, branch, debug)
 
     except Exception as e:
         status_indicator.fail()

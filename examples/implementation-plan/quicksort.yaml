@@ -1,0 +1,21 @@
+name: Write Quicksort Implementation
+prompt: We want to implement quicksort TDD-Style.
+
+steps:
+  - name: Write Quicksort unit tests
+    prompt: |
+      Write Python unit tests for a quicksort implementation. The tests should cover the following cases:
+        - An empty list
+        - A list with one element
+        - A list with two elements
+      Write the tests into `test_quicksort.py`.
+  - name: Write Quicksort implementation
+    prompt: |
+      Write a Python function that implements the quicksort algorithm so that the tests pass.
+      The function should take a list of integers as input and return a sorted list.
+      Write the implementation into `quicksort.py`.
+  - name: QA
+    prompt: |
+      1. Look at all changes in this PR and make sure they make sense.
+      2. If anything needs to change, make the necessary changes.
+      3. Edit the PR title and description so they reflect all file changes of the PR coherently
