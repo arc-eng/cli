@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 import click
 import yaml
@@ -37,3 +38,20 @@ def load_config():
     with open(CONFIG_LOCATION) as f:
         config = yaml.safe_load(f)
     return config
+
+
+def pull_branch_changes(status_indicator, console, branch, debug=False):
+    status_indicator.update(f"Pull latest changes from {branch}")
+    try:
+        # Capture output of git pull
+        result = subprocess.run(['git', 'pull', 'origin', branch], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        output = result.stdout
+        error = result.stderr
+        status_indicator.success()
+        if debug:
+            console.line()
+            console.print(output)
+            console.line()
+    except Exception as e:
+        status_indicator.fail()
+        console.print(f"[bold red]An error occurred:[/bold red] {type(e)} {str(e)}\n\n{error if error else ''}")

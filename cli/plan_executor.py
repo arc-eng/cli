@@ -1,5 +1,6 @@
 import yaml
 from rich.console import Console
+from rich.markdown import Markdown
 
 from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
@@ -22,6 +23,8 @@ class PlanExecutor:
         self.name = self.plan.get('name')
         self.tasks = self.plan.get('steps')
         self.status_indicator = status_indicator
+        self.pr_number = None
+        self.responses = []
 
     def run(self, wait, repo, edit, quiet, model, debug, prompt):
         """Run all steps in a given plan
@@ -57,11 +60,25 @@ class PlanExecutor:
             branch = task.get('branch', None)
             snap = False
 
+            previous_responses = ""
+            for i, response in enumerate(self.responses):
+                previous_responses += f"## Result of Sub-task {i + 1}\n\n{response}\n\n"
             wrapped_prompt = (f"We are working on a main task that contains a list of sub-tasks. This is sub-task {current_task} / {num_tasks}\n\n---\n\n"
-                              f"Main Task: {self.name}\n\n{prompt}\n\n---\n\n"
-                              f"Sub-task: {task.get('name')}\n\n{task.get('prompt')}\n\n---\n\n"
-                              f"Execute the sub-task")
+                              f"# Main Task {self.name}\n\n{prompt}\n\n"
+                              f"# Results of previous sub-tasks\n\n{previous_responses}\n\n"
+                              f"# Current Sub-task: {task.get('name')}\n\n{task.get('prompt')}\n\n---\n\n"
+                              f"Follow the instructions of the current sub-task! Respond with a compact bullet list of your actions.")
+            if debug:
+                console.line()
+                console.print(Markdown(wrapped_prompt))
+                console.line()
 
             prompt = task.get('prompt')
             task_runner = TaskRunner(self.status_indicator)
-            task_runner.run_task(wait, repo, snap, edit, quiet, cheap, code, template_file_path, direct, output_file, model, debug, wrapped_prompt, branch)
+            finished_task = task_runner.run_task(wait, repo, snap, edit, quiet, cheap, code, template_file_path, direct, output_file, model, debug, wrapped_prompt, branch=branch, pr_number=self.pr_number)
+            if not finished_task:
+                raise ValueError('Task failed')
+            self.responses.append(finished_task.result)
+            if self.pr_number is None and finished_task.pr_number and not quiet:
+                console.print(f"Found new pull request! All subsequent tasks will run on PR #{finished_task.pr_number}")
+            self.pr_number = int(finished_task.pr_number)

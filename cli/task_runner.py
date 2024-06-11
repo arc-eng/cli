@@ -1,7 +1,9 @@
 import os
 from pathlib import Path
+from typing import Optional
 
 import click
+from pr_pilot import Task
 from pr_pilot.util import create_task
 from rich.console import Console
 from rich.markdown import Markdown
@@ -24,8 +26,7 @@ class TaskRunner:
         os.system(screenshot_command)
         return Path("/tmp/screenshot.png")
 
-    def run_task(self, wait, repo, snap, edit, quiet, cheap, code, file, direct, output, model, debug, prompt, branch=None):
-        prompt = ' '.join(prompt)
+    def run_task(self, wait, repo, snap, edit, quiet, cheap, code, file, direct, output, model, debug, prompt, branch=None, pr_number=None) -> Optional[Task]:
 
         console = Console()
         screenshot = self.take_screenshot() if snap else None
@@ -38,7 +39,7 @@ class TaskRunner:
             repo = self.config.get("default_repo")
         if not repo:
             console.print(f"No Github repository provided. Use --repo or set 'default_repo' in {CONFIG_LOCATION}.")
-            return
+            return None
         if file:
             self.status_indicator.start()
             renderer = PromptTemplate(file, repo, model, self.status_indicator)
@@ -47,7 +48,10 @@ class TaskRunner:
             prompt = click.edit("", extension=".md")
             if not prompt:
                 console.print("No prompt provided.")
-                return
+                return None
+
+        if pr_number:
+            prompt = f"We are working on PR #{pr_number}. Read the PR first before doing anything else.\n\n---\n\n" + prompt
 
         if edit:
             file_content = Path(edit).read_text()
@@ -77,15 +81,18 @@ class TaskRunner:
         self.status_indicator.start()
 
         branch_str = f"on branch {branch}" if branch else ""
+        pr_str = f" for PR #{pr_number}" if pr_number else ""
         self.status_indicator.update(f"Creating new task for {repo} {branch_str} ...")
-        task = create_task(repo, prompt, log=False, gpt_model=model, image=screenshot, branch=branch)
-        self.status_indicator.update(f"Task created: https://app.pr-pilot.ai/dashboard/tasks/{task.id}")
+        task = create_task(repo, prompt, log=False, gpt_model=model, image=screenshot, branch=branch, pr_number=pr_number)
+        self.status_indicator.update(f"Task created{pr_str}: https://app.pr-pilot.ai/dashboard/tasks/{task.id}")
         self.status_indicator.success()
         if debug:
             console.print(task)
+        task_handler = None
         if wait:
             task_handler = TaskHandler(task, self.status_indicator)
             task_handler.wait_for_result(output, quiet)
         self.status_indicator.stop()
         if debug:
             console.print(task)
+        return task_handler.task if task_handler else task
