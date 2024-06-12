@@ -1,0 +1,12 @@
+name: Summarize a Github issue
+prompt: |
+  Summarize a Github issue in a single sentence. The summary should be concise and capture the main point of the issue.
+
+steps:
+  - name: Find the issue
+    prompt: Look at all open issues and give me a link to one of the issues.
+
+  - name: Summarize the issue
+    prompt: |
+      Read the issue and summarize it in a single sentence. The summary should be concise and capture the main point of the issue.
+      Write the summary here.

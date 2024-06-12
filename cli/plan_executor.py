@@ -26,16 +26,14 @@ class PlanExecutor:
         self.pr_number = None
         self.responses = []
 
-    def run(self, wait, repo, edit, quiet, model, debug, prompt):
+    def run(self, wait, repo, quiet, model, debug):
         """Run all steps in a given plan
 
         :param wait: Wait for PR Pilot to finish the plan
         :param repo: Github repository in the format owner/repo
-        :param edit: Let PR Pilot edit a file for you
         :param quiet: Disable all output on the terminal
         :param model: GPT model to use
         :param debug: Display debug information
-        :param prompt: Prompt for the task
 
         """
         console = Console()
@@ -64,7 +62,7 @@ class PlanExecutor:
             for i, response in enumerate(self.responses):
                 previous_responses += f"## Result of Sub-task {i + 1}\n\n{response}\n\n"
             wrapped_prompt = (f"We are working on a main task that contains a list of sub-tasks. This is sub-task {current_task} / {num_tasks}\n\n---\n\n"
-                              f"# Main Task {self.name}\n\n{prompt}\n\n"
+                              f"# Main Task {self.name}\n\n{self.plan.get('prompt')}\n\n"
                               f"# Results of previous sub-tasks\n\n{previous_responses}\n\n"
                               f"# Current Sub-task: {task.get('name')}\n\n{task.get('prompt')}\n\n---\n\n"
                               f"Follow the instructions of the current sub-task! Respond with a compact bullet list of your actions.")
@@ -73,12 +71,11 @@ class PlanExecutor:
                 console.print(Markdown(wrapped_prompt))
                 console.line()
 
-            prompt = task.get('prompt')
             task_runner = TaskRunner(self.status_indicator)
-            finished_task = task_runner.run_task(wait, repo, snap, edit, quiet, cheap, code, template_file_path, direct, output_file, model, debug, wrapped_prompt, branch=branch, pr_number=self.pr_number)
+            finished_task = task_runner.run_task(wait, repo, snap, False, quiet, cheap, code, template_file_path, direct, output_file, model, debug, wrapped_prompt, branch=branch, pr_number=self.pr_number)
             if not finished_task:
                 raise ValueError('Task failed')
             self.responses.append(finished_task.result)
             if self.pr_number is None and finished_task.pr_number and not quiet:
                 console.print(f"Found new pull request! All subsequent tasks will run on PR #{finished_task.pr_number}")
-            self.pr_number = int(finished_task.pr_number)
+            self.pr_number = int(finished_task.pr_number) if finished_task.pr_number else None
