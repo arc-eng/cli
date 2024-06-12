@@ -25,37 +25,37 @@ Open a terminal and `ls` into a repository you have [installed](https://github.c
 In your repository, use the `pilot` command:
 
 ```bash
-pilot "Tell me about this project!"
+pilot task "Tell me about this project!"
 ```
 
 **📝 Ask PR Pilot to edit a local file for you:**
 
 ```bash
-pilot --edit cli/cli.py "Make sure all functions and classes have docstrings."
+pilot edit cli/cli.py "Make sure all functions and classes have docstrings."
 ```
 
 **⚡ Generate code quickly and save it as a file:**
 
 ```bash
-pilot -o test_utils.py --code "Write some unit tests for the utils.py file."
+pilot task -o test_utils.py --code "Write some unit tests for the utils.py file."
 ```
 
 **🔍 Capture part of your screen and add it to a prompt:**
 
 ```bash
-pilot -o component.html --code --snap "Write a Bootstrap5 component that looks like this."
+pilot task -o component.html --code --snap "Write a Bootstrap5 component that looks like this."
 ```
 
 **📊 Get an organized view of your Github issues:**
 
 ```bash
-pilot "Find all open Github issues labeled as 'bug', categorize and prioritize them"
+pilot task "Find all open Github issues labeled as 'bug', categorize and prioritize them"
 ```
 
 **📝 Generate parts of your documentation with a [template](./prompts/README.md.jinja2):**
 
 ```bash
-pilot --direct -f prompts/README.md.jinja2 -o README.md
+pilot task --direct -f prompts/README.md.jinja2 -o README.md
 ```
 
 To learn more about templates, check out the [prompts](./prompts) directory.
@@ -85,39 +85,80 @@ steps:
     template: doc_instructions.md
 ```
 
-Run it with `pilot --plan document_cli.yaml`.
+Run it with `pilot plan document_cli.yaml`.
 
 ### ⚙️ Options and Parameters
 
-You can customize your interact with PR Pilot using parameters and options:
+The CLI has global parameters and options that can be used to customize its behavior.
+
 
 ```bash
-Usage: pilot [OPTIONS] [PROMPT]...
+Usage: pilot [OPTIONS] COMMAND [ARGS]...
 
-  Create a new task for PR Pilot - https://docs.pr-pilot.ai
+  PR Pilot CLI - https://docs.pr-pilot.ai
 
 Options:
   --wait / --no-wait        Wait for PR Pilot to finish the task.
   --repo TEXT               Github repository in the format owner/repo.
-  --snap                    Select a portion of your screen to add as an image
-                            to the task.
-  -p, --plan PATH           Path to YAML file containing step-by-step plan for
-                            PR Pilot.
-  -e, --edit PATH           Let PR Pilot edit a file for you.
   --spinner / --no-spinner  Display a loading indicator.
   --quiet                   Disable all output on the terminal.
-  --cheap                   Use the cheapest GPT model (gpt-3.5-turbo)
-  --code                    Optimize prompt and settings for generating code
-  -f, --file PATH           Generate prompt from a template file.
-  --direct                  Do not feed the rendered template as a prompt into
-                            PR Pilot, but render it directly as output.
-  -o, --output PATH         Output file for the result.
   -m, --model TEXT          GPT model to use.
   -b, --branch TEXT         Run the task on a specific branch.
   --sync                    Run task on your current branch and pull PR
                             Pilot's changes when done.
   --debug                   Display debug information.
   --help                    Show this message and exit.
+
+Commands:
+  edit  Let PR Pilot edit a file for you.
+  plan  Let PR Pilot execute a plan for you.
+  task  Create a new task for PR Pilot
+
+```
+
+Then there are three sub-commands.
+
+Create a new task for PR Pilot using a prompt or prompt template.
+
+```bash
+Usage: pilot task [OPTIONS] [PROMPT]...
+
+  Create a new task for PR Pilot
+
+Options:
+  --snap             Select a portion of your screen to add as an image to the
+                     task.
+  --cheap            Use the cheapest GPT model (gpt-3.5-turbo)
+  --code             Optimize prompt and settings for generating code
+  -f, --file PATH    Generate prompt from a template file.
+  --direct           Do not feed the rendered template as a prompt into PR
+                     Pilot, but render it directly as output.
+  -o, --output PATH  Output file for the result.
+  --help             Show this message and exit.
+
+```
+
+Edit a local file using PR Pilot.
+
+```bash
+Usage: pilot edit [OPTIONS] FILE_PATH PROMPT
+
+  Let PR Pilot edit a file for you.
+
+Options:
+  --help  Show this message and exit.
+
+```
+
+Run a step-by-step plan with PR Pilot.
+
+```bash
+Usage: pilot plan [OPTIONS] FILE_PATH
+
+  Let PR Pilot execute a plan for you.
+
+Options:
+  --help  Show this message and exit.
 
 ```
 

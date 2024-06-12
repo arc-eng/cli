@@ -9,5 +9,5 @@ Plans can be used to break down more complex tasks into smaller steps.
 This plan demonstrates how to implement the Quicksort algorithm in Python. 
 
 ```shell
-pilot --plan quicksort.yaml
+pilot plan quicksort.yaml
 ```
