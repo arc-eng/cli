@@ -96,27 +96,21 @@ The CLI has global parameters and options that can be used to customize its beha
 {{ sh('python -m cli.cli --help') }}
 ```
 
-Then there are three sub-commands:
+#### Commands
 
-#### `pilot task PROMPT`
-
-Create a new task for PR Pilot using a prompt or prompt template.
+Hand over a task to PR Pilot.
 
 ```bash
 {{ sh('python -m cli.cli task --help') }}
 ```
 
-#### `pilot edit FILE PROMPT`
-
-Edit a local file using PR Pilot.
+Let PR Pilot edit a file for you.
 
 ```bash
 {{ sh('python -m cli.cli edit --help') }}
 ```
 
-#### `pilot plan PLAN`
-
-Run a step-by-step plan with PR Pilot.
+Let PR Pilot execute a step-by-step plan.
 
 ```bash
 {{ sh('python -m cli.cli plan --help') }}

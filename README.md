@@ -97,6 +97,19 @@ Usage: pilot [OPTIONS] COMMAND [ARGS]...
 
   PR Pilot CLI - https://docs.pr-pilot.ai
 
+  Delegate routine work to AI with confidence and predictability.
+
+  Examples:
+
+  - 📸 Create a Bootstrap5 component based on a screenshot:
+    pilot task -o component.html --code --snap "Write a Bootstrap5 component that looks like this."
+
+  - 🛠️ Refactor and clean up code:
+    pilot edit main.js "Break up large functions, organize the file and add comments."
+
+  - 🔄 Interact across services and tools:
+    pilot task "Find all open Linear and Github issues labeled as 'bug' and send them to the #bugs Slack channel."
+
 Options:
   --wait / --no-wait        Wait for PR Pilot to finish the task.
   --repo TEXT               Github repository in the format owner/repo.
@@ -110,52 +123,74 @@ Options:
   --help                    Show this message and exit.
 
 Commands:
-  edit  Let PR Pilot edit a file for you.
-  plan  Let PR Pilot execute a plan for you.
-  task  Create a new task for PR Pilot
+  edit  ✍️ Let PR Pilot edit a file for you.
+  plan  📋 Let PR Pilot execute a plan for you.
+  task  🛠️Create a new task for PR Pilot.
 
 ```
 
-Then there are three sub-commands.
+#### Commands
 
-Create a new task for PR Pilot using a prompt or prompt template.
+Work Delegation:
 
 ```bash
 Usage: pilot task [OPTIONS] [PROMPT]...
 
-  Create a new task for PR Pilot
+  🛠️Create a new task for PR Pilot.
+
+  Examples:
+
+  - Generate unit tests for a Python file:
+    pilot task -o test_utils.py --code "Write some unit tests for the utils.py file."
+
+  - Create a Bootstrap5 component based on a screenshot:
+    pilot task -o component.html --code --snap "Write a Bootstrap5 component that looks like this."
+
+  - Send a list of all bug issues to Slack:
+    pilot task "Find all open Github issues labeled as 'bug' and send them to the #bugs Slack channel."
 
 Options:
-  --snap             Select a portion of your screen to add as an image to the
-                     task.
-  --cheap            Use the cheapest GPT model (gpt-3.5-turbo)
-  --code             Optimize prompt and settings for generating code
-  -f, --file PATH    Generate prompt from a template file.
-  --direct           Do not feed the rendered template as a prompt into PR
+  --snap             📸 Select a portion of your screen to add as an image to
+                     the task.
+  --cheap            💸 Use the cheapest GPT model (gpt-3.5-turbo)
+  --code             💻 Optimize prompt and settings for generating code
+  -f, --file PATH    📂 Generate prompt from a template file.
+  --direct           🔄 Do not feed the rendered template as a prompt into PR
                      Pilot, but render it directly as output.
-  -o, --output PATH  Output file for the result.
+  -o, --output PATH  💾 Output file for the result.
   --help             Show this message and exit.
 
 ```
 
-Edit a local file using PR Pilot.
+In-Place Editing:
 
 ```bash
 Usage: pilot edit [OPTIONS] FILE_PATH PROMPT
 
-  Let PR Pilot edit a file for you.
+  ✍️ Let PR Pilot edit a file for you.
+
+  Examples:
+
+  - ✍️ Quickly add docstrings to a Python file:
+    pilot edit main.py "Add docstrings for all classes, functions and parameters."
+
+  - ♻️ Refactor and clean up code:
+    pilot edit main.js "Break up large functions, organize the file and add comments."
+
+  - 🧩 Implement placeholders:
+    pilot edit "I left placeholder comments in the file. Please replace them with the actual code."
 
 Options:
   --help  Show this message and exit.
 
 ```
 
-Run a step-by-step plan with PR Pilot.
+For more complex tasks:
 
 ```bash
 Usage: pilot plan [OPTIONS] FILE_PATH
 
-  Let PR Pilot execute a plan for you.
+  📋 Let PR Pilot execute a plan for you.
 
 Options:
   --help  Show this message and exit.
