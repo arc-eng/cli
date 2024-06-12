@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pr-pilot-cli',
-    version='1.8.2',
+    version='1.8.3',
     packages=find_packages(),
     include_package_data=True,
     install_requires=[

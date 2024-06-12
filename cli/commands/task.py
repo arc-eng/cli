@@ -17,10 +17,10 @@ from cli.util import pull_branch_changes
 @click.option('--direct', is_flag=True, default=False,
               help='🔄 Do not feed the rendered template as a prompt into PR Pilot, but render it directly as output.')
 @click.option('--output', '-o', type=click.Path(exists=False), help='💾 Output file for the result.')
-@click.argument('prompt', nargs=-1)
+@click.argument('prompt', required=False, default=None, type=str)
 @click.pass_context
 def task(ctx, snap, cheap, code, file, direct, output, prompt):
-    """🛠️Create a new task for PR Pilot.
+    """🛠️ Create a new task for PR Pilot.
 
     Examples:
 
@@ -52,6 +52,8 @@ def task(ctx, snap, cheap, code, file, direct, output, prompt):
 
     except Exception as e:
         status_indicator.fail()
+        if ctx.obj['debug']:
+            raise
         console.print(f"[bold red]An error occurred:[/bold red] {type(e)} {str(e)}")
     finally:
         status_indicator.stop()
