@@ -23,6 +23,8 @@ def plan(ctx, file_path):
 
     except Exception as e:
         status_indicator.fail()
+        if ctx.obj['debug']:
+            raise e
         console.print(f"[bold red]An error occurred:[/bold red] {type(e)} {str(e)}")
     finally:
         status_indicator.stop()
