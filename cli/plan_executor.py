@@ -26,16 +26,14 @@ class PlanExecutor:
         self.pr_number = None
         self.responses = []
 
-    def run(self, wait, repo, edit, quiet, model, debug, prompt):
+    def run(self, wait, repo, quiet, model, debug):
         """Run all steps in a given plan
 
         :param wait: Wait for PR Pilot to finish the plan
         :param repo: Github repository in the format owner/repo
-        :param edit: Let PR Pilot edit a file for you
         :param quiet: Disable all output on the terminal
         :param model: GPT model to use
         :param debug: Display debug information
-        :param prompt: Prompt for the task
 
         """
         console = Console()
@@ -75,7 +73,7 @@ class PlanExecutor:
 
             prompt = task.get('prompt')
             task_runner = TaskRunner(self.status_indicator)
-            finished_task = task_runner.run_task(wait, repo, snap, edit, quiet, cheap, code, template_file_path, direct, output_file, model, debug, wrapped_prompt, branch=branch, pr_number=self.pr_number)
+            finished_task = task_runner.run_task(wait, repo, snap, False, quiet, cheap, code, template_file_path, direct, output_file, model, debug, wrapped_prompt, branch=branch, pr_number=self.pr_number)
             if not finished_task:
                 raise ValueError('Task failed')
             self.responses.append(finished_task.result)
