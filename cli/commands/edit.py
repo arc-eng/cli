@@ -34,8 +34,7 @@ def edit(ctx, snap, file_path, prompt):
 
     """
     console = Console()
-    show_spinner = ctx.obj['spinner'] and not ctx.obj['quiet']
-    status_indicator = StatusIndicator(spinner=show_spinner, messages=not ctx.obj['quiet'], console=console)
+    status_indicator = StatusIndicator(spinner=ctx.obj['spinner'], messages=not ctx.obj['quiet'], console=console)
 
     if not prompt:
         prompt = click.edit("", extension=".md")
