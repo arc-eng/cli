@@ -4,6 +4,7 @@ from rich.markdown import Markdown
 
 from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
+from cli.models import TaskParameters
 
 
 class PlanExecutor:
@@ -61,7 +62,7 @@ class PlanExecutor:
             previous_responses = ""
             for i, response in enumerate(self.responses):
                 previous_responses += f"## Result of Sub-task {i + 1}\n\n{response}\n\n"
-            wrapped_prompt = (f"We are working on a main task that contains a list of sub-tasks. This is sub-task {current_task} / {num_tasks}\n\n---\n\n"
+            wrapped_prompt = (f"We are working on a main task that contains a list of sub-tTasks. This is sub-task {current_task} / {num_tasks}\n\n---\n\n"
                               f"# Main Task {self.name}\n\n{self.plan.get('prompt')}\n\n"
                               f"# Results of previous sub-tasks\n\n{previous_responses}\n\n"
                               f"# Current Sub-task: {task.get('name')}\n\n{task.get('prompt')}\n\n---\n\n"
@@ -71,8 +72,25 @@ class PlanExecutor:
                 console.print(Markdown(wrapped_prompt))
                 console.line()
 
+            params = TaskParameters(
+                wait=wait,
+                repo=repo,
+                snap=snap,
+                quiet=quiet,
+                cheap=cheap,
+                code=code,
+                template_file_path=template_file_path,
+                direct=direct,
+                output_file=output_file,
+                model=model,
+                debug=debug,
+                prompt=wrapped_prompt,
+                branch=branch,
+                pr_number=self.pr_number
+            )
+
             task_runner = TaskRunner(self.status_indicator)
-            finished_task = task_runner.run_task(wait, repo, snap, quiet, cheap, code, template_file_path, direct, output_file, model, debug, wrapped_prompt, branch=branch, pr_number=self.pr_number)
+            finished_task = task_runner.run_task(params)
             if not finished_task:
                 raise ValueError('Task failed')
             self.responses.append(finished_task.result)
