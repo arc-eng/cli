@@ -43,12 +43,14 @@ def task(ctx, snap, cheap, code, file, direct, output, prompt):
     try:
         if ctx.obj['sync'] and not ctx.obj['branch']:
             # Get current branch from git
-            ctx.obj['branch'] = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
+            current_branch = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
+            if current_branch not in ['master', 'main']:
+                ctx.obj['branch'] = current_branch
 
         runner = TaskRunner(status_indicator)
-        runner.run_task(ctx.obj['wait'], ctx.obj['repo'], snap, None, ctx.obj['quiet'], cheap, code, file, direct, output, ctx.obj['model'], ctx.obj['debug'], prompt, branch=ctx.obj['branch'])
+        finished_task = runner.run_task(ctx.obj['wait'], ctx.obj['repo'], snap, None, ctx.obj['quiet'], cheap, code, file, direct, output, ctx.obj['model'], ctx.obj['debug'], prompt, branch=ctx.obj['branch'])
         if ctx.obj['sync']:
-            pull_branch_changes(status_indicator, console, ctx.obj['branch'], ctx.obj['debug'])
+            pull_branch_changes(status_indicator, console, finished_task.branch, ctx.obj['debug'])
 
     except Exception as e:
         status_indicator.fail()

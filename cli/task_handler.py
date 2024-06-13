@@ -29,7 +29,7 @@ class TaskHandler:
         :return:
         """
 
-        self.status.update("Generating a task title ...")
+        self.status.update("Preparing task ...")
         self.status.start()
         try:
             start_time = time.time()
