@@ -8,6 +8,7 @@ from cli.constants import CODE_PRIMER
 from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
 from cli.util import pull_branch_changes
+from cli.models import TaskParameters
 
 
 @click.command()
@@ -44,12 +45,26 @@ def edit(ctx, file_path, prompt):
     try:
         if ctx.obj['sync'] and not ctx.obj['branch']:
             # Get current branch from git
-            ctx.obj['branch'] = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
+            current_branch = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
+            if (current_branch not in ['master', 'main']):
+                ctx.obj['branch'] = current_branch
+
+        task_params = TaskParameters(
+            wait=ctx.obj['wait'],
+            repo=ctx.obj['repo'],
+            quiet=ctx.obj['quiet'],
+            output=file_path,
+            code=True,
+            model=ctx.obj['model'],
+            debug=ctx.obj['debug'],
+            prompt=prompt,
+            branch=ctx.obj['branch']
+        )
 
         runner = TaskRunner(status_indicator)
-        runner.run_task(ctx.obj['wait'], ctx.obj['repo'], None, file_path, ctx.obj['quiet'], True, None, False, file_path, ctx.obj['model'], ctx.obj['debug'], prompt, branch=ctx.obj['branch'])
+        finished_task = runner.run_task(task_params)
         if ctx.obj['sync']:
-            pull_branch_changes(status_indicator, console, ctx.obj['branch'], ctx.obj['debug'])
+            pull_branch_changes(status_indicator, console, finished_task.branch, ctx.obj['debug'])
 
     except Exception as e:
         status_indicator.fail()
