@@ -48,7 +48,7 @@ def task(ctx, snap, cheap, code, file, direct, output, prompt):
                 ctx.obj['branch'] = current_branch
 
         runner = TaskRunner(status_indicator)
-        finished_task = runner.run_task(ctx.obj['wait'], ctx.obj['repo'], snap, None, ctx.obj['quiet'], cheap, code, file, direct, output, ctx.obj['model'], ctx.obj['debug'], prompt, branch=ctx.obj['branch'])
+        finished_task = runner.run_task(ctx.obj['wait'], ctx.obj['repo'], snap, ctx.obj['quiet'], cheap, code, file, direct, output, ctx.obj['model'], ctx.obj['debug'], prompt, branch=ctx.obj['branch'])
         if ctx.obj['sync']:
             pull_branch_changes(status_indicator, console, finished_task.branch, ctx.obj['debug'])
 

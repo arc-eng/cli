@@ -1,8 +1,10 @@
 import os
+from pathlib import Path
 
 import click
 from rich.console import Console
 
+from cli.constants import CODE_PRIMER
 from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
 from cli.util import pull_branch_changes
@@ -34,13 +36,18 @@ def edit(ctx, file_path, prompt):
     show_spinner = ctx.obj['spinner'] and not ctx.obj['quiet']
     status_indicator = StatusIndicator(spinner=show_spinner, messages=not ctx.obj['quiet'], console=console)
 
+    file_content = Path(file_path).read_text()
+    user_prompt = prompt
+    prompt = f"I have the following file content:\n\n---\n{file_content}\n---\n\n"
+    prompt += f"Please edit the file content above in the following way:\n\n{user_prompt}"
+
     try:
         if ctx.obj['sync'] and not ctx.obj['branch']:
             # Get current branch from git
             ctx.obj['branch'] = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
 
         runner = TaskRunner(status_indicator)
-        runner.run_task(ctx.obj['wait'], ctx.obj['repo'], None, file_path, ctx.obj['quiet'], False, False, None, False, None, ctx.obj['model'], ctx.obj['debug'], prompt, branch=ctx.obj['branch'])
+        runner.run_task(ctx.obj['wait'], ctx.obj['repo'], None, file_path, ctx.obj['quiet'], True, None, False, file_path, ctx.obj['model'], ctx.obj['debug'], prompt, branch=ctx.obj['branch'])
         if ctx.obj['sync']:
             pull_branch_changes(status_indicator, console, ctx.obj['branch'], ctx.obj['debug'])
 

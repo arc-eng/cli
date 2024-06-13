@@ -72,7 +72,7 @@ class PlanExecutor:
                 console.line()
 
             task_runner = TaskRunner(self.status_indicator)
-            finished_task = task_runner.run_task(wait, repo, snap, False, quiet, cheap, code, template_file_path, direct, output_file, model, debug, wrapped_prompt, branch=branch, pr_number=self.pr_number)
+            finished_task = task_runner.run_task(wait, repo, snap, quiet, cheap, code, template_file_path, direct, output_file, model, debug, wrapped_prompt, branch=branch, pr_number=self.pr_number)
             if not finished_task:
                 raise ValueError('Task failed')
             self.responses.append(finished_task.result)

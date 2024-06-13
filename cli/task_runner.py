@@ -26,7 +26,7 @@ class TaskRunner:
         os.system(screenshot_command)
         return Path("/tmp/screenshot.png")
 
-    def run_task(self, wait, repo, snap, edit, quiet, cheap, code, file, direct, output, model, debug, prompt, branch=None, pr_number=None) -> Optional[Task]:
+    def run_task(self, wait, repo, snap, quiet, cheap, code, file, direct, output, model, debug, prompt, branch=None, pr_number=None) -> Optional[Task]:
 
         console = Console()
         screenshot = self.take_screenshot() if snap else None
@@ -53,13 +53,6 @@ class TaskRunner:
         if pr_number:
             prompt = f"We are working on PR #{pr_number}. Read the PR first before doing anything else.\n\n---\n\n" + prompt
 
-        if edit:
-            file_content = Path(edit).read_text()
-            user_prompt = prompt
-            prompt = f"I have the following file content:\n\n---\n{file_content}\n---\n\n"
-            prompt += f"Please edit the file content above in the following way:\n\n{user_prompt}\n\n{CODE_PRIMER}"
-            if not output:
-                output = edit
 
         if cheap:
             model = CHEAP_MODEL
@@ -91,7 +84,7 @@ class TaskRunner:
         task_handler = None
         if wait:
             task_handler = TaskHandler(task, self.status_indicator)
-            task_handler.wait_for_result(output, quiet)
+            task_handler.wait_for_result(output, quiet, code=code)
         self.status_indicator.stop()
         if debug:
             console.print(task)
