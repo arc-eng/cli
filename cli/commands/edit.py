@@ -4,18 +4,18 @@ from pathlib import Path
 import click
 from rich.console import Console
 
-from cli.constants import CODE_PRIMER
+from cli.models import TaskParameters
 from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
 from cli.util import pull_branch_changes
-from cli.models import TaskParameters
 
 
 @click.command()
+@click.option('--snap', is_flag=True, help='📸 Add a screenshot to your prompt.')
 @click.argument('file_path', type=click.Path(exists=True))
-@click.argument('prompt')
+@click.argument('prompt', required=False, default=None, type=str)
 @click.pass_context
-def edit(ctx, file_path, prompt):
+def edit(ctx, snap, file_path, prompt):
     """✍️ Let PR Pilot edit a file for you.
 
     Examples:
@@ -34,8 +34,10 @@ def edit(ctx, file_path, prompt):
 
     """
     console = Console()
-    show_spinner = ctx.obj['spinner'] and not ctx.obj['quiet']
-    status_indicator = StatusIndicator(spinner=show_spinner, messages=not ctx.obj['quiet'], console=console)
+    status_indicator = StatusIndicator(spinner=ctx.obj['spinner'], messages=not ctx.obj['quiet'], console=console)
+
+    if not prompt:
+        prompt = click.edit("", extension=".md")
 
     file_content = Path(file_path).read_text()
     user_prompt = prompt
@@ -50,6 +52,7 @@ def edit(ctx, file_path, prompt):
                 ctx.obj['branch'] = current_branch
 
         task_params = TaskParameters(
+            snap=snap,
             wait=ctx.obj['wait'],
             repo=ctx.obj['repo'],
             quiet=ctx.obj['quiet'],

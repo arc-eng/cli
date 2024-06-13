@@ -114,7 +114,7 @@ Options:
   --wait / --no-wait        Wait for PR Pilot to finish the task.
   --repo TEXT               Github repository in the format owner/repo.
   --spinner / --no-spinner  Display a loading indicator.
-  --quiet                   Disable all output on the terminal.
+  --quiet / --chatty        Disable all status messages.
   -m, --model TEXT          GPT model to use.
   -b, --branch TEXT         Run the task on a specific branch.
   --sync / --no-sync        Run task on your current branch and pull PR
@@ -165,7 +165,7 @@ Options:
 Let PR Pilot edit a file for you.
 
 ```bash
-Usage: pilot edit [OPTIONS] FILE_PATH PROMPT
+Usage: pilot edit [OPTIONS] FILE_PATH [PROMPT]
 
   ✍️ Let PR Pilot edit a file for you.
 
@@ -181,6 +181,7 @@ Usage: pilot edit [OPTIONS] FILE_PATH PROMPT
     pilot edit "I left placeholder comments in the file. Please replace them with the actual code."
 
 Options:
+  --snap  📸 Add a screenshot to your prompt.
   --help  Show this message and exit.
 
 ```
