@@ -2,6 +2,9 @@ from rich.console import Console
 from yaspin import yaspin
 
 
+MAX_MSG_LEN = 80
+
+
 class StatusIndicator:
 
     def __init__(self, spinner=True, messages=True, console=None):
@@ -12,7 +15,7 @@ class StatusIndicator:
 
     def update(self, text):
         if self.visible:
-            self.spinner.text = text
+            self.spinner.text = text[:MAX_MSG_LEN]
 
     def success(self):
         if self.visible and self.messages:

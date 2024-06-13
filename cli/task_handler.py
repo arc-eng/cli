@@ -47,12 +47,13 @@ class TaskHandler:
 
             result = self.task.result
 
-            # Task created a PR
-            if self.task.pr_number and not quiet:
-                pr_url = f"https://github.com/{self.task.github_project}/pull/{self.task.pr_number}"
+            new_pr_url = None
+            if not self.task_runs_on_pr and self.task.pr_number:
+                # Task created a new PR
+                new_pr_url = f"https://github.com/{self.task.github_project}/pull/{self.task.pr_number}"
                 if not self.task_runs_on_pr:
                     # We found a new PR number, let the user know
-                    self.status.update(f"Opened Pull Request: {pr_url}")
+                    self.status.update(f"Opened Pull Request: {new_pr_url}")
 
             # User wants output in a file
             if output_file:
@@ -68,8 +69,12 @@ class TaskHandler:
             else:
                 self.status.success()
                 self.status.stop()
-                if not quiet and result:
+                if result:
                     self.console.line()
+                    # If quiet mode is enabled, we still want to show the PR URL
+                    if quiet and new_pr_url:
+                        reference_emojis = "🔗" if self.task_runs_on_pr else "🔗🆕"
+                        result += f"\n\n[🆕 **PR #{self.task.pr_number}**]({new_pr_url})"
                     self.console.print(Markdown(result))
                     self.console.line()
 
