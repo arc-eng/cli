@@ -93,7 +93,7 @@ The CLI has global parameters and options that can be used to customize its beha
 
 
 ```bash
-Usage: pilot [OPTIONS] COMMAND [ARGS]...
+Usage: python -m cli.cli [OPTIONS] COMMAND [ARGS]...
 
   PR Pilot CLI - https://docs.pr-pilot.ai
 
@@ -117,7 +117,7 @@ Options:
   --quiet                   Disable all output on the terminal.
   -m, --model TEXT          GPT model to use.
   -b, --branch TEXT         Run the task on a specific branch.
-  --sync                    Run task on your current branch and pull PR
+  --sync / --no-sync        Run task on your current branch and pull PR
                             Pilot's changes when done.
   --debug                   Display debug information.
   --help                    Show this message and exit.
@@ -125,18 +125,18 @@ Options:
 Commands:
   edit  ✍️ Let PR Pilot edit a file for you.
   plan  📋 Let PR Pilot execute a plan for you.
-  task  🛠️Create a new task for PR Pilot.
+  task  🛠️ Create a new task for PR Pilot.
 
 ```
 
 #### Commands
 
-Work Delegation:
+Hand over a task to PR Pilot.
 
 ```bash
-Usage: pilot task [OPTIONS] [PROMPT]...
+Usage: python -m cli.cli task [OPTIONS] [PROMPT]
 
-  🛠️Create a new task for PR Pilot.
+  🛠️ Create a new task for PR Pilot.
 
   Examples:
 
@@ -162,10 +162,10 @@ Options:
 
 ```
 
-In-Place Editing:
+Let PR Pilot edit a file for you.
 
 ```bash
-Usage: pilot edit [OPTIONS] FILE_PATH PROMPT
+Usage: python -m cli.cli edit [OPTIONS] FILE_PATH PROMPT
 
   ✍️ Let PR Pilot edit a file for you.
 
@@ -185,10 +185,10 @@ Options:
 
 ```
 
-For more complex tasks:
+Let PR Pilot execute a step-by-step plan.
 
 ```bash
-Usage: pilot plan [OPTIONS] FILE_PATH
+Usage: python -m cli.cli plan [OPTIONS] FILE_PATH
 
   📋 Let PR Pilot execute a plan for you.
 
@@ -206,6 +206,12 @@ api_key: YOUR_API_KEY
 
 # Default Github repository if not running CLI in a repository directory
 default_repo: owner/repo
+
+# Enabled --sync by default
+auto_sync: true
+
+# Print status messages to the command line
+print_status: true
 ```
 
 ## 🤝 Contributing

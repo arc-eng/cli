@@ -68,7 +68,7 @@ class TaskHandler:
             else:
                 self.status.success()
                 self.status.stop()
-                if not quiet:
+                if not quiet and result:
                     self.console.line()
                     self.console.print(Markdown(result))
                     self.console.line()
