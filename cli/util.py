@@ -43,8 +43,12 @@ def load_config():
 def pull_branch_changes(status_indicator, console, branch, debug=False):
     status_indicator.update(f"Pull latest changes from {branch}")
     try:
+        # Fetch origin and checkout branch
+        subprocess_params = dict(stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        subprocess.run(['git', 'fetch', 'origin'], **subprocess_params)
+        subprocess.run(['git', 'checkout', branch], **subprocess_params)
         # Capture output of git pull
-        result = subprocess.run(['git', 'pull', 'origin', branch], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        result = subprocess.run(['git', 'pull', 'origin', branch], **subprocess_params)
         output = result.stdout
         error = result.stderr
         status_indicator.success()

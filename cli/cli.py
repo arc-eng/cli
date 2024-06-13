@@ -1,4 +1,5 @@
 import click
+from rich.console import Console
 
 from cli.commands.edit import edit
 from cli.commands.plan import plan
@@ -52,4 +53,7 @@ main.add_command(plan)
 
 
 if __name__ == '__main__':
+    console = Console()
+    console.line()
     main()
+    console.line()
