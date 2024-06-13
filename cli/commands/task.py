@@ -67,7 +67,8 @@ def task(ctx, snap, cheap, code, file, direct, output, prompt):
         finished_task = runner.run_task(task_params)
         if ctx.obj['sync']:
             branch = finished_task.branch if finished_task else ctx.obj['branch']
-            pull_branch_changes(status_indicator, console, branch, ctx.obj['debug'])
+            if branch:
+                pull_branch_changes(status_indicator, console, branch, ctx.obj['debug'])
 
     except Exception as e:
         status_indicator.fail()

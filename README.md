@@ -93,7 +93,7 @@ The CLI has global parameters and options that can be used to customize its beha
 
 
 ```bash
-Usage: python -m cli.cli [OPTIONS] COMMAND [ARGS]...
+Usage: pilot [OPTIONS] COMMAND [ARGS]...
 
   PR Pilot CLI - https://docs.pr-pilot.ai
 
@@ -134,7 +134,7 @@ Commands:
 Hand over a task to PR Pilot.
 
 ```bash
-Usage: python -m cli.cli task [OPTIONS] [PROMPT]
+Usage: pilot task [OPTIONS] [PROMPT]
 
   🛠️ Create a new task for PR Pilot.
 
@@ -165,7 +165,7 @@ Options:
 Let PR Pilot edit a file for you.
 
 ```bash
-Usage: python -m cli.cli edit [OPTIONS] FILE_PATH PROMPT
+Usage: pilot edit [OPTIONS] FILE_PATH PROMPT
 
   ✍️ Let PR Pilot edit a file for you.
 
@@ -188,7 +188,7 @@ Options:
 Let PR Pilot execute a step-by-step plan.
 
 ```bash
-Usage: python -m cli.cli plan [OPTIONS] FILE_PATH
+Usage: pilot plan [OPTIONS] FILE_PATH
 
   📋 Let PR Pilot execute a plan for you.
 
@@ -210,8 +210,8 @@ default_repo: owner/repo
 # Enabled --sync by default
 auto_sync: true
 
-# Print status messages to the command line
-print_status: true
+# Suppress status messages by default
+quiet: true
 ```
 
 ## 🤝 Contributing
