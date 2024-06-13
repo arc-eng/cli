@@ -73,8 +73,7 @@ class TaskHandler:
                     self.console.line()
                     # If quiet mode is enabled, we still want to show the PR URL
                     if quiet and new_pr_url:
-                        reference_emojis = "🔗" if self.task_runs_on_pr else "🔗🆕"
-                        result += f"\n\n[🆕 **PR #{self.task.pr_number}**]({new_pr_url})"
+                        result += f"\n\n🆕 [**PR #{self.task.pr_number}**]({new_pr_url})"
                     self.console.print(Markdown(result))
                     self.console.line()
 

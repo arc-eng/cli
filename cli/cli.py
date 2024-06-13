@@ -12,7 +12,7 @@ from cli.util import load_config
 @click.option('--wait/--no-wait', is_flag=True, default=True, help='Wait for PR Pilot to finish the task.')
 @click.option('--repo', help='Github repository in the format owner/repo.', required=False)
 @click.option('--spinner/--no-spinner', is_flag=True, default=True, help='Display a loading indicator.')
-@click.option('--quiet', is_flag=True, default=False, help='Disable all status messages.')
+@click.option('--quiet/--chatty', is_flag=True, default=False, help='Disable all status messages.')
 @click.option('--model', '-m', help='GPT model to use.', default=DEFAULT_MODEL)
 @click.option('--branch', '-b', help='Run the task on a specific branch.', required=False, default=None)
 @click.option('--sync/--no-sync', is_flag=True, default=False, help='Run task on your current branch and pull PR Pilot\'s changes when done.')

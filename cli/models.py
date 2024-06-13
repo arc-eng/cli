@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 
+
 class TaskParameters(BaseModel):
     wait: bool = Field(default=False, description="Wait for the task to complete")
     repo: Optional[str] = Field(default=None, description="Repository to run the task on")
