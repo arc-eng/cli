@@ -5,6 +5,7 @@ from cli.commands.edit import edit
 from cli.commands.plan import plan
 from cli.commands.task import task
 from cli.constants import DEFAULT_MODEL
+from cli.util import load_config
 
 
 @click.group()
@@ -14,7 +15,7 @@ from cli.constants import DEFAULT_MODEL
 @click.option('--quiet', is_flag=True, default=False, help='Disable all output on the terminal.')
 @click.option('--model', '-m', help='GPT model to use.', default=DEFAULT_MODEL)
 @click.option('--branch', '-b', help='Run the task on a specific branch.', required=False, default=None)
-@click.option('--sync', is_flag=True, default=False, help='Run task on your current branch and pull PR Pilot\'s changes when done.')
+@click.option('--sync/--no-sync', is_flag=True, default=False, help='Run task on your current branch and pull PR Pilot\'s changes when done.')
 @click.option('--debug', is_flag=True, default=False, help='Display debug information.')
 @click.pass_context
 def main(ctx, wait, repo, spinner, quiet, model, branch, sync, debug):
@@ -36,14 +37,17 @@ def main(ctx, wait, repo, spinner, quiet, model, branch, sync, debug):
     - 🔄 Interact across services and tools:
       pilot task "Find all open Linear and Github issues labeled as 'bug' and send them to the #bugs Slack channel."
     """
+
+    user_config = load_config()
+
     ctx.ensure_object(dict)
     ctx.obj['wait'] = wait
     ctx.obj['repo'] = repo
     ctx.obj['spinner'] = spinner
-    ctx.obj['quiet'] = quiet
+    ctx.obj['quiet'] = user_config.get('quiet', quiet)
     ctx.obj['model'] = model
     ctx.obj['branch'] = branch
-    ctx.obj['sync'] = sync
+    ctx.obj['sync'] = user_config.get('auto_sync', sync)
     ctx.obj['debug'] = debug
 
 
@@ -53,7 +57,4 @@ main.add_command(plan)
 
 
 if __name__ == '__main__':
-    console = Console()
-    console.line()
     main()
-    console.line()

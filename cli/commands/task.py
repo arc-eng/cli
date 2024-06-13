@@ -38,8 +38,7 @@ def task(ctx, snap, cheap, code, file, direct, output, prompt):
       pilot task "Find all open Github issues labeled as 'bug' and send them to the #bugs Slack channel."
     """
     console = Console()
-    show_spinner = ctx.obj['spinner'] and not ctx.obj['quiet']
-    status_indicator = StatusIndicator(spinner=show_spinner, messages=not ctx.obj['quiet'], console=console)
+    status_indicator = StatusIndicator(spinner=ctx.obj['spinner'], messages=not ctx.obj['quiet'], console=console)
 
     try:
         if ctx.obj['sync'] and not ctx.obj['branch']:
@@ -67,7 +66,8 @@ def task(ctx, snap, cheap, code, file, direct, output, prompt):
         runner = TaskRunner(status_indicator)
         finished_task = runner.run_task(task_params)
         if ctx.obj['sync']:
-            pull_branch_changes(status_indicator, console, finished_task.branch, ctx.obj['debug'])
+            branch = finished_task.branch if finished_task else ctx.obj['branch']
+            pull_branch_changes(status_indicator, console, branch, ctx.obj['debug'])
 
     except Exception as e:
         status_indicator.fail()

@@ -13,11 +13,9 @@ class StatusIndicator:
     def update(self, text):
         if self.visible:
             self.spinner.text = text
-        elif self.messages:
-            self.console.print(f"[bold]>[/bold] {text}")
 
     def success(self):
-        if self.visible:
+        if self.visible and self.messages:
             self.spinner.ok("✅ ")
             self.spinner.start()
 
