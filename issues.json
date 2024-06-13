@@ -1,0 +1,20 @@
+{
+  "github_issues": [
+    {
+      "id": 51,
+      "title": "🐛 Missing `cli/commands` directory",
+      "url": "https://github.com/PR-Pilot-AI/pr-pilot-cli/issues/51"
+    },
+    {
+      "id": 54,
+      "title": "🔍 Update issues.json with GitHub bug and handle Linear error",
+      "url": "https://github.com/PR-Pilot-AI/pr-pilot-cli/pull/54"
+    },
+    {
+      "id": 55,
+      "title": "🐞 Update issues.json with GitHub Bugs and Handle Linear Error",
+      "url": "https://github.com/PR-Pilot-AI/pr-pilot-cli/pull/55"
+    }
+  ],
+  "linear_issues": []
+}
