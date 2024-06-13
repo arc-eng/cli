@@ -6,6 +6,7 @@ from rich.console import Console
 from cli.constants import CHEAP_MODEL
 from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
+from cli.models import TaskParameters
 from cli.util import pull_branch_changes
 
 
@@ -44,11 +45,27 @@ def task(ctx, snap, cheap, code, file, direct, output, prompt):
         if ctx.obj['sync'] and not ctx.obj['branch']:
             # Get current branch from git
             current_branch = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
-            if current_branch not in ['master', 'main']:
+            if (current_branch not in ['master', 'main']):
                 ctx.obj['branch'] = current_branch
 
+        task_params = TaskParameters(
+            wait=ctx.obj['wait'],
+            repo=ctx.obj['repo'],
+            snap=snap,
+            quiet=ctx.obj['quiet'],
+            cheap=cheap,
+            code=code,
+            file=file,
+            direct=direct,
+            output=output,
+            model=ctx.obj['model'],
+            debug=ctx.obj['debug'],
+            prompt=prompt,
+            branch=ctx.obj['branch']
+        )
+
         runner = TaskRunner(status_indicator)
-        finished_task = runner.run_task(ctx.obj['wait'], ctx.obj['repo'], snap, ctx.obj['quiet'], cheap, code, file, direct, output, ctx.obj['model'], ctx.obj['debug'], prompt, branch=ctx.obj['branch'])
+        finished_task = runner.run_task(task_params)
         if ctx.obj['sync']:
             pull_branch_changes(status_indicator, console, finished_task.branch, ctx.obj['debug'])
 
