@@ -40,6 +40,12 @@ def main(ctx, wait, repo, spinner, quiet, model, branch, sync, debug):
 
     user_config = load_config()
 
+    # If repo is set manually, don't auto sync
+    if repo:
+        sync = False
+    else:
+        sync = user_config.get('auto_sync', sync)
+
     ctx.ensure_object(dict)
     ctx.obj['wait'] = wait
     ctx.obj['repo'] = repo
@@ -47,7 +53,7 @@ def main(ctx, wait, repo, spinner, quiet, model, branch, sync, debug):
     ctx.obj['quiet'] = user_config.get('quiet', quiet)
     ctx.obj['model'] = model
     ctx.obj['branch'] = branch
-    ctx.obj['sync'] = user_config.get('auto_sync', sync)
+    ctx.obj['sync'] = sync
     ctx.obj['debug'] = debug
 
 

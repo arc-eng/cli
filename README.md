@@ -198,6 +198,23 @@ Options:
 
 ```
 
+
+## 📦 Installation
+
+Two options are available for installing the CLI:
+
+
+### pip
+```
+pip install --upgrade pr-pilot-cli
+```
+
+### Homebrew:
+```
+brew tap pr-pilot-ai/homebrew-tap
+brew install pr-pilot-cli
+```
+
 ## ⚙️ Configuration
 The configuration file is located at `~/.pr-pilot.yaml`.
 
@@ -220,11 +237,3 @@ Contributors are welcome to improve the CLI by submitting pull requests or repor
 
 ## 📜 License
 The PR Pilot CLI is open-source software licensed under the GPL-3 license.
-
-## 📦 Installation
-
-To install the required dependencies using Poetry, run:
-
-```bash
-poetry install
-```

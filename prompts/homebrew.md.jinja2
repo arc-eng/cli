@@ -1,0 +1,9 @@
+Here is the new homebrew formula:
+
+```ruby
+{{ sh('poetry homebrew-formula --quiet --output=-') }}
+```
+
+1. Change the test command to `pilot --help`
+2. Add the "rust" build dependency to the formula
+3. Write the content to `Formula/pr-pilot-cli.rb`

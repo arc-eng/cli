@@ -41,7 +41,7 @@ def task(ctx, snap, cheap, code, file, direct, output, prompt):
     status_indicator = StatusIndicator(spinner=ctx.obj['spinner'], messages=not ctx.obj['quiet'], console=console)
 
     try:
-        if ctx.obj['sync'] and not ctx.obj['branch']:
+        if ctx.obj['sync']:
             # Get current branch from git
             current_branch = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
             if (current_branch not in ['master', 'main']):

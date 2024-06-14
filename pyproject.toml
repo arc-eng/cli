@@ -5,6 +5,7 @@ description = "CLI for PR Pilot, a text-to-task automation platform for Github."
 authors = ["Marco Lamina <marco@pr-pilot.ai>"]
 license = "GPL-3.0"
 readme = "README.md"
+packages = [{include = "cli"}]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
@@ -14,7 +15,6 @@ pyyaml = "6.0.1"
 yaspin = "3.0.2"
 rich = "13.7.1"
 jinja2 = "3.1.4"
-pydantic = "2.7.0"
 
 [tool.poetry.scripts]
 pilot = "cli.cli:main"
