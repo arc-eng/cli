@@ -1,16 +1,19 @@
 [tool.poetry]
 name = "pr-pilot-cli"
-version = "1.8.9"
+version = "1.8.10"
 description = "CLI for PR Pilot, a text-to-task automation platform for Github."
 authors = ["Marco Lamina <marco@pr-pilot.ai>"]
 license = "GPL-3.0"
 readme = "README.md"
 packages = [{include = "cli"}]
+documentation = "https://docs.pr-pilot.ai"
+homepage = "https://www.pr-pilot.ai"
+repository = "https://github.com/pr-pilot-ai/pr-pilot-cli"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<4.0"
+python = ">=3.10,<4.0"
 click = "8.1.7"
-pr-pilot = "1.5.3"
+pr-pilot = "1.5.4"
 pyyaml = "6.0.1"
 yaspin = "3.0.2"
 rich = "13.7.1"
