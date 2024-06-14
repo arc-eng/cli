@@ -11,12 +11,27 @@
 
 # PR Pilot Command-Line Interface
 
-[PR Pilot](https://docs.pr-pilot.ai) gives you a natural language interface for your Github projects.
-Given a prompt, it uses LLMs (Large Language Models) to autonomously fulfill tasks by interacting with your code base
-and Github issues.
+[PR Pilot](https://docs.pr-pilot.ai) assist you in your daily workflow and works with the dev tools you trust and love - exactly when and where you want it.
 
 Using [prompt templates](./prompts), you can create powerful,
 reusable commands that can be executed by PR Pilot.
+
+## 📦 Installation
+
+Two options are available for installing the CLI:
+
+
+### pip
+```
+pip install --upgrade pr-pilot-cli
+```
+
+### Homebrew:
+```
+brew tap pr-pilot-ai/homebrew-tap
+brew install pr-pilot-cli
+```
+
 
 ## 🛠️ Usage
 
@@ -117,21 +132,7 @@ Let PR Pilot execute a step-by-step plan.
 ```
 
 
-## 📦 Installation
 
-Two options are available for installing the CLI:
-
-
-### pip
-```
-pip install --upgrade pr-pilot-cli
-```
-
-### Homebrew:
-```
-brew tap pr-pilot-ai/homebrew-tap
-brew install pr-pilot-cli
-```
 
 ## ⚙️ Configuration
 The configuration file is located at `~/.pr-pilot.yaml`.

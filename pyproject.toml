@@ -11,7 +11,7 @@ homepage = "https://www.pr-pilot.ai"
 repository = "https://github.com/pr-pilot-ai/pr-pilot-cli"
 
 [tool.poetry.dependencies]
-python = ">=3.10,<4.0"
+python = "~3.10.0"
 click = "8.1.7"
 pr-pilot = "1.5.4"
 pyyaml = "6.0.1"
