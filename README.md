@@ -198,6 +198,23 @@ Options:
 
 ```
 
+
+## 📦 Installation
+
+Two options are available for installing the CLI:
+
+
+### pip
+```
+pip install --upgrade pr-pilot-cli
+```
+
+### Homebrew:
+```
+brew tap pr-pilot-ai/homebrew-tap
+brew install pr-pilot-cli
+```
+
 ## ⚙️ Configuration
 The configuration file is located at `~/.pr-pilot.yaml`.
 
