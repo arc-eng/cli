@@ -13,8 +13,35 @@
 
 [PR Pilot](https://docs.pr-pilot.ai) assist you in your daily workflow and works with the dev tools you trust and love - exactly when and where you want it.
 
-Using [prompt templates](./prompts), you can create powerful,
-reusable commands that can be executed by PR Pilot.
+```bash
+pilot edit main.py "Add docstrings to all functions and classes"
+```
+
+With [prompt templates](https://github.com/PR-Pilot-AI/pr-pilot-cli/tree/main/prompts), you can create powerful,
+reusable commands:
+
+```markdown
+I've made some changes and opened a new PR: #{{ env('PR_NUMBER') }}.
+
+I need a PR title and a description that summarizes these changes in short, concise bullet points.
+The PR description will also be used as merge commit message, so it should be clear and informative.
+
+Use the following guidelines:
+
+- Start title with a verb in the imperative mood (e.g., "Add", "Fix", "Update").
+- At the very top, provide 1-sentence summary of the changes and their impact.
+- Below, list the changes made in bullet points.
+
+# Your task
+Edit PR #{{ env('PR_NUMBER') }} title and description to reflect the changes made in this PR.
+```
+
+Send PR Pilot off to give any PR a title and description according to your guidelines:
+
+```bash
+PR_NUMBER=153 pilot task -f generate-pr-description.md.jinja2
+```
+
 
 ## 📦 Installation
 
@@ -80,27 +107,49 @@ To learn more about templates, check out the [prompts](./prompts) directory.
 Break down more complex tasks into smaller steps with a plan:
 
 ```yaml
-# document_cli.yaml
+# add_page.yaml
 
-name: Document the CLI
+name: Add a TODO Page
 prompt: |
-  The CLI is great, but we need a comprehensive user documentation.
-  The documentation should be stored as Markdown files in the repository.
+  We are adding a TODO page to the application.
+  Users should be able to:
+  - See a list of their TODOs
+  - Cross of TODO items / mark them as done
+  - Add new TODO items
 
 steps:
-  - name: Identify documentation needs
-    output_file: doc_instructions.md
+  - name: Create HTML template
     prompt: |
-      1. Read `cli/cli.py`
-      2. Identify the key features of the CLI and how it works
-      3. List the documentation files that need to be created and outline their content
-      4. Create step-by-step instructions for creating the documentation
-
-  - name: Document the CLI
-    template: doc_instructions.md
+      1. Look at templates/users.html to understand the basic structure
+      2. Create templates/todo.html based on the example
+  - name: Create view controller
+    prompt: |
+      The controller should handle all actions/calls from the UI.
+      1. Look at views/users.py to understand the basic structure
+      2. Create views/todo.py based on the example
+  - name: Integrate the page
+    prompt: |
+      Integrate the new page into the application:
+      1. Add a new route in urls.py, referencing the new view controller
+      2. Add a new tab to the navigation in templates/base.html
+  - name: Generate PR description
+    template: prompts/generate-pr-description.md.jinja2
+```
+You can run this plan with:
+```bash
+pilot plan add_page.yaml
 ```
 
-Run it with `pilot plan document_cli.yaml`.
+PR Pilot will then autonomously:
+* Create a new branch and open a PR
+* Implement the HTML template and view controller
+* Integrate the new page into the navigation
+* Look at all changes and create a PR description based on your preferences defined in `prompts/generate-pr-description.md.jinja2`
+
+Save this as part of your code base. Next time you need a new page, simply adjust the plan and run it again.
+If you don't like the result, simply close the PR and delete the branch.
+
+You can iterate on the plan until you are satisfied with the result.
 
 ### ⚙️ Options and Parameters
 
