@@ -4,6 +4,7 @@ from rich.console import Console
 from cli.commands.edit import edit
 from cli.commands.plan import plan
 from cli.commands.task import task
+from cli.commands.history import history
 from cli.constants import DEFAULT_MODEL
 from cli.util import load_config
 
@@ -60,6 +61,7 @@ def main(ctx, wait, repo, spinner, quiet, model, branch, sync, debug):
 main.add_command(task)
 main.add_command(edit)
 main.add_command(plan)
+main.add_command(history)
 
 
 if __name__ == '__main__':
