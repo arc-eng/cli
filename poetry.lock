@@ -37,6 +37,20 @@ files = [
 ]
 
 [[package]]
+name = "humanize"
+version = "4.9.0"
+description = "Python humanize utilities"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "humanize-4.9.0-py3-none-any.whl", hash = "sha256:ce284a76d5b1377fd8836733b983bfb0b76f1aa1c090de2566fcf008d7f6ab16"},
+    {file = "humanize-4.9.0.tar.gz", hash = "sha256:582a265c931c683a7e9b8ed9559089dea7edcf6cc95be39a3cbc2c5d5ac2bcfa"},
+]
+
+[package.extras]
+tests = ["freezegun", "pytest", "pytest-cov"]
+
+[[package]]
 name = "jinja2"
 version = "3.1.4"
 description = "A very fast and expressive template engine."
@@ -474,4 +488,4 @@ termcolor = "2.3.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "4ea1c7d15dc99b3df1dfd97da9dc95551721e3af713398da1acc126d523a55bc"
+content-hash = "4bccefd8808223832c778dea3d9d2abd0de50f32da3e2e99e5cc9e37a81006e9"

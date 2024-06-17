@@ -4,6 +4,7 @@ from pr_pilot import Task
 from pr_pilot.util import get_task
 from rich.console import Console
 from rich.markdown import Markdown
+from rich.padding import Padding
 
 from cli.status_indicator import StatusIndicator
 from cli.util import clean_code_block_with_language_specifier
@@ -70,12 +71,10 @@ class TaskHandler:
                 self.status.success()
                 self.status.stop()
                 if result:
-                    self.console.line()
                     # If quiet mode is enabled, we still want to show the PR URL
                     if quiet and new_pr_url:
                         result += f"\n\n🆕 [**PR #{self.task.pr_number}**]({new_pr_url})"
-                    self.console.print(Markdown(result))
-                    self.console.line()
+                    self.console.print(Padding(Markdown(result), (1, 1)))
 
             return result
         except Exception as e:

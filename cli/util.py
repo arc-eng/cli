@@ -1,8 +1,12 @@
 import os
 import subprocess
+from datetime import datetime, timezone
 
 import click
+import humanize
 import yaml
+from pr_pilot import Task
+from rich.markdown import Markdown
 
 from cli.constants import CONFIG_LOCATION, CONFIG_API_KEY
 
@@ -59,3 +63,39 @@ def pull_branch_changes(status_indicator, console, branch, debug=False):
     except Exception as e:
         status_indicator.fail()
         console.print(f"[bold red]An error occurred:[/bold red] {type(e)} {str(e)}\n\n{error if error else ''}")
+
+class TaskFormatter:
+
+    def __init__(self, task: Task):
+        self.task = task
+
+    def format_github_project(self):
+        return f"[link=https://github.com/{self.task.github_project}]{self.task.github_project}[/link]"
+
+    def format_created_at(self):
+        # If task was created less than 23 hours ago, show relative time
+        now = datetime.now(timezone.utc)  # Use timezone-aware datetime
+        if (now - self.task.created).days == 0:
+            return humanize.naturaltime(self.task.created)
+        local_time = self.task.created.astimezone()
+        return local_time.strftime("%Y-%m-%d %H:%M:%S")
+
+    def format_pr_link(self):
+        if self.task.pr_number:
+            return f"[link=https://github.com/{self.task.github_project}/pull/{self.task.pr_number}]#{self.task.pr_number}[/link]"
+        return ""
+
+    def format_status(self):
+        if self.task.status == "running":
+            return f"[bold yellow]{self.task.status}[/bold yellow]"
+        elif self.task.status == "completed":
+            return f"[bold green]{self.task.status}[/bold green]"
+        elif self.task.status == "failed":
+            return f"[bold red]{self.task.status}[/bold red]"
+
+    def format_title(self):
+        dashboard_url = f"https://app.pr-pilot.ai/dashboard/tasks/{str(self.task.id)}/"
+        return f"[link={dashboard_url}]{self.task.title}[/link]"
+
+    def format_branch(self):
+        return Markdown(f"`{self.task.branch}`")
