@@ -21,12 +21,13 @@ class TaskHandler:
         self.status = status_indicator
         self.task_runs_on_pr = self.task.pr_number is not None
 
-    def wait_for_result(self, output_file=None, quiet=False, code=False) -> str:
+    def wait_for_result(self, output_file=None, quiet=False, code=False, print_result=True) -> str:
         """
         Wait for the task to finish and display the result.
         :param output_file: Optional file to save the result.
         :param quiet: If True, nothing will be printed on the command line.
         :param code: If True, the result will be treated as code
+        :param print_result: If True, the result will be printed on the command line.
         :return:
         """
 
@@ -74,7 +75,8 @@ class TaskHandler:
                     # If quiet mode is enabled, we still want to show the PR URL
                     if quiet and new_pr_url:
                         result += f"\n\n🆕 [**PR #{self.task.pr_number}**]({new_pr_url})"
-                    self.console.print(Padding(Markdown(result), (1, 1)))
+                    if print_result:
+                        self.console.print(Padding(Markdown(result), (1, 1)))
 
             return result
         except Exception as e:
