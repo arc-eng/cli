@@ -37,6 +37,20 @@ files = [
 ]
 
 [[package]]
+name = "humanize"
+version = "4.9.0"
+description = "Python humanize utilities"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "humanize-4.9.0-py3-none-any.whl", hash = "sha256:ce284a76d5b1377fd8836733b983bfb0b76f1aa1c090de2566fcf008d7f6ab16"},
+    {file = "humanize-4.9.0.tar.gz", hash = "sha256:582a265c931c683a7e9b8ed9559089dea7edcf6cc95be39a3cbc2c5d5ac2bcfa"},
+]
+
+[package.extras]
+tests = ["freezegun", "pytest", "pytest-cov"]
+
+[[package]]
 name = "jinja2"
 version = "3.1.4"
 description = "A very fast and expressive template engine."
@@ -159,13 +173,13 @@ files = [
 
 [[package]]
 name = "pr-pilot"
-version = "1.5.4"
+version = "1.6.1"
 description = "Python SDK for PR Pilot, a text-to-task automation platform for Github."
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "pr_pilot-1.5.4-py3-none-any.whl", hash = "sha256:cdd295765e3852d9519ec57083a1a1652746ef1a5d930005c9bdd934a5235588"},
-    {file = "pr_pilot-1.5.4.tar.gz", hash = "sha256:75e911b84a8308100481027de8bb0d71f6b828845d62ce82ae855533cc0c037a"},
+    {file = "pr_pilot-1.6.1-py3-none-any.whl", hash = "sha256:70e891c874ca11cb70ee08509de9eb5da6cdb0952184baa049bb5f2b241199e8"},
+    {file = "pr_pilot-1.6.1.tar.gz", hash = "sha256:eeeee96c78289f40e31e6bd7e637598656a5e0326b7f915e95bef76e2caa3587"},
 ]
 
 [package.dependencies]
@@ -474,4 +488,4 @@ termcolor = "2.3.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "7a5e609107a1cd6fd02ab598af457e47d72c0523d75fad8f0c8b926022e1a692"
+content-hash = "4bccefd8808223832c778dea3d9d2abd0de50f32da3e2e99e5cc9e37a81006e9"

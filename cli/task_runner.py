@@ -8,13 +8,13 @@ from pr_pilot.util import create_task
 from rich.console import Console
 from rich.markdown import Markdown
 
-from cli.constants import CODE_PRIMER, CHEAP_MODEL, CODE_MODEL, CONFIG_LOCATION, CONFIG_API_KEY
+from cli.constants import CODE_PRIMER, CHEAP_MODEL, CODE_MODEL, CONFIG_LOCATION
 from cli.detect_repository import detect_repository
+from cli.models import TaskParameters
 from cli.prompt_template import PromptTemplate
 from cli.status_indicator import StatusIndicator
 from cli.task_handler import TaskHandler
 from cli.util import load_config
-from cli.models import TaskParameters
 
 
 class TaskRunner:
@@ -32,8 +32,6 @@ class TaskRunner:
         console = Console()
         screenshot = self.take_screenshot() if params.snap else None
 
-        if not os.getenv("PR_PILOT_API_KEY"):
-            os.environ["PR_PILOT_API_KEY"] = self.config[CONFIG_API_KEY]
         if not params.repo:
             params.repo = detect_repository()
         if not params.repo:

@@ -187,9 +187,10 @@ Options:
   --help                    Show this message and exit.
 
 Commands:
-  edit  ✍️ Let PR Pilot edit a file for you.
-  plan  📋 Let PR Pilot execute a plan for you.
-  task  🛠️ Create a new task for PR Pilot.
+  edit     ✍️ Let PR Pilot edit a file for you.
+  history  📜 Access recent tasks.
+  plan     📋 Let PR Pilot execute a plan for you.
+  task     🛠️ Create a new task for PR Pilot.
 
 ```
 
