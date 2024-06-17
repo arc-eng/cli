@@ -7,7 +7,8 @@ readme:
 pr-description:
 	poetry run pilot --no-spinner task -f prompts/generate_pr_description.md.jinja2
 homebrew:
-	poetry run pilot --no-sync --repo=PR-Pilot-AI/pr-pilot-homebrew task -f prompts/homebrew.md.jinja2
+	# Generate a homebrew formula and open a PR on the tap repository
+	poetry run pilot --no-spinner --no-sync --repo=PR-Pilot-AI/pr-pilot-homebrew task -f prompts/homebrew.md.jinja2
 daily-report:
 	# Generate daily report
 	poetry run pilot task -f prompts/slack-report.md.jinja2
