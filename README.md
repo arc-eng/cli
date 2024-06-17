@@ -11,7 +11,7 @@
 
 # PR Pilot Command-Line Interface
 
-[PR Pilot](https://docs.pr-pilot.ai) assist you in your daily workflow and works with the dev tools you trust and love - exactly when and where you want it.
+[PR Pilot](https://docs.pr-pilot.ai) assists you in your daily workflow and works with the dev tools you trust and love - exactly when and where you want it.
 
 ```bash
 pilot edit main.py "Add docstrings to all functions and classes"
