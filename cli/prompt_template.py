@@ -24,6 +24,9 @@ def sh(shell_command, status):
 
 def read_env_var(variable, default=None):
     """Get the value of an environment variable, with a default value."""
+    if variable not in os.environ and default is None:
+        # Ask for Variable input with click
+        os.environ[variable] = click.prompt(f"{variable}: ")
     return os.environ.get(variable, default)
 
 

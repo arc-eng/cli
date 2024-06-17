@@ -1,3 +1,5 @@
+import os
+
 import click
 from rich.console import Console
 
@@ -5,7 +7,7 @@ from cli.commands.edit import edit
 from cli.commands.plan import plan
 from cli.commands.task import task
 from cli.commands.history import history
-from cli.constants import DEFAULT_MODEL
+from cli.constants import DEFAULT_MODEL, CONFIG_API_KEY
 from cli.util import load_config
 
 
@@ -40,6 +42,9 @@ def main(ctx, wait, repo, spinner, quiet, model, branch, sync, debug):
     """
 
     user_config = load_config()
+
+    if not os.getenv("PR_PILOT_API_KEY"):
+        os.environ["PR_PILOT_API_KEY"] = user_config[CONFIG_API_KEY]
 
     # If repo is set manually, don't auto sync
     if repo:
