@@ -4,6 +4,8 @@ import yaml
 from cli.models import TaskParameters
 
 
+DEFAULT_FILE_PATH = '.pilot-commands.yaml'
+
 class Command(BaseModel):
     # Should be lower case, no spaces, hyphens
     name: str = Field(..., description="Name of the command", example="generate-pr-description", pattern="^[a-z0-9-]+$")
@@ -16,7 +18,7 @@ class CommandIndex:
     A class to manage the index of commands stored in a YAML file.
     """
 
-    def __init__(self, file_path: str = 'pilot-commands.yaml'):
+    def __init__(self, file_path: str = DEFAULT_FILE_PATH):
         """
         Initialize the CommandIndex with the given file path.
 
@@ -50,7 +52,14 @@ class CommandIndex:
         Add a new command to the list and save it.
 
         :param command: The Command instance to add.
+
+        :raises ValueError: If a command with the same name already exists.
         """
+        for cmd in self.commands:
+            if cmd.name == command.name:
+                raise ValueError(f"Command with name '{command.name}' already exists")
+        command.params.branch = None
+        command.params.pr_number = None
         self.commands.append(command)
         self.save_commands()
 

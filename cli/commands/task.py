@@ -77,14 +77,14 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
         if save_command:
             command_index = CommandIndex()
             console.print(Padding("Save the task parameters as a command:", (1, 1)))
-            name = click.prompt("Name (e.g. generate-pr-desc)", type=str)
-            description = click.prompt("Short description", type=str)
+            name = click.prompt("  Name (e.g. generate-pr-desc)", type=str)
+            description = click.prompt("  Short description", type=str)
             command = Command(name=name, description=description, params=task_params)
             command_index.add_command(command)
-            console.print(f"Command saved to `{command_index.file_path}`:")
-            console.print(command.dict())
+            console.print(Padding(f"Command saved to `{command_index.file_path}`:", (1, 1)))
+            console.print(Padding(command.dict(), 1, 1))
             console.line()
-            console.print(f"You can now run this command with `pilot run {name}`.")
+            console.print(Padding(f"You can now run this command with `pilot run {name}`.", (1, 1)))
 
 
     except Exception as e:
