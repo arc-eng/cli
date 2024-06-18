@@ -165,17 +165,6 @@ Usage: pilot [OPTIONS] COMMAND [ARGS]...
 
   Delegate routine work to AI with confidence and predictability.
 
-  Examples:
-
-  - 📸 Create a Bootstrap5 component based on a screenshot:
-    pilot task -o component.html --code --snap "Write a Bootstrap5 component that looks like this."
-
-  - 🛠️ Refactor and clean up code:
-    pilot edit main.js "Break up large functions, organize the file and add comments."
-
-  - 🔄 Interact across services and tools:
-    pilot task "Find all open Linear and Github issues labeled as 'bug' and send them to the #bugs Slack channel."
-
 Options:
   --wait / --no-wait        Wait for PR Pilot to finish the task.
   --repo TEXT               Github repository in the format owner/repo.
@@ -183,8 +172,8 @@ Options:
   --quiet / --chatty        Disable all status messages.
   -m, --model TEXT          GPT model to use.
   -b, --branch TEXT         Run the task on a specific branch.
-  --sync / --no-sync        Run task on your current branch and pull PR
-                            Pilot's changes when done.
+  --sync / --no-sync        Run task on your current branch and pull PR Pilots
+                            changes when done.
   --debug                   Display debug information.
   --help                    Show this message and exit.
 
@@ -206,16 +195,7 @@ Usage: pilot task [OPTIONS] [PROMPT]
 
   🛠️Create a new task for PR Pilot.
 
-  Examples:
-
-  - Generate unit tests for a Python file:
-    pilot task -o test_utils.py --code "Write some unit tests for the utils.py file."
-
-  - Create a Bootstrap5 component based on a screenshot:
-    pilot task -o component.html --code --snap "Write a Bootstrap5 component that looks like this."
-
-  - Send a list of all bug issues to Slack:
-    pilot task "Find all open Github issues labeled as 'bug' and send them to the #bugs Slack channel."
+  Examples: https://github.com/pr-pilot-ai/pr-pilot-cli
 
 Options:
   --snap             📸 Select a portion of your screen to add as an image to
@@ -226,8 +206,7 @@ Options:
   --direct           🔄 Do not feed the rendered template as a prompt into PR
                      Pilot, but render it directly as output.
   -o, --output PATH  💾 Output file for the result.
-  --save-command     💾 Save the task parameters as a command in pilot-
-                     commands.yaml
+  --save-command     💾 Save the task parameters as a command for later use.
   --help             Show this message and exit.
 
 ```
@@ -262,6 +241,8 @@ Let PR Pilot execute a step-by-step plan.
 Usage: pilot plan [OPTIONS] FILE_PATH
 
   📋 Let PR Pilot execute a plan for you.
+
+  Learn more: https://docs.pr-pilot.ai/user_guide.html
 
 Options:
   --help  Show this message and exit.
