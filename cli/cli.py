@@ -25,20 +25,6 @@ def main(ctx, wait, repo, spinner, quiet, model, branch, sync, debug):
     """PR Pilot CLI - https://docs.pr-pilot.ai
 
     Delegate routine work to AI with confidence and predictability.
-
-    Examples:
-
-    \b
-    - 📸 Create a Bootstrap5 component based on a screenshot:
-      pilot task -o component.html --code --snap "Write a Bootstrap5 component that looks like this."
-
-    \b
-    - 🛠️ Refactor and clean up code:
-      pilot edit main.js "Break up large functions, organize the file and add comments."
-
-    \b
-    - 🔄 Interact across services and tools:
-      pilot task "Find all open Linear and Github issues labeled as 'bug' and send them to the #bugs Slack channel."
     """
 
     user_config = load_config()
@@ -68,7 +54,13 @@ main.add_command(edit)
 main.add_command(plan)
 main.add_command(history)
 
-main.add_command(RunCommand(name="run", help="🚀 Run a saved command."))
+run_command_help = """
+🚀 Run a saved command.
+
+Create new commands by using the --save-command flag when running a task.
+"""
+
+main.add_command(RunCommand(name="run", help=run_command_help))
 
 
 if __name__ == '__main__':

@@ -10,7 +10,10 @@ from cli.util import pull_branch_changes
 @click.argument('file_path', type=click.Path(exists=True))
 @click.pass_context
 def plan(ctx, file_path):
-    """📋 Let PR Pilot execute a plan for you."""
+    """📋 Let PR Pilot execute a plan for you.
+
+    Learn more: https://docs.pr-pilot.ai/user_guide.html
+    """
     console = Console()
     show_spinner = ctx.obj['spinner'] and not ctx.obj['quiet']
     status_indicator = StatusIndicator(spinner=show_spinner, messages=not ctx.obj['quiet'], console=console)

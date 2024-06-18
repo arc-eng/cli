@@ -20,25 +20,13 @@ from cli.command_index import CommandIndex, PilotCommand
 @click.option('--direct', is_flag=True, default=False,
               help='🔄 Do not feed the rendered template as a prompt into PR Pilot, but render it directly as output.')
 @click.option('--output', '-o', type=click.Path(exists=False), help='💾 Output file for the result.')
-@click.option('--save-command', is_flag=True, help='💾 Save the task parameters as a command in pilot-commands.yaml')
+@click.option('--save-command', is_flag=True, help='💾 Save the task parameters as a command for later use.')
 @click.argument('prompt', required=False, default=None, type=str)
 @click.pass_context
 def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
     """🛠️Create a new task for PR Pilot.
 
-    Examples:
-
-    \b
-    - Generate unit tests for a Python file:
-      pilot task -o test_utils.py --code "Write some unit tests for the utils.py file."
-
-    \b
-    - Create a Bootstrap5 component based on a screenshot:
-      pilot task -o component.html --code --snap "Write a Bootstrap5 component that looks like this."
-
-    \b
-    - Send a list of all bug issues to Slack:
-      pilot task "Find all open Github issues labeled as 'bug' and send them to the #bugs Slack channel."
+    Examples: https://github.com/pr-pilot-ai/pr-pilot-cli
     """
     console = Console()
     status_indicator = StatusIndicator(spinner=ctx.obj['spinner'], messages=not ctx.obj['quiet'], console=console)

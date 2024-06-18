@@ -9,6 +9,10 @@ from rich.table import Table
 from cli.util import TaskFormatter
 
 
+NO_TASKS_MESSAGE = """
+You have no tasks yet. Run a task with `pilot task` to create one.
+"""
+
 @click.group(invoke_without_command=True)
 @click.pass_context
 def history(ctx):
@@ -20,7 +24,8 @@ def history(ctx):
         # Default behavior when no sub-command is invoked
         console = Console()
         if not tasks:
-            console.print("[bold red]No tasks found.[/bold red]")
+            console.print(Padding(Markdown(NO_TASKS_MESSAGE), (1, 1)))
+            return
         task_number = 1
 
         table = Table(box=None)
