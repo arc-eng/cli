@@ -51,7 +51,12 @@ def test_save_command_param_saves_command(runner, mock_create_task, mock_command
     """The --save-command param should save the task parameters as a command"""
     prompt = "This is a test prompt."
     result = runner.invoke(main, ['task', '--save-command', prompt])
-
-    mock_create_task.assert_called_once()
     mock_command_index.add_command.assert_called_once()
+    assert result.exit_code == 0
+
+
+def test_save_command_param_does_not_run_task(runner, mock_create_task, mock_command_index, mock_click_prompt):
+    """The --save-command param should not run the task"""
+    result = runner.invoke(main, ['task', '--save-command', 'test-prompt'])
+    mock_create_task.assert_not_called()
     assert result.exit_code == 0

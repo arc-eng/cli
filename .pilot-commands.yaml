@@ -28,3 +28,17 @@ commands:
     spinner: false
     sync: true
     wait: true
+- description: Assemble a comprehensive daily report and send it to Slack
+  name: daily-report
+  params:
+    cheap: false
+    code: false
+    debug: false
+    direct: false
+    file: prompts/slack-report.md.jinja2
+    model: gpt-4o
+    quiet: true
+    snap: false
+    spinner: true
+    sync: true
+    wait: true

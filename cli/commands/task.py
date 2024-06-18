@@ -43,7 +43,7 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
     console = Console()
     status_indicator = StatusIndicator(spinner=ctx.obj['spinner'], messages=not ctx.obj['quiet'], console=console)
 
-    try :
+    try:
         if ctx.obj['sync']:
             # Get current branch from git
             current_branch = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
@@ -68,15 +68,6 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
             sync=ctx.obj['sync']
         )
 
-        runner = TaskRunner(status_indicator)
-        finished_task = runner.run_task(task_params)
-
-        if ctx.obj['sync']:
-            branch = finished_task.branch if finished_task else ctx.obj['branch']
-            if branch:
-                pull_branch_changes(status_indicator, console, branch, ctx.obj['debug'])
-
-
         if save_command:
             command_index = CommandIndex()
             console.print(Padding("[green bold]Save the task parameters as a command:[/green bold]", (1, 1)))
@@ -86,6 +77,15 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
             command_index.add_command(command)
             console.print(Padding(f"Command saved to [code]{command_index.file_path}[/code]", (1, 1)))
             console.print(Padding(Markdown(f"You can now run this command with `pilot run {name}`."), (1, 1)))
+            return
+
+        runner = TaskRunner(status_indicator)
+        finished_task = runner.run_task(task_params)
+
+        if ctx.obj['sync']:
+            branch = finished_task.branch if finished_task else ctx.obj['branch']
+            if branch:
+                pull_branch_changes(status_indicator, console, branch, ctx.obj['debug'])
 
 
     except Exception as e:
