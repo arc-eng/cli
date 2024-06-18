@@ -12,6 +12,13 @@
 
 # PR Pilot Command-Line Interface
 [![Unit Tests](https://github.com/PR-Pilot-AI/pr-pilot-cli/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/PR-Pilot-AI/pr-pilot-cli/actions/workflows/unit_tests.yml)
+[![PyPI](https://img.shields.io/pypi/v/pr-pilot-cli.svg)][pypi status]
+[![Python Version](https://img.shields.io/pypi/pyversions/pr-pilot-cli)][pypi status]
+[![License](https://img.shields.io/pypi/l/pr-pilot-cli)][license]
+[![Black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)][pre-commit]
+<br>
+
 
 [PR Pilot](https://docs.pr-pilot.ai) assists you in your daily workflow and works with the dev tools you trust and love - exactly when and where you want it.
 
@@ -179,6 +186,7 @@ Options:
 
 Commands:
   edit     ✍️ Let PR Pilot edit a file for you.
+  grab     🤲 Grab commands, prompts and plans from other repositories.
   history  📜 Access recent tasks.
   plan     📋 Let PR Pilot execute a plan for you.
   run      🚀 Run a saved command.
@@ -221,13 +229,13 @@ Usage: pilot edit [OPTIONS] FILE_PATH [PROMPT]
   Examples:
 
   - ✍️ Quickly add docstrings to a Python file:
-    pilot edit main.py "Add docstrings for all classes, functions and parameters."
+    pilot edit main.py "Add docstrings for all classes, functions and parameters"
 
   - ♻️ Refactor and clean up code:
-    pilot edit main.js "Break up large functions, organize the file and add comments."
+    pilot edit main.js "Break up large functions, organize the file and add comments"
 
   - 🧩 Implement placeholders:
-    pilot edit "I left placeholder comments in the file. Please replace them with the actual code."
+    pilot edit "I left placeholder comments in the file. Please replace them with the actual code"
 
 Options:
   --snap  📸 Add a screenshot to your prompt.
