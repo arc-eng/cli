@@ -1,10 +1,31 @@
 We have collected the following information about our projects:
 
+# Git Activity of the past 24 hours
+{{ sh(['git', 'log', '--since="24 hours ago"', '--pretty=format:"%h - %an: %s%n%b"']) }}
+
 # New Github issues since yesterday
-{{ subtask('Find all Github issues created since yesterday 7am PST and summarize them by topics, with in-line links for easy access.') }}
+{% set prompt %}
+1. Find all Github issues created since yesterday 7am PST
+2. Read and understand every issue you found
+3. Identify common topics / parts of the code that are affected
+4. Summarize the issues by topics, with in-line links for easy access
+Your summaries should be:
+  - Designed to catch me up and give me the gist
+  - Contain references to the original issues, files, and people involved
+{% endset %}
+{{ subtask(prompt) }}
 
 # New Linear issues since yesterday
-{{ subtask('Find all Linear issues (title, description, url) for team PR Pilot created since yesterday 7am PST and summarize them by topics, with in-line links for quick access.') }}
+{% set prompt %}
+1. Find all linear issues (title, description, url) created since yesterday 7am PST for team "PR Pilot"
+2. Read and understand every issue you found
+3. Identify common topics / parts of the code that are affected
+4. Summarize the issues by topics, with in-line links for easy access
+   Your summaries should be:
+- Designed to catch me up and give me the gist
+- Contain references to the original issues, files, and people involved
+{% endset %}
+{{ subtask(prompt) }}
 
 # New Slack messages since yesterday
 {{ subtask('Find all Slack messages in channel #bot-testing from yesterday and today. Summarize them by topics, with inline-links to messages') }}
@@ -32,7 +53,9 @@ Use the following template to organize the content by topic and priority:
 
 ```
 
-Use personal, concise, informative language.
+Guidelines for writing the report:
+- Use personal, concise, informative language.
+- Topics should be content-oriented, e.g. not "Github issues" but "CLI history feature" or "Bug in dashboard"
 
 Do the following:
 1. Send the report to #daily-reports on Slack

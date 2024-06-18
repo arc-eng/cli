@@ -14,7 +14,9 @@ MAX_RECURSION_LEVEL = 3
 def sh(shell_command, status):
     status.update(f"Running shell command: {shell_command}")
     try:
-        process = subprocess.Popen(shell_command.split(), stdout=subprocess.PIPE)
+        if isinstance(shell_command, str):
+            shell_command = shell_command.split()
+        process = subprocess.Popen(shell_command, stdout=subprocess.PIPE)
         output, error = process.communicate()
         status.success()
         return output.decode('utf-8')
@@ -75,7 +77,7 @@ class PromptTemplate:
                 task_handler = TaskHandler(task, status)
                 return task_handler.wait_for_result(quiet=True, print_result=False)
             except Exception as e:
-                return f"Error: {e}"
+                raise click.ClickException(f"Error creating sub-task: {e}")
 
         env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
         env.globals.update(env=read_env_var)

@@ -37,10 +37,10 @@ commands:
     direct: false
     file: prompts/slack-report.md.jinja2
     model: gpt-4o
-    quiet: true
+    quiet: false
     snap: false
     spinner: true
-    sync: true
+    sync: false
     wait: true
 - description: Run the tests, analyze the output and provide suggestions
   name: test-analysis
