@@ -18,7 +18,12 @@
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)][pre-commit]
 <br>
-
+[pypi status]: https://pypi.org/project/inquirer/
+[read the docs]: https://python-inquirer.readthedocs.io/
+[tests]: https://github.com/magmax/python-inquirer/actions?workflow=Tests
+[codecov]: https://app.codecov.io/gh/magmax/python-inquirer
+[pre-commit]: https://github.com/pre-commit/pre-commit
+[black]: https://github.com/psf/black
 
 [PR Pilot](https://docs.pr-pilot.ai) assists you in your daily workflow and works with the dev tools you trust and love - exactly when and where you want it.
 
