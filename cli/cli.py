@@ -18,7 +18,7 @@ from cli.util import load_config
 @click.option('--quiet/--chatty', is_flag=True, default=False, help='Disable all status messages.')
 @click.option('--model', '-m', help='GPT model to use.', default=DEFAULT_MODEL)
 @click.option('--branch', '-b', help='Run the task on a specific branch.', required=False, default=None)
-@click.option('--sync/--no-sync', is_flag=True, default=False, help='Run task on your current branch and pull PR Pilot\'s changes when done.')
+@click.option('--sync/--no-sync', is_flag=True, default=False, help='Run task on your current branch and pull PR Pilots changes when done.')
 @click.option('--debug', is_flag=True, default=False, help='Display debug information.')
 @click.pass_context
 def main(ctx, wait, repo, spinner, quiet, model, branch, sync, debug):
