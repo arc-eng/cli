@@ -37,11 +37,15 @@ class TaskRunner:
         if not params.repo:
             params.repo = self.config.get("default_repo")
         if not params.repo:
-            console.print(f"No Github repository provided. Use --repo or set 'default_repo' in {CONFIG_LOCATION}.")
+            console.print(
+                f"No Github repository provided. Use --repo or set 'default_repo' in {CONFIG_LOCATION}."
+            )
             return None
         if params.file:
             self.status_indicator.start()
-            renderer = PromptTemplate(params.file, params.repo, params.model, self.status_indicator)
+            renderer = PromptTemplate(
+                params.file, params.repo, params.model, self.status_indicator
+            )
             params.prompt = renderer.render()
         if not params.prompt:
             params.prompt = click.edit("", extension=".md")
@@ -50,7 +54,10 @@ class TaskRunner:
                 return None
 
         if params.pr_number:
-            params.prompt = f"We are working on PR #{params.pr_number}. Read the PR first before doing anything else.\n\n---\n\n" + params.prompt
+            params.prompt = (
+                f"We are working on PR #{params.pr_number}. Read the PR first before doing anything else.\n\n---\n\n"
+                + params.prompt
+            )
 
         if params.cheap:
             params.model = CHEAP_MODEL
@@ -66,16 +73,32 @@ class TaskRunner:
                 self.status_indicator.stop()
                 if not params.quiet:
                     console.line()
-                    console.print(Markdown(f"Rendered template `{params.file}` into `{params.output}`"))
+                    console.print(
+                        Markdown(
+                            f"Rendered template `{params.file}` into `{params.output}`"
+                        )
+                    )
                     console.line()
                 return
         self.status_indicator.start()
 
         branch_str = f"on branch {params.branch}" if params.branch else ""
         pr_str = f" for PR #{params.pr_number}" if params.pr_number else ""
-        self.status_indicator.update(f"Creating new task for {params.repo} {branch_str} ...")
-        task = create_task(params.repo, params.prompt, log=False, gpt_model=params.model, image=screenshot, branch=params.branch, pr_number=params.pr_number)
-        self.status_indicator.update(f"Task created{pr_str}: https://app.pr-pilot.ai/dashboard/tasks/{task.id}")
+        self.status_indicator.update(
+            f"Creating new task for {params.repo} {branch_str} ..."
+        )
+        task = create_task(
+            params.repo,
+            params.prompt,
+            log=False,
+            gpt_model=params.model,
+            image=screenshot,
+            branch=params.branch,
+            pr_number=params.pr_number,
+        )
+        self.status_indicator.update(
+            f"Task created{pr_str}: https://app.pr-pilot.ai/dashboard/tasks/{task.id}"
+        )
         self.status_indicator.success()
         if params.debug:
             console.print(task)

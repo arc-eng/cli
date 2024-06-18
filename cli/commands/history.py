@@ -13,12 +13,13 @@ NO_TASKS_MESSAGE = """
 You have no tasks yet. Run a task with `pilot task` to create one.
 """
 
+
 @click.group(invoke_without_command=True)
 @click.pass_context
 def history(ctx):
     """📜 Access recent tasks."""
     tasks = list_tasks()
-    ctx.obj['tasks'] = tasks
+    ctx.obj["tasks"] = tasks
 
     if ctx.invoked_subcommand is None:
         # Default behavior when no sub-command is invoked
@@ -39,28 +40,30 @@ def history(ctx):
 
         for task in tasks:
             task_formatter = TaskFormatter(task)
-            table.add_row(str(task_number),
-                          task_formatter.format_created_at(),
-                          task_formatter.format_github_project(),
-                          task_formatter.format_pr_link(),
-                          task_formatter.format_status(),
-                          task_formatter.format_title())
+            table.add_row(
+                str(task_number),
+                task_formatter.format_created_at(),
+                task_formatter.format_github_project(),
+                task_formatter.format_pr_link(),
+                task_formatter.format_status(),
+                task_formatter.format_title(),
+            )
             task_number += 1
         console.print(Padding(table, (1, 1)))
         return
 
 
 @history.group(invoke_without_command=True)
-@click.argument('task_number', required=False, type=int, default=1)
+@click.argument("task_number", required=False, type=int, default=1)
 @click.pass_context
 def last(ctx, task_number):
     """Show the n-th latest task. Default is the last task."""
     console = Console()
-    tasks = ctx.obj['tasks']
+    tasks = ctx.obj["tasks"]
     if task_number > len(tasks):
         console.print(f"[bold red]There are less than {task_number} tasks.[/bold red]")
         raise click.Abort()
-    ctx.obj['selected_task'] = tasks[task_number - 1]
+    ctx.obj["selected_task"] = tasks[task_number - 1]
     if ctx.invoked_subcommand is None:
         # Pretty print task properties using rich
         task = tasks[task_number - 1]
@@ -83,12 +86,17 @@ def last(ctx, task_number):
 
 
 @last.command()
-@click.option('--markdown', is_flag=True, default=False, help="Return the prompt in markdown format.")
+@click.option(
+    "--markdown",
+    is_flag=True,
+    default=False,
+    help="Return the prompt in markdown format.",
+)
 @click.pass_context
 def prompt(ctx, markdown):
     """Show the n-th latest task's prompt."""
     console = Console()
-    task = ctx.obj['selected_task']
+    task = ctx.obj["selected_task"]
     if markdown:
         console.print(task.user_request)
     else:
@@ -96,12 +104,17 @@ def prompt(ctx, markdown):
 
 
 @last.command()
-@click.option('--markdown', is_flag=True, default=False, help="Return the result in markdown format.")
+@click.option(
+    "--markdown",
+    is_flag=True,
+    default=False,
+    help="Return the result in markdown format.",
+)
 @click.pass_context
 def result(ctx, markdown):
     """Show the n-th latest task's result."""
     console = Console()
-    task = ctx.obj['selected_task']
+    task = ctx.obj["selected_task"]
     if markdown:
         console.print(task.result)
     else:

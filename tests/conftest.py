@@ -11,11 +11,11 @@ def mock_create_task():
 
 @pytest.fixture(autouse=True)
 def mock_load_config():
-    with patch('cli.cli.load_config') as mock:
+    with patch("cli.cli.load_config") as mock:
         mock.return_value = {
-            'quiet': True,
-            'auto_sync': False,
-            'api_key': 'test_api_key'
+            "quiet": True,
+            "auto_sync": False,
+            "api_key": "test_api_key",
         }
         yield mock
 
@@ -34,7 +34,7 @@ def mock_get_task():
             title="Mock title",
             status="completed",
             prompt="Mock prompt",
-            result="Mock result"
+            result="Mock result",
         )
         yield mock
 

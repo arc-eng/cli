@@ -19,7 +19,7 @@ def sh(shell_command, status):
         process = subprocess.Popen(shell_command, stdout=subprocess.PIPE)
         output, error = process.communicate()
         status.success()
-        return output.decode('utf-8')
+        return output.decode("utf-8")
     except Exception as e:
         click.echo(str(e))
         status.fail()
@@ -35,7 +35,7 @@ def read_env_var(variable, default=None):
 
 def wrap_function_with_status(func, status):
     def wrapper(*args, **kwargs):
-        kwargs['status'] = status
+        kwargs["status"] = status
         return func(*args, **kwargs)
 
     return wrapper
@@ -43,7 +43,9 @@ def wrap_function_with_status(func, status):
 
 class PromptTemplate:
 
-    def __init__(self, template_file_path, repo, model, status, recursion_level=0, **kwargs):
+    def __init__(
+        self, template_file_path, repo, model, status, recursion_level=0, **kwargs
+    ):
         self.template_file_path = template_file_path
         self.repo = repo
         self.model = model
@@ -62,12 +64,25 @@ class PromptTemplate:
             if os.path.exists(potential_file_path):
 
                 if self.recursion_level >= MAX_RECURSION_LEVEL:
-                    status.update(f"Abort loading {prompt}. Maximum recursion level reached.")
+                    status.update(
+                        f"Abort loading {prompt}. Maximum recursion level reached."
+                    )
                     status.success()
                     return ""
-                recursion_str = f"(Recursion level {self.recursion_level})" if self.recursion_level > 0 else ""
+                recursion_str = (
+                    f"(Recursion level {self.recursion_level})"
+                    if self.recursion_level > 0
+                    else ""
+                )
                 status.update(f"Loading prompt from file: {prompt} {recursion_str}")
-                sub_template = PromptTemplate(potential_file_path, self.repo, self.model, status, self.recursion_level-1, **kwargs)
+                sub_template = PromptTemplate(
+                    potential_file_path,
+                    self.repo,
+                    self.model,
+                    status,
+                    self.recursion_level - 1,
+                    **kwargs,
+                )
                 prompt = sub_template.render()
                 status.success()
 

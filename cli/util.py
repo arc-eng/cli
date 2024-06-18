@@ -6,7 +6,9 @@ import click
 import humanize
 import yaml
 from pr_pilot import Task
+from rich.console import Console
 from rich.markdown import Markdown
+from rich.padding import Padding
 
 from cli.constants import CONFIG_LOCATION, CONFIG_API_KEY
 
@@ -34,7 +36,9 @@ def load_config():
             api_key = os.getenv("PR_PILOT_API_KEY")
         else:
             api_key_url = "https://app.pr-pilot.ai/dashboard/api-keys/"
-            click.echo(f"Configuration file not found. Please create an API key at {api_key_url}.")
+            click.echo(
+                f"Configuration file not found. Please create an API key at {api_key_url}."
+            )
             api_key = click.prompt("PR Pilot API key")
         with open(CONFIG_LOCATION, "w") as f:
             f.write(f"{CONFIG_API_KEY}: {api_key}")
@@ -48,11 +52,13 @@ def pull_branch_changes(status_indicator, console, branch, debug=False):
     status_indicator.update(f"Pull latest changes from {branch}")
     try:
         # Fetch origin and checkout branch
-        subprocess_params = dict(stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        subprocess.run(['git', 'fetch', 'origin'], **subprocess_params)
-        subprocess.run(['git', 'checkout', branch], **subprocess_params)
+        subprocess_params = dict(
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+        )
+        subprocess.run(["git", "fetch", "origin"], **subprocess_params)
+        subprocess.run(["git", "checkout", branch], **subprocess_params)
         # Capture output of git pull
-        result = subprocess.run(['git', 'pull', 'origin', branch], **subprocess_params)
+        result = subprocess.run(["git", "pull", "origin", branch], **subprocess_params)
         output = result.stdout
         error = result.stderr
         status_indicator.success()
@@ -62,7 +68,10 @@ def pull_branch_changes(status_indicator, console, branch, debug=False):
             console.line()
     except Exception as e:
         status_indicator.fail()
-        console.print(f"[bold red]An error occurred:[/bold red] {type(e)} {str(e)}\n\n{error if error else ''}")
+        console.print(
+            f"[bold red]An error occurred:[/bold red] {type(e)} {str(e)}\n\n{error if error else ''}"
+        )
+
 
 class TaskFormatter:
 
@@ -99,3 +108,13 @@ class TaskFormatter:
 
     def format_branch(self):
         return Markdown(f"`{self.task.branch}`")
+
+
+class PaddedConsole:
+    def __init__(self, padding=(1, 1)):
+        self.console = Console()
+        self.padding = padding
+
+    def print(self, content):
+        padded_content = Padding(content, self.padding)
+        self.console.print(padded_content)

@@ -2,6 +2,7 @@ import click
 
 from cli.command_index import CommandIndex
 
+
 class RunCommand(click.Group):
 
     def __init__(self, **kwargs):
