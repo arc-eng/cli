@@ -9,9 +9,9 @@
   <a href="https://www.pr-pilot.ai">Website</a>
 </p>
 
-[![Unit Tests](https://github.com/PR-Pilot-AI/pr-pilot-cli/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/PR-Pilot-AI/pr-pilot-cli/actions/workflows/unit_tests.yml)
 
 # PR Pilot Command-Line Interface
+[![Unit Tests](https://github.com/PR-Pilot-AI/pr-pilot-cli/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/PR-Pilot-AI/pr-pilot-cli/actions/workflows/unit_tests.yml)
 
 [PR Pilot](https://docs.pr-pilot.ai) assists you in your daily workflow and works with the dev tools you trust and love - exactly when and where you want it.
 
