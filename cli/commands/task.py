@@ -1,6 +1,7 @@
 import os
 import click
 from rich.console import Console
+from rich.markdown import Markdown
 from rich.padding import Padding
 
 from cli.constants import CHEAP_MODEL
@@ -8,7 +9,7 @@ from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
 from cli.models import TaskParameters
 from cli.util import pull_branch_changes
-from cli.command_index import CommandIndex, Command
+from cli.command_index import CommandIndex, PilotCommand
 
 
 @click.command()
@@ -23,7 +24,7 @@ from cli.command_index import CommandIndex, Command
 @click.argument('prompt', required=False, default=None, type=str)
 @click.pass_context
 def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
-    """🛠️ Create a new task for PR Pilot.
+    """🛠️Create a new task for PR Pilot.
 
     Examples:
 
@@ -62,7 +63,9 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
             model=ctx.obj['model'],
             debug=ctx.obj['debug'],
             prompt=prompt,
-            branch=ctx.obj['branch']
+            branch=ctx.obj['branch'],
+            spinner=ctx.obj['spinner'],
+            sync=ctx.obj['sync']
         )
 
         runner = TaskRunner(status_indicator)
@@ -76,15 +79,13 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
 
         if save_command:
             command_index = CommandIndex()
-            console.print(Padding("Save the task parameters as a command:", (1, 1)))
+            console.print(Padding("[green bold]Save the task parameters as a command:[/green bold]", (1, 1)))
             name = click.prompt("  Name (e.g. generate-pr-desc)", type=str)
             description = click.prompt("  Short description", type=str)
-            command = Command(name=name, description=description, params=task_params)
+            command = PilotCommand(name=name, description=description, params=task_params)
             command_index.add_command(command)
-            console.print(Padding(f"Command saved to `{command_index.file_path}`:", (1, 1)))
-            console.print(Padding(command.dict(), 1, 1))
-            console.line()
-            console.print(Padding(f"You can now run this command with `pilot run {name}`.", (1, 1)))
+            console.print(Padding(f"Command saved to [code]{command_index.file_path}[/code]", (1, 1)))
+            console.print(Padding(Markdown(f"You can now run this command with `pilot run {name}`."), (1, 1)))
 
 
     except Exception as e:

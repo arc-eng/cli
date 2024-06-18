@@ -20,3 +20,5 @@ class TaskParameters(BaseModel):
     prompt: Optional[str] = Field(default=None, description="Prompt to use for the task")
     branch: Optional[str] = Field(default=None, description="Branch to use for the task")
     pr_number: Optional[int] = Field(default=None, description="Pull request number")
+    spinner: bool = Field(default=True, description="Display spinners")
+    sync: bool = Field(default=False, description="Sync local repository state with PR Pilot changes")
