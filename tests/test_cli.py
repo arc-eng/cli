@@ -34,7 +34,20 @@ def test_code_param_includes_code_primer(runner, mock_create_task):
     assert result.exit_code == 0
 
 
-def test_save_command_param_saves_command(runner, mock_create_task, mock_command_index):
+@pytest.fixture
+def mock_command_index():
+    with patch("cli.commands.task.CommandIndex") as mock:
+        yield mock.return_value
+
+
+@pytest.fixture(autouse=True)
+def mock_click_prompt():
+    with patch("cli.commands.task.click.prompt") as mock:
+        mock.return_value = "test-value"
+        yield mock
+
+
+def test_save_command_param_saves_command(runner, mock_create_task, mock_command_index, mock_click_prompt):
     """The --save-command param should save the task parameters as a command"""
     prompt = "This is a test prompt."
     result = runner.invoke(main, ['task', '--save-command', prompt])

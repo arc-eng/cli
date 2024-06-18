@@ -10,7 +10,7 @@ def command_index(tmp_path):
 
 
 def test_add_command(command_index):
-    task_params = TaskParameters(wait=10, repo='test_repo', snap=False, quiet=False, cheap=False, code=False, file=None, direct=False, output=None, model='test_model', debug=False, prompt='test_prompt', branch=None)
+    task_params = TaskParameters(wait=True, repo='test_repo', snap=False, quiet=False, cheap=False, code=False, file=None, direct=False, output=None, model='test_model', debug=False, prompt='test_prompt', branch=None)
     command = Command(name='test-command', description='Test command', params=task_params)
     command_index.add_command(command)
 
@@ -22,7 +22,7 @@ def test_add_command(command_index):
 
 
 def test_add_duplicate_command(command_index):
-    task_params = TaskParameters(wait=10, repo='test_repo', snap=False, quiet=False, cheap=False, code=False, file=None, direct=False, output=None, model='test_model', debug=False, prompt='test_prompt', branch=None)
+    task_params = TaskParameters(wait=True, repo='test_repo', snap=False, quiet=False, cheap=False, code=False, file=None, direct=False, output=None, model='test_model', debug=False, prompt='test_prompt', branch=None)
     command = Command(name='test-command', description='Test command', params=task_params)
     command_index.add_command(command)
 
@@ -31,7 +31,7 @@ def test_add_duplicate_command(command_index):
 
 
 def test_load_commands_from_file(command_index):
-    task_params = TaskParameters(wait=10, repo='test_repo', snap=False, quiet=False, cheap=False, code=False, file=None, direct=False, output=None, model='test_model', debug=False, prompt='test_prompt', branch=None)
+    task_params = TaskParameters(wait=True, repo='test_repo', snap=False, quiet=False, cheap=False, code=False, file=None, direct=False, output=None, model='test_model', debug=False, prompt='test_prompt', branch=None)
     command = Command(name='test-command', description='Test command', params=task_params)
     command_index.add_command(command)
 
