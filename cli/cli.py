@@ -1,12 +1,11 @@
 import os
 
 import click
-from rich.console import Console
 
 from cli.commands.edit import edit
+from cli.commands.history import history
 from cli.commands.plan import plan
 from cli.commands.task import task
-from cli.commands.history import history
 from cli.constants import DEFAULT_MODEL, CONFIG_API_KEY
 from cli.util import load_config
 

@@ -43,7 +43,8 @@ class TaskHandler:
                 if self.task.title and not self.task.title == "A title" and not task_title == self.task.title:
                     task_title = self.task.title
                     self.status.update(self.task.title)
-                time.sleep(POLL_INTERVAL)
+                if self.task.status == "running":
+                    time.sleep(POLL_INTERVAL)
             if self.task.status == "failed":
                 raise ValueError(f"Task failed: {self.task.result}")
 
