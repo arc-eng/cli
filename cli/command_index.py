@@ -16,8 +16,8 @@ DEFAULT_FILE_PATH = '.pilot-commands.yaml'
 
 class PilotCommand(BaseModel):
     # Should be lower case, no spaces, hyphens
-    name: str = Field(..., description="Name of the command", example="generate-pr-description", pattern="^[a-z0-9-]+$")
-    description: str = Field(..., description="Description of the command", example="Generate a PR description")
+    name: str = Field(..., description="Name of the command", pattern="^[a-z0-9-]+$")
+    description: str = Field(..., description="Description of the command")
     params: TaskParameters = Field(..., description="CLI parameters for the command")
 
     def callback(self, *args, **kwargs):
@@ -70,7 +70,7 @@ class CommandIndex:
         Save the current list of commands to the YAML file.
         """
         with open(self.file_path, 'w') as file:
-            yaml.dump({'commands': [cmd.dict(exclude_none=True) for cmd in self.commands]}, file)
+            yaml.dump({'commands': [cmd.model_dump(exclude_none=True) for cmd in self.commands]}, file)
 
     def add_command(self, command: PilotCommand) -> None:
         """

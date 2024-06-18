@@ -8,12 +8,12 @@ commands:
     direct: false
     model: gpt-3.5-turbo
     prompt: write a haiku about this project
-    quiet: true
+    quiet: false
     repo: PR-Pilot-AI/pr-pilot-cli
     snap: false
-    spinner: false
+    spinner: true
     sync: false
-    wait: true
+    wait: false
 - description: Generate PR Title and Description
   name: pr-description
   params:
@@ -36,6 +36,20 @@ commands:
     debug: false
     direct: false
     file: prompts/slack-report.md.jinja2
+    model: gpt-4o
+    quiet: true
+    snap: false
+    spinner: true
+    sync: true
+    wait: true
+- description: Run the tests, analyze the output and provide suggestions
+  name: test-analysis
+  params:
+    cheap: false
+    code: false
+    debug: false
+    direct: false
+    file: prompts/analyze_test_results.md.jinja2
     model: gpt-4o
     quiet: true
     snap: false
