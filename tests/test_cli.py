@@ -32,3 +32,13 @@ def test_code_param_includes_code_primer(runner, mock_create_task):
     assert CODE_PRIMER in called_prompt
     assert prompt in called_prompt
     assert result.exit_code == 0
+
+
+def test_save_command_param_saves_command(runner, mock_create_task, mock_command_index):
+    """The --save-command param should save the task parameters as a command"""
+    prompt = "This is a test prompt."
+    result = runner.invoke(main, ['task', '--save-command', prompt])
+
+    mock_create_task.assert_called_once()
+    mock_command_index.add_command.assert_called_once()
+    assert result.exit_code == 0
