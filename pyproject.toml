@@ -10,6 +10,9 @@ documentation = "https://docs.pr-pilot.ai"
 homepage = "https://www.pr-pilot.ai"
 repository = "https://github.com/pr-pilot-ai/pr-pilot-cli"
 
+[tool.black]
+line-length = 100
+
 [tool.poetry.dependencies]
 python = "~3.10.0"
 click = "8.1.7"

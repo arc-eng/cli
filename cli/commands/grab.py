@@ -12,8 +12,6 @@ from rich.table import Table
 from cli.command_index import DEFAULT_FILE_PATH, CommandIndex
 from cli.status_indicator import StatusIndicator
 
-from cli.util import PaddedConsole
-
 
 @click.group()
 @click.pass_context
@@ -79,9 +77,7 @@ def grab_commands(ctx, repo):
         for command_name in answers["commands"]:
             remote_command = remote_index.get_command(command_name)
             if local_index.get_command(command_name):
-                overwrite = Confirm.ask(
-                    f"Command {command_name} already exists. Overwrite?"
-                )
+                overwrite = Confirm.ask(f"Command {command_name} already exists. Overwrite?")
                 if not overwrite:
                     continue
             local_index.remove_command(command_name)
@@ -100,7 +96,7 @@ def grab_commands(ctx, repo):
         local_index.save_commands()
         console.line()
         if commands_imported:
-            console.print(f"You can now use the following commands:")
+            console.print("You can now use the following commands:")
             table = Table(box=None, show_header=False)
             table.add_column("Command", style="bold")
             table.add_column("Description", style="magenta")

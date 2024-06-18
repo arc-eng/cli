@@ -19,18 +19,14 @@ from cli.util import load_config
     default=True,
     help="Wait for PR Pilot to finish the task.",
 )
-@click.option(
-    "--repo", help="Github repository in the format owner/repo.", required=False
-)
+@click.option("--repo", help="Github repository in the format owner/repo.", required=False)
 @click.option(
     "--spinner/--no-spinner",
     is_flag=True,
     default=True,
     help="Display a loading indicator.",
 )
-@click.option(
-    "--quiet/--chatty", is_flag=True, default=False, help="Disable all status messages."
-)
+@click.option("--quiet/--chatty", is_flag=True, default=False, help="Disable all status messages.")
 @click.option("--model", "-m", help="GPT model to use.", default=DEFAULT_MODEL)
 @click.option(
     "--branch",

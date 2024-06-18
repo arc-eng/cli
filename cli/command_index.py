@@ -33,9 +33,7 @@ class PilotCommand(BaseModel):
         runner = TaskRunner(status_indicator)
         finished_task = runner.run_task(self.params)
         if self.params.sync and finished_task.branch:
-            pull_branch_changes(
-                status_indicator, console, finished_task.branch, self.params.debug
-            )
+            pull_branch_changes(status_indicator, console, finished_task.branch, self.params.debug)
         status_indicator.stop()
 
     def to_click_command(self) -> Command:
@@ -75,11 +73,7 @@ class CommandIndex:
         """
         with open(self.file_path, "w") as file:
             yaml.dump(
-                {
-                    "commands": [
-                        cmd.model_dump(exclude_none=True) for cmd in self.commands
-                    ]
-                },
+                {"commands": [cmd.model_dump(exclude_none=True) for cmd in self.commands]},
                 file,
             )
 
@@ -93,9 +87,7 @@ class CommandIndex:
         """
         for cmd in self.commands:
             if cmd.name == new_command.name:
-                raise ValueError(
-                    f"Command with name '{new_command.name}' already exists"
-                )
+                raise ValueError(f"Command with name '{new_command.name}' already exists")
         new_command.params.branch = None
         new_command.params.pr_number = None
         if new_command.params.file:

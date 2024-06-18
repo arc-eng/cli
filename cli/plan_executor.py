@@ -42,9 +42,7 @@ class PlanExecutor:
         current_task = 0
         if not quiet:
             console.line()
-            console.print(
-                f"Running [bold]{self.name}[/bold] with {num_tasks} sub-tasks."
-            )
+            console.print(f"Running [bold]{self.name}[/bold] with {num_tasks} sub-tasks.")
         for task in self.tasks:
             if not quiet:
                 console.line()
@@ -65,11 +63,13 @@ class PlanExecutor:
             for i, response in enumerate(self.responses):
                 previous_responses += f"## Result of Sub-task {i + 1}\n\n{response}\n\n"
             wrapped_prompt = (
-                f"We are working on a main task that contains a list of sub-tTasks. This is sub-task {current_task} / {num_tasks}\n\n---\n\n"
+                "We are working on a main task that contains a list of sub-tTasks. "
+                f"This is sub-task {current_task} / {num_tasks}\n\n---\n\n"
                 f"# Main Task {self.name}\n\n{self.plan.get('prompt')}\n\n"
                 f"# Results of previous sub-tasks\n\n{previous_responses}\n\n"
                 f"# Current Sub-task: {task.get('name')}\n\n{task.get('prompt')}\n\n---\n\n"
-                f"Follow the instructions of the current sub-task! Respond with a compact bullet list of your actions."
+                f"Follow the instructions of the current sub-task! "
+                f"Respond with a compact bullet list of your actions."
             )
             if debug:
                 console.line()
@@ -100,8 +100,7 @@ class PlanExecutor:
             self.responses.append(finished_task.result)
             if self.pr_number is None and finished_task.pr_number and not quiet:
                 console.print(
-                    f"Found new pull request! All subsequent tasks will run on PR #{finished_task.pr_number}"
+                    f"Found new pull request! "
+                    f"All subsequent tasks will run on PR #{finished_task.pr_number}"
                 )
-            self.pr_number = (
-                int(finished_task.pr_number) if finished_task.pr_number else None
-            )
+            self.pr_number = int(finished_task.pr_number) if finished_task.pr_number else None

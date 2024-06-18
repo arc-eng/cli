@@ -33,9 +33,7 @@ def get_remote_origin_url():
 
 def extract_owner_repo(url):
     """Extract the owner/repo from a GitHub URL."""
-    match = re.match(
-        r"(?:git@github\.com:|https://github\.com/)([^/]+)/([^/]+)(?:\.git)?", url
-    )
+    match = re.match(r"(?:git@github\.com:|https://github\.com/)([^/]+)/([^/]+)(?:\.git)?", url)
     if match:
         return f"{match.group(1)}/{match.group(2)}".replace(".git", "")
     return None
@@ -63,7 +61,8 @@ if __name__ == "__main__":
                 print("Could not extract owner/repo from the remote origin URL.")
         else:
             print(
-                "This directory is a git repository, but the remote origin URL could not be determined."
+                "This directory is a git repository, "
+                "but the remote origin URL could not be determined."
             )
     else:
         print("This directory is not a git repository.")

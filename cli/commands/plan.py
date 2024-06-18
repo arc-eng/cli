@@ -30,9 +30,7 @@ def plan(ctx, file_path):
             ctx.obj["debug"],
         )
         if ctx.obj["sync"]:
-            pull_branch_changes(
-                status_indicator, console, ctx.obj["branch"], ctx.obj["debug"]
-            )
+            pull_branch_changes(status_indicator, console, ctx.obj["branch"], ctx.obj["debug"])
 
     except Exception as e:
         status_indicator.fail()

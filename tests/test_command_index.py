@@ -25,9 +25,7 @@ def test_add_command(command_index):
         prompt="test_prompt",
         branch=None,
     )
-    command = PilotCommand(
-        name="test-command", description="Test command", params=task_params
-    )
+    command = PilotCommand(name="test-command", description="Test command", params=task_params)
     command_index.add_command(command)
 
     commands = command_index.get_commands()
@@ -53,14 +51,10 @@ def test_add_duplicate_command(command_index):
         prompt="test_prompt",
         branch=None,
     )
-    command = PilotCommand(
-        name="test-command", description="Test command", params=task_params
-    )
+    command = PilotCommand(name="test-command", description="Test command", params=task_params)
     command_index.add_command(command)
 
-    with pytest.raises(
-        ValueError, match="Command with name 'test-command' already exists"
-    ):
+    with pytest.raises(ValueError, match="Command with name 'test-command' already exists"):
         command_index.add_command(command)
 
 
@@ -80,9 +74,7 @@ def test_load_commands_from_file(command_index):
         prompt="test_prompt",
         branch=None,
     )
-    command = PilotCommand(
-        name="test-command", description="Test command", params=task_params
-    )
+    command = PilotCommand(name="test-command", description="Test command", params=task_params)
     command_index.add_command(command)
 
     new_index = CommandIndex(file_path=command_index.file_path)

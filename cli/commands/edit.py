@@ -22,15 +22,15 @@ def edit(ctx, snap, file_path, prompt):
 
     \b
     - ✍️ Quickly add docstrings to a Python file:
-      pilot edit main.py "Add docstrings for all classes, functions and parameters."
+      pilot edit main.py "Add docstrings for all classes, functions and parameters"
 
     \b
     - ♻️ Refactor and clean up code:
-      pilot edit main.js "Break up large functions, organize the file and add comments."
+      pilot edit main.js "Break up large functions, organize the file and add comments"
 
     \b
     - 🧩 Implement placeholders:
-      pilot edit "I left placeholder comments in the file. Please replace them with the actual code."
+      pilot edit "I left placeholder comments in the file. Please replace them with the actual code"
 
     """
     console = Console()
@@ -44,9 +44,7 @@ def edit(ctx, snap, file_path, prompt):
     file_content = Path(file_path).read_text()
     user_prompt = prompt
     prompt = f"I have the following file content:\n\n---\n{file_content}\n---\n\n"
-    prompt += (
-        f"Please edit the file content above in the following way:\n\n{user_prompt}"
-    )
+    prompt += f"Please edit the file content above in the following way:\n\n{user_prompt}"
 
     try:
         if ctx.obj["sync"] and not ctx.obj["branch"]:
@@ -71,9 +69,7 @@ def edit(ctx, snap, file_path, prompt):
         runner = TaskRunner(status_indicator)
         finished_task = runner.run_task(task_params)
         if ctx.obj["sync"]:
-            pull_branch_changes(
-                status_indicator, console, finished_task.branch, ctx.obj["debug"]
-            )
+            pull_branch_changes(status_indicator, console, finished_task.branch, ctx.obj["debug"])
 
     except Exception as e:
         status_indicator.fail()

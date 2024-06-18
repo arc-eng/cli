@@ -21,9 +21,7 @@ class TaskHandler:
         self.status = status_indicator
         self.task_runs_on_pr = self.task.pr_number is not None
 
-    def wait_for_result(
-        self, output_file=None, quiet=False, code=False, print_result=True
-    ) -> str:
+    def wait_for_result(self, output_file=None, quiet=False, code=False, print_result=True) -> str:
         """
         Wait for the task to finish and display the result.
         :param output_file: Optional file to save the result.
@@ -59,7 +57,9 @@ class TaskHandler:
             new_pr_url = None
             if not self.task_runs_on_pr and self.task.pr_number:
                 # Task created a new PR
-                new_pr_url = f"https://github.com/{self.task.github_project}/pull/{self.task.pr_number}"
+                new_pr_url = (
+                    f"https://github.com/{self.task.github_project}/pull/{self.task.pr_number}"
+                )
                 if not self.task_runs_on_pr:
                     # We found a new PR number, let the user know
                     self.status.update(f"Opened Pull Request: {new_pr_url}")
@@ -81,9 +81,7 @@ class TaskHandler:
                 if result:
                     # If quiet mode is enabled, we still want to show the PR URL
                     if quiet and new_pr_url:
-                        result += (
-                            f"\n\n🆕 [**PR #{self.task.pr_number}**]({new_pr_url})"
-                        )
+                        result += f"\n\n🆕 [**PR #{self.task.pr_number}**]({new_pr_url})"
                     if print_result:
                         self.console.print(Padding(Markdown(result), (1, 1)))
 

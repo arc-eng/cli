@@ -43,9 +43,7 @@ def wrap_function_with_status(func, status):
 
 class PromptTemplate:
 
-    def __init__(
-        self, template_file_path, repo, model, status, recursion_level=0, **kwargs
-    ):
+    def __init__(self, template_file_path, repo, model, status, recursion_level=0, **kwargs):
         self.template_file_path = template_file_path
         self.repo = repo
         self.model = model
@@ -64,15 +62,11 @@ class PromptTemplate:
             if os.path.exists(potential_file_path):
 
                 if self.recursion_level >= MAX_RECURSION_LEVEL:
-                    status.update(
-                        f"Abort loading {prompt}. Maximum recursion level reached."
-                    )
+                    status.update(f"Abort loading {prompt}. Maximum recursion level reached.")
                     status.success()
                     return ""
                 recursion_str = (
-                    f"(Recursion level {self.recursion_level})"
-                    if self.recursion_level > 0
-                    else ""
+                    f"(Recursion level {self.recursion_level})" if self.recursion_level > 0 else ""
                 )
                 status.update(f"Loading prompt from file: {prompt} {recursion_str}")
                 sub_template = PromptTemplate(

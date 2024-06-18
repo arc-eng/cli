@@ -40,7 +40,8 @@ from cli.command_index import CommandIndex, PilotCommand
     "--direct",
     is_flag=True,
     default=False,
-    help="🔄 Do not feed the rendered template as a prompt into PR Pilot, but render it directly as output.",
+    help="🔄 Do not feed the rendered template as a prompt into PR Pilot, "
+    "but render it directly as output.",
 )
 @click.option(
     "--output",
@@ -100,14 +101,10 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
             )
             name = click.prompt("  Name (e.g. generate-pr-desc)", type=str)
             description = click.prompt("  Short description", type=str)
-            command = PilotCommand(
-                name=name, description=description, params=task_params
-            )
+            command = PilotCommand(name=name, description=description, params=task_params)
             command_index.add_command(command)
             console.print(
-                Padding(
-                    f"Command saved to [code]{command_index.file_path}[/code]", (1, 1)
-                )
+                Padding(f"Command saved to [code]{command_index.file_path}[/code]", (1, 1))
             )
             console.print(
                 Padding(
