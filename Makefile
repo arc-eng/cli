@@ -7,3 +7,7 @@ readme:
 homebrew:
 	# Generate a homebrew formula and open a PR on the tap repository
 	poetry run pilot --no-spinner --no-sync --repo=PR-Pilot-AI/pr-pilot-homebrew task -f prompts/homebrew.md.jinja2
+commit-hooks:
+	# Install pre-commit hooks
+	poetry install
+	poetry run pre-commit install
