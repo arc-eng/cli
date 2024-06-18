@@ -44,6 +44,16 @@ Send PR Pilot off to give any PR a title and description according to your guide
 PR_NUMBER=153 pilot task -f generate-pr-description.md.jinja2
 ```
 
+Turn this task into a reusable command for later:
+
+```bash
+# Save the task as a command
+pilot task -f generate-pr-description.md.jinja2 --save-command
+
+# Call the saved command
+pilot run pr-description
+```
+
 
 ## 📦 Installation
 
