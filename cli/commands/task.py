@@ -1,14 +1,12 @@
 import os
-
 import click
 from rich.console import Console
-
 from cli.constants import CHEAP_MODEL
 from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
 from cli.models import TaskParameters
 from cli.util import pull_branch_changes
-
+from cli.command_index import CommandIndex
 
 @click.command()
 @click.option('--snap', is_flag=True, help='📸 Select a portion of your screen to add as an image to the task.')
@@ -18,9 +16,10 @@ from cli.util import pull_branch_changes
 @click.option('--direct', is_flag=True, default=False,
               help='🔄 Do not feed the rendered template as a prompt into PR Pilot, but render it directly as output.')
 @click.option('--output', '-o', type=click.Path(exists=False), help='💾 Output file for the result.')
+@click.option('--save-command', is_flag=True, help='💾 Save the task parameters as a command in pilot-commands.yaml')
 @click.argument('prompt', required=False, default=None, type=str)
 @click.pass_context
-def task(ctx, snap, cheap, code, file, direct, output, prompt):
+def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
     """🛠️ Create a new task for PR Pilot.
 
     Examples:
@@ -40,7 +39,7 @@ def task(ctx, snap, cheap, code, file, direct, output, prompt):
     console = Console()
     status_indicator = StatusIndicator(spinner=ctx.obj['spinner'], messages=not ctx.obj['quiet'], console=console)
 
-    try:
+    try {
         if ctx.obj['sync']:
             # Get current branch from git
             current_branch = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
@@ -62,6 +61,14 @@ def task(ctx, snap, cheap, code, file, direct, output, prompt):
             prompt=prompt,
             branch=ctx.obj['branch']
         )
+
+        if save_command:
+            command_index = CommandIndex()
+            command_index.add_command({
+                'name': prompt,
+                'description': prompt,
+                'parameters': task_params.dict()
+            })
 
         runner = TaskRunner(status_indicator)
         finished_task = runner.run_task(task_params)
