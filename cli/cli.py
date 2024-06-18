@@ -5,6 +5,7 @@ import click
 from cli.commands.edit import edit
 from cli.commands.history import history
 from cli.commands.plan import plan
+from cli.commands.run import RunCommand
 from cli.commands.task import task
 from cli.constants import DEFAULT_MODEL, CONFIG_API_KEY
 from cli.util import load_config
@@ -66,6 +67,8 @@ main.add_command(task)
 main.add_command(edit)
 main.add_command(plan)
 main.add_command(history)
+
+main.add_command(RunCommand(name="run", help="🚀 Run a saved command."))
 
 
 if __name__ == '__main__':

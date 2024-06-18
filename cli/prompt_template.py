@@ -4,6 +4,7 @@ import subprocess
 import click
 import jinja2
 from pr_pilot.util import create_task
+from rich.prompt import Prompt
 
 from cli.task_handler import TaskHandler
 
@@ -26,7 +27,7 @@ def read_env_var(variable, default=None):
     """Get the value of an environment variable, with a default value."""
     if variable not in os.environ and default is None:
         # Ask for Variable input with click
-        os.environ[variable] = click.prompt(variable)
+        os.environ[variable] = Prompt.ask(f"Enter value for {variable}")
     return os.environ.get(variable, default)
 
 

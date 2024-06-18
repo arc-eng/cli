@@ -192,7 +192,8 @@ Commands:
   edit     ✍️ Let PR Pilot edit a file for you.
   history  📜 Access recent tasks.
   plan     📋 Let PR Pilot execute a plan for you.
-  task     🛠️ Create a new task for PR Pilot.
+  run      🚀 Run a saved command.
+  task     🛠️Create a new task for PR Pilot.
 
 ```
 
@@ -203,7 +204,7 @@ Hand over a task to PR Pilot.
 ```bash
 Usage: pilot task [OPTIONS] [PROMPT]
 
-  🛠️ Create a new task for PR Pilot.
+  🛠️Create a new task for PR Pilot.
 
   Examples:
 
@@ -225,6 +226,8 @@ Options:
   --direct           🔄 Do not feed the rendered template as a prompt into PR
                      Pilot, but render it directly as output.
   -o, --output PATH  💾 Output file for the result.
+  --save-command     💾 Save the task parameters as a command in pilot-
+                     commands.yaml
   --help             Show this message and exit.
 
 ```

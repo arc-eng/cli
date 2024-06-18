@@ -1,0 +1,44 @@
+commands:
+- description: Writes a Haiku about this project
+  name: haiku
+  params:
+    cheap: true
+    code: false
+    debug: false
+    direct: false
+    model: gpt-3.5-turbo
+    prompt: write a haiku about this project
+    quiet: true
+    repo: PR-Pilot-AI/pr-pilot-cli
+    snap: false
+    spinner: false
+    sync: false
+    wait: true
+- description: Generate PR Title and Description
+  name: pr-description
+  params:
+    cheap: false
+    code: false
+    debug: false
+    direct: false
+    file: prompts/generate_pr_description.md.jinja2
+    model: gpt-4o
+    quiet: true
+    snap: false
+    spinner: false
+    sync: true
+    wait: true
+- description: Assemble a comprehensive daily report and send it to Slack
+  name: daily-report
+  params:
+    cheap: false
+    code: false
+    debug: false
+    direct: false
+    file: prompts/slack-report.md.jinja2
+    model: gpt-4o
+    quiet: true
+    snap: false
+    spinner: true
+    sync: true
+    wait: true
