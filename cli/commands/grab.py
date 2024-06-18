@@ -33,78 +33,102 @@ def grab_commands(ctx, repo):
         spinner=ctx.obj["spinner"], messages=not ctx.obj["quiet"], console=console
     )
     status_indicator.start()
-    # Check out repository to a temporary directory
     full_repo_url = f"git@github.com:{repo}.git"
     with tempfile.TemporaryDirectory() as tmp_dir:
-        # Shallow clone repository with subprocess
-        status_indicator.update(f"Loading commands from {repo}")
-        subprocess.run(
-            ["git", "clone", "--depth", "1", full_repo_url, tmp_dir],
-            check=True,
-            capture_output=True,
-        )
-        # Load .pilot-commands.yaml from the repository
+        clone_repository(status_indicator, full_repo_url, tmp_dir)
         full_path = os.path.join(tmp_dir, DEFAULT_FILE_PATH)
         if not os.path.exists(full_path):
             click.ClickException(
                 f"Repository {full_repo_url} does not contain a {DEFAULT_FILE_PATH} file."
             )
         status_indicator.stop()
-        # Load the commands from the repository
         remote_index = CommandIndex(full_path)
-        # Render all commands as a Rich table
-        console.print(f"Found the following commands in {repo}:")
-        table = Table(box=None)
-        table.add_column("Name", style="cyan bold")
-        table.add_column("Description", style="magenta")
-        for command in remote_index.get_commands():
-            table.add_row(command.name, command.description)
-        console.print(Padding(table, (1, 1)))
-        # Use rich to provide a select list for the user
-        choices = [cmd.name for cmd in remote_index.get_commands()]
-        questions = [
-            inquirer.Checkbox(
-                "commands",
-                message="Which commands would you like to add?",
-                choices=choices,
-            ),
-        ]
-        answers = inquirer.prompt(questions)
-        # Add the selected command to the local index
+        display_commands(console, repo, remote_index)
+        answers = prompt_user_for_commands(remote_index)
         local_index = CommandIndex()
-        files_imported = []
-        commands_imported = []
-        for command_name in answers["commands"]:
-            remote_command = remote_index.get_command(command_name)
-            if local_index.get_command(command_name):
-                overwrite = Confirm.ask(f"Command {command_name} already exists. Overwrite?")
-                if not overwrite:
-                    continue
-            local_index.remove_command(command_name)
-            local_index.add_command(remote_command)
-            if remote_command.params.file:
-                full_path = os.path.join(tmp_dir, remote_command.params.file)
-                # Copy file to local directory
-                with open(full_path, "r") as f:
-                    content = f.read()
-                # Make directories if necessary
-                os.makedirs(os.path.dirname(remote_command.params.file), exist_ok=True)
-                with open(remote_command.params.file, "w") as f:
-                    f.write(content)
-                files_imported.append(remote_command.params.file)
-            commands_imported.append(remote_command)
+        commands_imported, files_imported = import_commands(
+            answers, remote_index, local_index, tmp_dir
+        )
         local_index.save_commands()
-        console.line()
-        if commands_imported:
-            console.print("You can now use the following commands:")
-            table = Table(box=None, show_header=False)
-            table.add_column("Command", style="bold")
-            table.add_column("Description", style="magenta")
-            for command in commands_imported:
-                table.add_row(
-                    f"[code]pilot run [green]{command.name}[/green][code]",
-                    command.description,
-                )
-            console.print(Padding(table, (1, 1)))
-        else:
-            console.print("No commands imported.")
+        display_imported_commands(console, commands_imported)
+
+
+def clone_repository(status_indicator, full_repo_url, tmp_dir):
+    """Clone the repository to a temporary directory."""
+    status_indicator.update(f"Loading commands from {full_repo_url}")
+    subprocess.run(
+        ["git", "clone", "--depth", "1", full_repo_url, tmp_dir],
+        check=True,
+        capture_output=True,
+    )
+
+
+def display_commands(console, repo, remote_index):
+    """Display the commands found in the repository."""
+    console.print(f"Found the following commands in {repo}:")
+    table = Table(box=None)
+    table.add_column("Name", style="cyan bold")
+    table.add_column("Description", style="magenta")
+    for command in remote_index.get_commands():
+        table.add_row(command.name, command.description)
+    console.print(Padding(table, (1, 1)))
+
+
+def prompt_user_for_commands(remote_index):
+    """Prompt the user to select commands to import."""
+    choices = [cmd.name for cmd in remote_index.get_commands()]
+    questions = [
+        inquirer.Checkbox(
+            "commands",
+            message="Which commands would you like to add?",
+            choices=choices,
+        ),
+    ]
+    return inquirer.prompt(questions)
+
+
+def import_commands(answers, remote_index, local_index, tmp_dir):
+    """Import the selected commands into the local index."""
+    files_imported = []
+    commands_imported = []
+    for command_name in answers["commands"]:
+        remote_command = remote_index.get_command(command_name)
+        if local_index.get_command(command_name):
+            overwrite = Confirm.ask(f"Command {command_name} already exists. Overwrite?")
+            if not overwrite:
+                continue
+        local_index.remove_command(command_name)
+        local_index.add_command(remote_command)
+        if remote_command.params.file:
+            full_path = os.path.join(tmp_dir, remote_command.params.file)
+            copy_file_to_local_directory(full_path, remote_command.params.file)
+            files_imported.append(remote_command.params.file)
+        commands_imported.append(remote_command)
+    return commands_imported, files_imported
+
+
+def copy_file_to_local_directory(source_path, destination_path):
+    """Copy a file from the source path to the local directory."""
+    with open(source_path, "r") as f:
+        content = f.read()
+    os.makedirs(os.path.dirname(destination_path), exist_ok=True)
+    with open(destination_path, "w") as f:
+        f.write(content)
+
+
+def display_imported_commands(console, commands_imported):
+    """Display the imported commands."""
+    console.line()
+    if commands_imported:
+        console.print("You can now use the following commands:")
+        table = Table(box=None, show_header=False)
+        table.add_column("Command", style="bold")
+        table.add_column("Description", style="magenta")
+        for command in commands_imported:
+            table.add_row(
+                f"[code]pilot run [green]{command.name}[/green][code]",
+                command.description,
+            )
+        console.print(Padding(table, (1, 1)))
+    else:
+        console.print("No commands imported.")
