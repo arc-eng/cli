@@ -1,4 +1,3 @@
-### README.md
 <div align="center">
 <img src="https://avatars.githubusercontent.com/ml/17635?s=140&v=" width="100" alt="PR Pilot Logo">
 </div>
@@ -9,6 +8,8 @@
   <a href="https://www.pr-pilot.ai/blog">Blog</a> |
   <a href="https://www.pr-pilot.ai">Website</a>
 </p>
+
+[![Unit Tests](https://github.com/PR-Pilot-AI/pr-pilot-cli/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/PR-Pilot-AI/pr-pilot-cli/actions/workflows/unit_tests.yml)
 
 # PR Pilot Command-Line Interface
 
@@ -263,6 +264,7 @@ Options:
   --help  Show this message and exit.
 
 ```
+
 
 
 
