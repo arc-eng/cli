@@ -1,12 +1,15 @@
 import os
 import click
 from rich.console import Console
+from rich.padding import Padding
+
 from cli.constants import CHEAP_MODEL
 from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
 from cli.models import TaskParameters
 from cli.util import pull_branch_changes
-from cli.command_index import CommandIndex
+from cli.command_index import CommandIndex, Command
+
 
 @click.command()
 @click.option('--snap', is_flag=True, help='📸 Select a portion of your screen to add as an image to the task.')
@@ -39,7 +42,7 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
     console = Console()
     status_indicator = StatusIndicator(spinner=ctx.obj['spinner'], messages=not ctx.obj['quiet'], console=console)
 
-    try {
+    try :
         if ctx.obj['sync']:
             # Get current branch from git
             current_branch = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
@@ -62,20 +65,27 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
             branch=ctx.obj['branch']
         )
 
-        if save_command:
-            command_index = CommandIndex()
-            command_index.add_command({
-                'name': prompt,
-                'description': prompt,
-                'parameters': task_params.dict()
-            })
-
         runner = TaskRunner(status_indicator)
         finished_task = runner.run_task(task_params)
+
         if ctx.obj['sync']:
             branch = finished_task.branch if finished_task else ctx.obj['branch']
             if branch:
                 pull_branch_changes(status_indicator, console, branch, ctx.obj['debug'])
+
+
+        if save_command:
+            command_index = CommandIndex()
+            console.print(Padding("Save the task parameters as a command:", (1, 1)))
+            name = click.prompt("Name (e.g. generate-pr-desc)", type=str)
+            description = click.prompt("Short description", type=str)
+            command = Command(name=name, description=description, params=task_params)
+            command_index.add_command(command)
+            console.print(f"Command saved to `{command_index.file_path}`:")
+            console.print(command.dict())
+            console.line()
+            console.print(f"You can now run this command with `pilot run {name}`.")
+
 
     except Exception as e:
         status_indicator.fail()
