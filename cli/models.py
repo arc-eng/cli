@@ -6,6 +6,7 @@ class TaskParameters(BaseModel):
     """
     Model representing the parameters for a task.
     """
+
     wait: bool = Field(default=False, description="Wait for the task to complete")
     repo: Optional[str] = Field(default=None, description="Repository to run the task on")
     snap: bool = Field(default=False, description="Take a screenshot")
@@ -21,4 +22,6 @@ class TaskParameters(BaseModel):
     branch: Optional[str] = Field(default=None, description="Branch to use for the task")
     pr_number: Optional[int] = Field(default=None, description="Pull request number")
     spinner: bool = Field(default=True, description="Display spinners")
-    sync: bool = Field(default=False, description="Sync local repository state with PR Pilot changes")
+    sync: bool = Field(
+        default=False, description="Sync local repository state with PR Pilot changes"
+    )

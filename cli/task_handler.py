@@ -40,7 +40,11 @@ class TaskHandler:
                 if time.time() - start_time > MAX_RESULT_WAIT_TIME:
                     raise TimeoutError("The task took too long to complete.")
                 self.task = get_task(self.task.id)
-                if self.task.title and not self.task.title == "A title" and not task_title == self.task.title:
+                if (
+                    self.task.title
+                    and not self.task.title == "A title"
+                    and not task_title == self.task.title
+                ):
                     task_title = self.task.title
                     self.status.update(self.task.title)
                 if self.task.status == "running":
@@ -53,7 +57,9 @@ class TaskHandler:
             new_pr_url = None
             if not self.task_runs_on_pr and self.task.pr_number:
                 # Task created a new PR
-                new_pr_url = f"https://github.com/{self.task.github_project}/pull/{self.task.pr_number}"
+                new_pr_url = (
+                    f"https://github.com/{self.task.github_project}/pull/{self.task.pr_number}"
+                )
                 if not self.task_runs_on_pr:
                     # We found a new PR number, let the user know
                     self.status.update(f"Opened Pull Request: {new_pr_url}")

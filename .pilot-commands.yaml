@@ -14,18 +14,18 @@ commands:
     spinner: true
     sync: false
     wait: false
-- description: Generate PR Title and Description
-  name: pr-description
+- description: Run the tests, analyze the output and provide suggestions
+  name: test-analysis
   params:
     cheap: false
     code: false
     debug: false
     direct: false
-    file: prompts/generate_pr_description.md.jinja2
+    file: prompts/analyze_test_results.md.jinja2
     model: gpt-4o
     quiet: true
     snap: false
-    spinner: false
+    spinner: true
     sync: true
     wait: true
 - description: Assemble a comprehensive daily report and send it to Slack
@@ -42,17 +42,17 @@ commands:
     spinner: true
     sync: false
     wait: true
-- description: Run the tests, analyze the output and provide suggestions
-  name: test-analysis
+- description: Generate PR Title and Description
+  name: pr-description
   params:
     cheap: false
     code: false
     debug: false
     direct: false
-    file: prompts/analyze_test_results.md.jinja2
+    file: prompts/generate_pr_description.md.jinja2
     model: gpt-4o
     quiet: true
     snap: false
-    spinner: true
+    spinner: false
     sync: true
     wait: true

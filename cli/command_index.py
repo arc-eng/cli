@@ -11,7 +11,7 @@ from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
 from cli.util import pull_branch_changes
 
-DEFAULT_FILE_PATH = '.pilot-commands.yaml'
+DEFAULT_FILE_PATH = ".pilot-commands.yaml"
 
 
 class PilotCommand(BaseModel):
@@ -24,10 +24,12 @@ class PilotCommand(BaseModel):
         console = Console()
         if self.params.sync:
             # Get current branch from git
-            current_branch = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
-            if (current_branch not in ['master', 'main']):
+            current_branch = os.popen("git rev-parse --abbrev-ref HEAD").read().strip()
+            if current_branch not in ["master", "main"]:
                 self.params.branch = current_branch
-        status_indicator = StatusIndicator(spinner=self.params.spinner, messages=not self.params.quiet, console=console)
+        status_indicator = StatusIndicator(
+            spinner=self.params.spinner, messages=not self.params.quiet, console=console
+        )
         runner = TaskRunner(status_indicator)
         finished_task = runner.run_task(self.params)
         if self.params.sync and finished_task.branch:
@@ -59,9 +61,9 @@ class CommandIndex:
         :return: A list of Command instances.
         """
         try:
-            with open(self.file_path, 'r') as file:
+            with open(self.file_path, "r") as file:
                 data = yaml.safe_load(file)
-                return [PilotCommand(**cmd) for cmd in data.get('commands', [])]
+                return [PilotCommand(**cmd) for cmd in data.get("commands", [])]
         except FileNotFoundError:
             return []
 
@@ -69,25 +71,28 @@ class CommandIndex:
         """
         Save the current list of commands to the YAML file.
         """
-        with open(self.file_path, 'w') as file:
-            yaml.dump({'commands': [cmd.model_dump(exclude_none=True) for cmd in self.commands]}, file)
+        with open(self.file_path, "w") as file:
+            yaml.dump(
+                {"commands": [cmd.model_dump(exclude_none=True) for cmd in self.commands]},
+                file,
+            )
 
-    def add_command(self, command: PilotCommand) -> None:
+    def add_command(self, new_command: PilotCommand) -> None:
         """
         Add a new command to the list and save it.
 
-        :param command: The Command instance to add.
+        :param new_command: The Command instance to add.
 
         :raises ValueError: If a command with the same name already exists.
         """
         for cmd in self.commands:
-            if cmd.name == command.name:
-                raise ValueError(f"Command with name '{command.name}' already exists")
-        command.params.branch = None
-        command.params.pr_number = None
-        if command.params.file:
-            command.params.prompt = None
-        self.commands.append(command)
+            if cmd.name == new_command.name:
+                raise ValueError(f"Command with name '{new_command.name}' already exists")
+        new_command.params.branch = None
+        new_command.params.pr_number = None
+        if new_command.params.file:
+            new_command.params.prompt = None
+        self.commands.append(new_command)
         self.save_commands()
 
     def get_commands(self) -> List[PilotCommand]:
@@ -98,14 +103,23 @@ class CommandIndex:
         """
         return self.commands
 
-    def get_command(self, command) -> Optional[PilotCommand]:
+    def get_command(self, command_name) -> Optional[PilotCommand]:
         """
         Get a command by name.
 
-        :param command:
+        :param command_name:
         :return:
         """
         for cmd in self.commands:
-            if cmd.name == command:
+            if cmd.name == command_name:
                 return cmd
         return None
+
+    def remove_command(self, command_name) -> None:
+        """
+        Remove a command by name.
+
+        :param command_name:
+        """
+        self.commands = [cmd for cmd in self.commands if cmd.name != command_name]
+        self.save_commands()

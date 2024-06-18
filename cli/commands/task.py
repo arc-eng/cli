@@ -13,15 +13,48 @@ from cli.command_index import CommandIndex, PilotCommand
 
 
 @click.command()
-@click.option('--snap', is_flag=True, help='📸 Select a portion of your screen to add as an image to the task.')
-@click.option('--cheap', is_flag=True, default=False, help=f'💸 Use the cheapest GPT model ({CHEAP_MODEL})')
-@click.option('--code', is_flag=True, default=False, help='💻 Optimize prompt and settings for generating code')
-@click.option('--file', '-f', type=click.Path(exists=True), help='📂 Generate prompt from a template file.')
-@click.option('--direct', is_flag=True, default=False,
-              help='🔄 Do not feed the rendered template as a prompt into PR Pilot, but render it directly as output.')
-@click.option('--output', '-o', type=click.Path(exists=False), help='💾 Output file for the result.')
-@click.option('--save-command', is_flag=True, help='💾 Save the task parameters as a command for later use.')
-@click.argument('prompt', required=False, default=None, type=str)
+@click.option(
+    "--snap",
+    is_flag=True,
+    help="📸 Select a portion of your screen to add as an image to the task.",
+)
+@click.option(
+    "--cheap",
+    is_flag=True,
+    default=False,
+    help=f"💸 Use the cheapest GPT model ({CHEAP_MODEL})",
+)
+@click.option(
+    "--code",
+    is_flag=True,
+    default=False,
+    help="💻 Optimize prompt and settings for generating code",
+)
+@click.option(
+    "--file",
+    "-f",
+    type=click.Path(exists=True),
+    help="📂 Generate prompt from a template file.",
+)
+@click.option(
+    "--direct",
+    is_flag=True,
+    default=False,
+    help="🔄 Do not feed the rendered template as a prompt into PR Pilot, "
+    "but render it directly as output.",
+)
+@click.option(
+    "--output",
+    "-o",
+    type=click.Path(exists=False),
+    help="💾 Output file for the result.",
+)
+@click.option(
+    "--save-command",
+    is_flag=True,
+    help="💾 Save the task parameters as a command for later use.",
+)
+@click.argument("prompt", required=False, default=None, type=str)
 @click.pass_context
 def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
     """🛠️Create a new task for PR Pilot.
@@ -29,56 +62,69 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
     Examples: https://github.com/pr-pilot-ai/pr-pilot-cli
     """
     console = Console()
-    status_indicator = StatusIndicator(spinner=ctx.obj['spinner'], messages=not ctx.obj['quiet'], console=console)
+    status_indicator = StatusIndicator(
+        spinner=ctx.obj["spinner"], messages=not ctx.obj["quiet"], console=console
+    )
 
     try:
-        if ctx.obj['sync']:
+        if ctx.obj["sync"]:
             # Get current branch from git
-            current_branch = os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
-            if (current_branch not in ['master', 'main']):
-                ctx.obj['branch'] = current_branch
+            current_branch = os.popen("git rev-parse --abbrev-ref HEAD").read().strip()
+            if current_branch not in ["master", "main"]:
+                ctx.obj["branch"] = current_branch
 
         task_params = TaskParameters(
-            wait=ctx.obj['wait'],
-            repo=ctx.obj['repo'],
+            wait=ctx.obj["wait"],
+            repo=ctx.obj["repo"],
             snap=snap,
-            quiet=ctx.obj['quiet'],
+            quiet=ctx.obj["quiet"],
             cheap=cheap,
             code=code,
             file=file,
             direct=direct,
             output=output,
-            model=ctx.obj['model'],
-            debug=ctx.obj['debug'],
+            model=ctx.obj["model"],
+            debug=ctx.obj["debug"],
             prompt=prompt,
-            branch=ctx.obj['branch'],
-            spinner=ctx.obj['spinner'],
-            sync=ctx.obj['sync']
+            branch=ctx.obj["branch"],
+            spinner=ctx.obj["spinner"],
+            sync=ctx.obj["sync"],
         )
 
         if save_command:
             command_index = CommandIndex()
-            console.print(Padding("[green bold]Save the task parameters as a command:[/green bold]", (1, 1)))
+            console.print(
+                Padding(
+                    "[green bold]Save the task parameters as a command:[/green bold]",
+                    (1, 1),
+                )
+            )
             name = click.prompt("  Name (e.g. generate-pr-desc)", type=str)
             description = click.prompt("  Short description", type=str)
             command = PilotCommand(name=name, description=description, params=task_params)
             command_index.add_command(command)
-            console.print(Padding(f"Command saved to [code]{command_index.file_path}[/code]", (1, 1)))
-            console.print(Padding(Markdown(f"You can now run this command with `pilot run {name}`."), (1, 1)))
+            console.print(
+                Padding(f"Command saved to [code]{command_index.file_path}[/code]", (1, 1))
+            )
+            console.print(
+                Padding(
+                    Markdown(f"You can now run this command with `pilot run {name}`."),
+                    (1, 1),
+                )
+            )
             return
 
         runner = TaskRunner(status_indicator)
         finished_task = runner.run_task(task_params)
 
-        if ctx.obj['sync']:
-            branch = finished_task.branch if finished_task else ctx.obj['branch']
+        if ctx.obj["sync"]:
+            branch = finished_task.branch if finished_task else ctx.obj["branch"]
             if branch:
-                pull_branch_changes(status_indicator, console, branch, ctx.obj['debug'])
-
+                pull_branch_changes(status_indicator, console, branch, ctx.obj["debug"])
 
     except Exception as e:
         status_indicator.fail()
-        if ctx.obj['debug']:
+        if ctx.obj["debug"]:
             raise
         console.print(f"[bold red]An error occurred:[/bold red] {type(e)} {str(e)}")
     finally:

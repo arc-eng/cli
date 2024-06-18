@@ -1,6 +1,6 @@
 import os
 
-CONFIG_LOCATION = os.path.expanduser('~/.pr-pilot.yaml')
+CONFIG_LOCATION = os.path.expanduser("~/.pr-pilot.yaml")
 CONFIG_API_KEY = "api_key"
 CODE_MODEL = "gpt-4o"
 CHEAP_MODEL = "gpt-3.5-turbo"
