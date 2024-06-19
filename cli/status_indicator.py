@@ -15,11 +15,11 @@ class StatusIndicator:
 
     def update(self, text):
         if self.visible:
-            self.spinner.text = text[:MAX_MSG_LEN]
+            self.spinner.text = text
 
     def success(self):
         if self.visible and self.messages:
-            self.spinner.ok("✅ ")
+            self.spinner.ok("✔️")
             self.spinner.start()
 
     def fail(self):

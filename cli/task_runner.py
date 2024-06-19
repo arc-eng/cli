@@ -7,6 +7,7 @@ from pr_pilot import Task
 from pr_pilot.util import create_task
 from rich.console import Console
 from rich.markdown import Markdown
+from rich.padding import Padding
 
 from cli.constants import CODE_PRIMER, CHEAP_MODEL, CODE_MODEL, CONFIG_LOCATION
 from cli.detect_repository import detect_repository
@@ -77,11 +78,16 @@ class TaskRunner:
                     )
                     console.line()
                 return
-        self.status_indicator.start()
 
-        branch_str = f"on branch {params.branch}" if params.branch else ""
-        pr_str = f" for PR #{params.pr_number}" if params.pr_number else ""
-        self.status_indicator.update(f"Creating new task for {params.repo} {branch_str} ...")
+        branch_str = f" on branch [code]{params.branch}[/code]" if params.branch else ""
+        pr_link = (
+            (
+                f"[link=https://github.com/{params.repo}/pull/{params.pr_number}]"
+                f"PR #{params.pr_number}[/link]"
+            )
+            if params.pr_number
+            else ""
+        )
         task = create_task(
             params.repo,
             params.prompt,
@@ -91,10 +97,13 @@ class TaskRunner:
             branch=params.branch,
             pr_number=params.pr_number,
         )
-        self.status_indicator.update(
-            f"Task created{pr_str}: https://app.pr-pilot.ai/dashboard/tasks/{task.id}"
+        message = (
+            f"[bold][green]Task created[/green]: "
+            f"[link=https://app.pr-pilot.ai/dashboard/tasks/{task.id}/]{task.id}[/link][/bold]"
+            f"{branch_str}{pr_link}"
         )
-        self.status_indicator.success()
+        console.print(Padding(message, (0, 0)))
+        self.status_indicator.start()
         if params.debug:
             console.print(task)
         task_handler = None

@@ -4,7 +4,7 @@ from pr_pilot import Task
 from pr_pilot.util import get_task
 from rich.console import Console
 from rich.markdown import Markdown
-from rich.padding import Padding
+from rich.panel import Panel
 
 from cli.status_indicator import StatusIndicator
 from cli.util import clean_code_block_with_language_specifier
@@ -83,7 +83,7 @@ class TaskHandler:
                     if quiet and new_pr_url:
                         result += f"\n\n🆕 [**PR #{self.task.pr_number}**]({new_pr_url})"
                     if print_result:
-                        self.console.print(Padding(Markdown(result), (1, 1)))
+                        self.console.print(Panel(Markdown(result), title="Result", expand=False))
 
             return result
         except Exception as e:
