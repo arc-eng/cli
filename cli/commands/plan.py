@@ -15,9 +15,8 @@ def plan(ctx, file_path):
     Learn more: https://docs.pr-pilot.ai/user_guide.html
     """
     console = Console()
-    show_spinner = ctx.obj["spinner"] and not ctx.obj["quiet"]
     status_indicator = StatusIndicator(
-        spinner=show_spinner, messages=not ctx.obj["quiet"], console=console
+        spinner=ctx["spinner"], messages=not ctx.obj["verbose"], console=console
     )
 
     try:
@@ -25,7 +24,7 @@ def plan(ctx, file_path):
         runner.run(
             ctx.obj["wait"],
             ctx.obj["repo"],
-            ctx.obj["quiet"],
+            ctx.obj["verbose"],
             ctx.obj["model"],
             ctx.obj["debug"],
         )

@@ -10,7 +10,7 @@ class TaskParameters(BaseModel):
     wait: bool = Field(default=False, description="Wait for the task to complete")
     repo: Optional[str] = Field(default=None, description="Repository to run the task on")
     snap: bool = Field(default=False, description="Take a screenshot")
-    quiet: bool = Field(default=False, description="Run in quiet mode")
+    verbose: bool = Field(default=False, description="Print more status messages")
     cheap: bool = Field(default=False, description="Use the cheap model")
     code: bool = Field(default=False, description="Include code primer")
     file: Optional[str] = Field(default=None, description="File to use for the prompt template")

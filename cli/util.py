@@ -48,6 +48,7 @@ def load_config():
 
 
 def pull_branch_changes(status_indicator, console, branch, debug=False):
+    status_indicator.start()
     status_indicator.update(f"Pull latest changes from {branch}")
     try:
         # Fetch origin and checkout branch
@@ -69,6 +70,8 @@ def pull_branch_changes(status_indicator, console, branch, debug=False):
             "[bold red]An error occurred:"
             f"[/bold red] {type(e)} {str(e)}\n\n{error if error else ''}"
         )
+    finally:
+        status_indicator.stop()
 
 
 class TaskFormatter:
