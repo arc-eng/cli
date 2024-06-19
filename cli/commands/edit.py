@@ -35,7 +35,7 @@ def edit(ctx, snap, file_path, prompt):
     """
     console = Console()
     status_indicator = StatusIndicator(
-        spinner=ctx.obj["spinner"], messages=not ctx.obj["quiet"], console=console
+        spinner=ctx.obj["spinner"], messages=ctx.obj["verbose"], console=console
     )
 
     if not prompt:
@@ -57,7 +57,7 @@ def edit(ctx, snap, file_path, prompt):
             snap=snap,
             wait=ctx.obj["wait"],
             repo=ctx.obj["repo"],
-            quiet=ctx.obj["quiet"],
+            verbose=ctx.obj["verbose"],
             output=file_path,
             code=True,
             model=ctx.obj["model"],

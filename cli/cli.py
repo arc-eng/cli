@@ -26,7 +26,7 @@ from cli.util import load_config
     default=True,
     help="Display a loading indicator.",
 )
-@click.option("--quiet/--chatty", is_flag=True, default=False, help="Disable all status messages.")
+@click.option("--verbose", is_flag=True, default=None, help="Display status messages")
 @click.option("--model", "-m", help="GPT model to use.", default=DEFAULT_MODEL)
 @click.option(
     "--branch",
@@ -43,7 +43,7 @@ from cli.util import load_config
 )
 @click.option("--debug", is_flag=True, default=False, help="Display debug information.")
 @click.pass_context
-def main(ctx, wait, repo, spinner, quiet, model, branch, sync, debug):
+def main(ctx, wait, repo, spinner, verbose, model, branch, sync, debug):
     """PR Pilot CLI - https://docs.pr-pilot.ai
 
     Delegate routine work to AI with confidence and predictability.
@@ -64,11 +64,15 @@ def main(ctx, wait, repo, spinner, quiet, model, branch, sync, debug):
     ctx.obj["wait"] = wait
     ctx.obj["repo"] = repo
     ctx.obj["spinner"] = spinner
-    ctx.obj["quiet"] = user_config.get("quiet", quiet)
+    ctx.obj["verbose"] = user_config.get("verbose", verbose)
     ctx.obj["model"] = model
     ctx.obj["branch"] = branch
     ctx.obj["sync"] = sync
     ctx.obj["debug"] = debug
+
+    if verbose is None:
+        # Verbose is not set, so let's see if it's set in user config
+        ctx.obj["verbose"] = user_config.get("verbose", False)
 
 
 main.add_command(task)

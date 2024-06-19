@@ -13,7 +13,7 @@ def mock_create_task():
 def mock_load_config():
     with patch("cli.cli.load_config") as mock:
         mock.return_value = {
-            "quiet": True,
+            "verbose": False,
             "auto_sync": False,
             "api_key": "test_api_key",
         }

@@ -8,7 +8,7 @@ commands:
     direct: false
     model: gpt-3.5-turbo
     prompt: write a haiku about this project
-    quiet: false
+    verbose: true
     repo: PR-Pilot-AI/pr-pilot-cli
     snap: false
     spinner: true
@@ -23,7 +23,7 @@ commands:
     direct: false
     file: prompts/analyze_test_results.md.jinja2
     model: gpt-4o
-    quiet: true
+    verbose: false
     snap: false
     spinner: true
     sync: true
@@ -37,7 +37,7 @@ commands:
     direct: false
     file: prompts/slack-report.md.jinja2
     model: gpt-4o
-    quiet: false
+    verbose: true
     snap: false
     spinner: true
     sync: false
@@ -51,7 +51,7 @@ commands:
     direct: false
     file: prompts/generate_pr_description.md.jinja2
     model: gpt-4o
-    quiet: true
+    verbose: false
     snap: false
     spinner: false
     sync: true

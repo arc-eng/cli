@@ -27,12 +27,12 @@ class PlanExecutor:
         self.pr_number = None
         self.responses = []
 
-    def run(self, wait, repo, quiet, model, debug):
+    def run(self, wait, repo, verbose, model, debug):
         """Run all steps in a given plan
 
         :param wait: Wait for PR Pilot to finish the plan
         :param repo: Github repository in the format owner/repo
-        :param quiet: Disable all output on the terminal
+        :param verbose: Display more status messages
         :param model: GPT model to use
         :param debug: Display debug information
 
@@ -40,11 +40,11 @@ class PlanExecutor:
         console = Console()
         num_tasks = len(self.tasks)
         current_task = 0
-        if not quiet:
+        if verbose:
             console.line()
             console.print(f"Running [bold]{self.name}[/bold] with {num_tasks} sub-tasks.")
         for task in self.tasks:
-            if not quiet:
+            if verbose:
                 console.line()
                 console.print(f"( {current_task + 1}/{num_tasks} ) {task.get('name')}")
             current_task += 1
@@ -80,7 +80,7 @@ class PlanExecutor:
                 wait=wait,
                 repo=repo,
                 snap=snap,
-                quiet=quiet,
+                verbose=verbose,
                 cheap=cheap,
                 code=code,
                 template_file_path=template_file_path,
@@ -98,7 +98,7 @@ class PlanExecutor:
             if not finished_task:
                 raise ValueError("Task failed")
             self.responses.append(finished_task.result)
-            if self.pr_number is None and finished_task.pr_number and not quiet:
+            if self.pr_number is None and finished_task.pr_number and verbose:
                 console.print(
                     f"Found new pull request! "
                     f"All subsequent tasks will run on PR #{finished_task.pr_number}"

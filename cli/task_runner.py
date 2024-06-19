@@ -44,7 +44,6 @@ class TaskRunner:
             )
             return None
         if params.file:
-            self.status_indicator.start()
             renderer = PromptTemplate(params.file, params.repo, params.model, self.status_indicator)
             params.prompt = renderer.render()
         if not params.prompt:
@@ -71,7 +70,7 @@ class TaskRunner:
                 with open(params.output, "w") as f:
                     f.write(params.prompt)
                 self.status_indicator.stop()
-                if not params.quiet:
+                if not params.verbose:
                     console.line()
                     console.print(
                         Markdown(f"Rendered template `{params.file}` into `{params.output}`")
@@ -97,19 +96,25 @@ class TaskRunner:
             branch=params.branch,
             pr_number=params.pr_number,
         )
-        message = (
-            f"[bold][green]Task created[/green]: "
-            f"[link=https://app.pr-pilot.ai/dashboard/tasks/{task.id}/]{task.id}[/link][/bold]"
-            f"{branch_str}{pr_link}"
-        )
-        console.print(Padding(message, (0, 0)))
         self.status_indicator.start()
+        if not params.verbose:
+            # Status messages are only visible in verbose mode, so let's print the new task ID
+            message = (
+                f"✔️ [bold][green]Task created[/green]: "
+                f"[link=https://app.pr-pilot.ai/dashboard/tasks/{task.id}/]{task.id}[/link][/bold]"
+                f"{branch_str}{pr_link}"
+            )
+            console.print(Padding(message, (0, 0)))
+        else:
+            self.status_indicator.update(f"Task created: {task.id}")
+            self.status_indicator.success(start_again=True)
+
         if params.debug:
             console.print(task)
         task_handler = None
         if params.wait:
             task_handler = TaskHandler(task, self.status_indicator)
-            task_handler.wait_for_result(params.output, params.quiet, code=params.code)
+            task_handler.wait_for_result(params.output, params.verbose, code=params.code)
         self.status_indicator.stop()
         if params.debug:
             console.print(task)
