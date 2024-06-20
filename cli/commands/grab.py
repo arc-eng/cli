@@ -45,6 +45,8 @@ def grab_commands(ctx, repo):
         remote_index = CommandIndex(full_path)
         display_commands(console, repo, remote_index)
         answers = prompt_user_for_commands(remote_index)
+        if not answers:
+            return
         local_index = CommandIndex()
         commands_imported, files_imported = import_commands(
             answers, remote_index, local_index, tmp_dir
