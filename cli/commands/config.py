@@ -1,32 +1,71 @@
 import click
 import os
+import subprocess
+from rich import print
+from rich.prompt import Confirm
+
+from cli.constants import CONFIG_LOCATION
+
 
 @click.group()
 def config():
-    """Configuration related commands."""
+    """Customize PR Pilots behavior."""
     pass
 
+
 @config.command()
-def shell_completions():
-    """Add shell completions for the PR Pilot CLI."""
-    shell = os.getenv('SHELL')
+def edit():
+    """Edit the configuration file."""
+    config_file = os.path.expanduser(CONFIG_LOCATION)
+    click.edit(filename=config_file)
+
+
+@config.command()
+def shell_completion():
+    """Add shell completions."""
+    shell = os.getenv("SHELL")
     if not shell:
-        click.echo('Could not determine the shell. Please set the SHELL environment variable.')
+        print(
+            "[red]Could not determine the shell. Please set the SHELL environment variable.[/red]"
+        )
         return
 
     shell_name = os.path.basename(shell)
 
-    if shell_name in ['bash', 'zsh', 'fish']:
-        click.echo(f'Adding completions for {shell_name} shell...')
-        click.echo('Follow the instructions below to enable completions:')
-        if shell_name == 'bash':
-            click.echo('Add the following line to your ~/.bashrc or ~/.profile:')
-            click.echo('eval "$(_PR_PILOT_COMPLETE=source_bash pr-pilot)"')
-        elif shell_name == 'zsh':
-            click.echo('Add the following line to your ~/.zshrc:')
-            click.echo('eval "$(_PR_PILOT_COMPLETE=source_zsh pr-pilot)"')
-        elif shell_name == 'fish':
-            click.echo('Add the following line to your ~/.config/fish/config.fish:')
-            click.echo('eval (env _PR_PILOT_COMPLETE=source_fish pr-pilot)')
+    if shell_name in ["bash", "zsh", "fish"]:
+        if shell_name == "bash":
+            print("[blue]Add the following line to your ~/.bashrc or ~/.profile:[/blue]")
+            print('[cyan]eval "$(_PILOT_COMPLETE=source_bash pilot)"[/cyan]')
+            if Confirm.ask(
+                "Do you want to add this line to your ~/.bashrc or ~/.profile?", default=True
+            ):
+                subprocess.run(
+                    [
+                        "bash",
+                        "-c",
+                        "echo 'eval \"$(_PILOT_COMPLETE=source_bash pilot)\"' >> ~/.bashrc",
+                    ]
+                )
+        elif shell_name == "zsh":
+            print("[blue]Add the following line to your ~/.zshrc:[/blue]")
+            print('[cyan]eval "$(_PILOT_COMPLETE=source_zsh pilot)"[/cyan]')
+            if Confirm.ask("Do you want to add this line to your ~/.zshrc?", default=True):
+                subprocess.run(
+                    ["zsh", "-c", "echo 'eval \"$(_PILOT_COMPLETE=source_zsh pilot)\"' >> ~/.zshrc"]
+                )
+        elif shell_name == "fish":
+            print("[blue]Add the following line to your ~/.config/fish/config.fish:[/blue]")
+            print("[cyan]eval (env _PILOT_COMPLETE=source_fish pilot)[/cyan]")
+            if Confirm.ask(
+                "Do you want to add this line to your ~/.config/fish/config.fish?", default=True
+            ):
+                subprocess.run(
+                    [
+                        "fish",
+                        "-c",
+                        "echo 'eval (env _PILOT_COMPLETE=source_fish pilot)' "
+                        ">> ~/.config/fish/config.fish",
+                    ]
+                )
     else:
-        click.echo(f'Shell {shell_name} is not supported for automatic completions.')
+        print(f"[red]Shell {shell_name} is not supported for automatic completions.[/red]")

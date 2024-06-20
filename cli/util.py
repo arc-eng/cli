@@ -32,16 +32,38 @@ def load_config():
     """Load the configuration from the default location. If it doesn't exist,
     ask user to enter API key and save config."""
     if not os.path.exists(CONFIG_LOCATION):
+        console = Console()
         if os.getenv("PR_PILOT_API_KEY"):
-            click.echo("Using API key from environment variable.")
+            console.print("Using API key from environment variable.")
             api_key = os.getenv("PR_PILOT_API_KEY")
         else:
             api_key_url = "https://app.pr-pilot.ai/dashboard/api-keys/"
-            click.echo(f"Configuration file not found. Please create an API key at {api_key_url}.")
+            console.print(
+                f"Configuration file not found. Please create an API key at {api_key_url}."
+            )
             api_key = click.prompt("PR Pilot API key")
+        console.line()
+        console.print(
+            "[green]Since it's the first time you're using PR Pilot, "
+            "let's set some default values.[/green]"
+        )
+        console.line()
+        auto_sync = click.confirm(
+            "When a new PR/branch is created, do you want it checked out automatically?"
+        )
+        verbose = click.confirm("Do you want to see detailed status messages?")
+        console.line()
         with open(CONFIG_LOCATION, "w") as f:
-            f.write(f"{CONFIG_API_KEY}: {api_key}")
-        click.echo(f"Configuration saved in {CONFIG_LOCATION}")
+            f.write(
+                yaml.dump(
+                    {
+                        CONFIG_API_KEY: api_key,
+                        "auto_sync": auto_sync,
+                        "verbose": verbose,
+                    }
+                )
+            )
+        console.print(f"Configuration saved in [code]{CONFIG_LOCATION}[/code]")
     with open(CONFIG_LOCATION) as f:
         config = yaml.safe_load(f)
     return config
