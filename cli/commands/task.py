@@ -1,15 +1,14 @@
-import os
 import click
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.padding import Padding
 
+from cli.command_index import CommandIndex, PilotCommand
 from cli.constants import CHEAP_MODEL
+from cli.models import TaskParameters
 from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
-from cli.models import TaskParameters
-from cli.util import pull_branch_changes
-from cli.command_index import CommandIndex, PilotCommand
+from cli.util import pull_branch_changes, get_current_branch
 
 
 @click.command()
@@ -69,7 +68,7 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
     try:
         if ctx.obj["sync"]:
             # Get current branch from git
-            current_branch = os.popen("git rev-parse --abbrev-ref HEAD").read().strip()
+            current_branch = get_current_branch()
             if current_branch not in ["master", "main"]:
                 ctx.obj["branch"] = current_branch
 

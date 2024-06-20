@@ -43,7 +43,7 @@ def test_prompt_user_for_commands(mock_command_index):
     ]
     with patch("inquirer.prompt") as mock_prompt:
         mock_prompt.return_value = {"commands": ["cmd1"]}
-        answers = prompt_user_for_commands(mock_command_index)
+        answers = prompt_user_for_commands(mock_command_index, MagicMock())
         assert answers == {"commands": ["cmd1"]}
         mock_prompt.assert_called_once()
 

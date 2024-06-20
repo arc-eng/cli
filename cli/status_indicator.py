@@ -19,7 +19,7 @@ class StatusIndicator:
 
     def success(self, start_again=False):
         if self.visible and self.messages:
-            self.spinner.ok("✔️")
+            self.spinner.ok("✔")
             if start_again:
                 self.spinner.start()
             self.spinner.start()

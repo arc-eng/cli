@@ -154,3 +154,7 @@ class PaddedConsole:
     def print(self, content):
         padded_content = Padding(content, self.padding)
         self.console.print(padded_content)
+
+
+def get_current_branch():
+    return os.popen("git rev-parse --abbrev-ref HEAD").read().strip()

@@ -17,11 +17,15 @@ def sh(shell_command, status):
     try:
         if isinstance(shell_command, str):
             shell_command = shell_command.split()
-        process = subprocess.Popen(shell_command, stdout=subprocess.PIPE)
-        output, error = process.communicate()
+        subprocess_params = dict(stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        result = subprocess.run(shell_command, **subprocess_params)
+        output = result.stdout
+        if result.stderr:
+            status.fail()
+            raise click.ClickException(f"Error running shell command: {result.stderr}")
         status.success(start_again=False)
         status.stop()
-        return output.decode("utf-8")
+        return output
     except Exception as e:
         click.echo(str(e))
         status.fail()
