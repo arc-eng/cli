@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pr-pilot-cli"
-version = "1.11.5"
+version = "1.11.6"
 description = "CLI for PR Pilot, a text-to-task automation platform for Github."
 authors = ["Marco Lamina <marco@pr-pilot.ai>"]
 license = "GPL-3.0"

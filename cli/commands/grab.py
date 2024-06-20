@@ -8,6 +8,7 @@ from rich.console import Console
 from rich.padding import Padding
 from rich.prompt import Confirm
 from rich.table import Table
+from rich.text import Text
 
 from cli.command_index import DEFAULT_FILE_PATH, CommandIndex
 from cli.status_indicator import StatusIndicator
@@ -43,11 +44,12 @@ def grab_commands(ctx, repo):
             )
         status_indicator.stop()
         remote_index = CommandIndex(full_path)
-        display_commands(console, repo, remote_index)
-        answers = prompt_user_for_commands(remote_index)
+        local_index = CommandIndex()
+        display_commands(console, repo, local_index, remote_index)
+        answers = prompt_user_for_commands(local_index, remote_index)
         if not answers:
             return
-        local_index = CommandIndex()
+
         commands_imported, files_imported = import_commands(
             answers, remote_index, local_index, tmp_dir
         )
@@ -65,24 +67,36 @@ def clone_repository(status_indicator, full_repo_url, tmp_dir):
     )
 
 
-def display_commands(console, repo, remote_index):
+def display_commands(console, repo, local_index, remote_index):
     """Display the commands found in the repository."""
-    console.print(f"Found the following commands in {repo}:")
-    table = Table(box=None)
-    table.add_column("Name", style="cyan bold")
-    table.add_column("Description", style="magenta")
+    table = Table(box=None, show_header=True)
+    table.add_column(repo)
+    table.add_column("")
+    local_command_names = [cmd.name for cmd in local_index.get_commands()]
     for command in remote_index.get_commands():
-        table.add_row(command.name, command.description)
-    console.print(Padding(table, (1, 1)))
+        if command.name in local_command_names:
+            # give name grey color if already exists in local index
+            table.add_row(
+                Text(command.name, style="bright_black"),
+                Text(command.description, style="bright_black"),
+            )
+        else:
+            table.add_row(
+                Text(command.name, style="bold blue"), Text(command.description, style="bold")
+            )
+    console.print(Padding(table, (1, 6)))
 
 
-def prompt_user_for_commands(remote_index):
+def prompt_user_for_commands(local_index, remote_index):
     """Prompt the user to select commands to import."""
-    choices = [cmd.name for cmd in remote_index.get_commands()]
+    local_command_names = [cmd.name for cmd in local_index.get_commands()]
+    choices = [
+        cmd.name for cmd in remote_index.get_commands() if cmd.name not in local_command_names
+    ]
     questions = [
         inquirer.Checkbox(
             "commands",
-            message="Which commands would you like to add?",
+            message="Grab",
             choices=choices,
         ),
     ]
