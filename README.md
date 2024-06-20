@@ -198,6 +198,7 @@ Commands:
   plan     📋 Let PR Pilot execute a plan for you.
   run      🚀 Run a saved command.
   task     ➕ Create a new task for PR Pilot.
+  upgrade  ⬆️ Upgrade pr-pilot-cli to the latest version.
 
 ```
 

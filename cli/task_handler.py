@@ -88,7 +88,5 @@ class TaskHandler:
                 if print_result:
                     self.console.print(Panel(Markdown(result), title="Result", expand=False))
 
-        except Exception as e:
-            self.status.update(f"Error: {e}")
-            self.status.fail()
-            raise click.ClickException(f"An error occurred: {e}")
+        finally:
+            self.status.stop()

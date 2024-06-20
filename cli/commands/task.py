@@ -122,10 +122,5 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
             if branch:
                 pull_branch_changes(status_indicator, console, branch, ctx.obj["debug"])
 
-    except Exception as e:
-        status_indicator.fail()
-        if ctx.obj["debug"]:
-            raise
-        console.print(f"[bold red]An error occurred:[/bold red] {type(e)} {str(e)}")
     finally:
         status_indicator.stop()
