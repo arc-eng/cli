@@ -1,5 +1,6 @@
 import time
 
+import click.exceptions
 from pr_pilot import Task
 from pr_pilot.util import get_task
 from rich.console import Console
@@ -49,7 +50,7 @@ class TaskHandler:
                 if self.task.status == "running":
                     time.sleep(POLL_INTERVAL)
             if self.task.status == "failed":
-                raise ValueError(f"Task failed: {self.task.result}")
+                raise click.ClickException(f"Task failed: {self.task.result}")
 
             result = self.task.result
 
@@ -61,7 +62,6 @@ class TaskHandler:
                 )
                 if not self.task_runs_on_pr:
                     # We found a new PR number, let the user know
-                    self.status.success(start_again=True)
                     self.status.update(f"Opened Pull Request: {new_pr_url}")
                     self.status.success(start_again=True)
 
@@ -91,3 +91,4 @@ class TaskHandler:
         except Exception as e:
             self.status.update(f"Error: {e}")
             self.status.fail()
+            raise click.ClickException(f"An error occurred: {e}")

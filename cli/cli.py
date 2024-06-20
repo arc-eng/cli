@@ -39,7 +39,7 @@ from cli.util import load_config
 @click.option(
     "--sync/--no-sync",
     is_flag=True,
-    default=False,
+    default=None,
     help="Run task on your current branch and pull PR Pilots changes when done.",
 )
 @click.option("--debug", is_flag=True, default=False, help="Display debug information.")
@@ -59,13 +59,14 @@ def main(ctx, wait, repo, spinner, verbose, model, branch, sync, debug):
     if repo:
         sync = False
     else:
-        sync = user_config.get("auto_sync", sync)
+        if sync is None:
+            # Sync is not set, so let's see if it's set in user config
+            sync = user_config.get("auto_sync", False)
 
     ctx.ensure_object(dict)
     ctx.obj["wait"] = wait
     ctx.obj["repo"] = repo
     ctx.obj["spinner"] = spinner
-    ctx.obj["verbose"] = user_config.get("verbose", verbose)
     ctx.obj["model"] = model
     ctx.obj["branch"] = branch
     ctx.obj["sync"] = sync
@@ -74,6 +75,8 @@ def main(ctx, wait, repo, spinner, verbose, model, branch, sync, debug):
     if verbose is None:
         # Verbose is not set, so let's see if it's set in user config
         ctx.obj["verbose"] = user_config.get("verbose", False)
+    else:
+        ctx.obj["verbose"] = verbose
 
 
 main.add_command(task)
