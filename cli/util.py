@@ -31,17 +31,24 @@ def clean_code_block_with_language_specifier(response):
 def load_config():
     """Load the configuration from the default location. If it doesn't exist,
     ask user to enter API key and save config."""
+    console = Console()
+    user_config = {}
+
     if not os.path.exists(CONFIG_LOCATION):
-        console = Console()
-        if os.getenv("PR_PILOT_API_KEY"):
-            console.print("Using API key from environment variable.")
-            api_key = os.getenv("PR_PILOT_API_KEY")
-        else:
-            api_key_url = "https://app.pr-pilot.ai/dashboard/api-keys/"
-            console.print(
-                f"Configuration file not found. Please create an API key at {api_key_url}."
-            )
-            api_key = click.prompt("PR Pilot API key")
+
+        api_key_url = "https://app.pr-pilot.ai/dashboard/api-keys/"
+        console.print(f"Configuration file not found. Please create an API key at {api_key_url}.")
+        api_key = click.prompt("PR Pilot API key")
+        user_config[CONFIG_API_KEY] = api_key
+    else:
+        with open(CONFIG_LOCATION) as f:
+            user_config = yaml.safe_load(f)
+
+    if os.getenv("PR_PILOT_API_KEY"):
+        console.print("Using API key from environment variable.")
+        api_key = os.getenv("PR_PILOT_API_KEY")
+        user_config[CONFIG_API_KEY] = api_key
+
         console.line()
         console.print(
             "[green]Since it's the first time you're using PR Pilot, "
