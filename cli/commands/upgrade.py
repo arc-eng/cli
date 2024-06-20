@@ -7,7 +7,7 @@ from rich.prompt import Confirm
 
 @click.command()
 def upgrade():
-    """Upgrade pr-pilot-cli to the latest version."""
+    """⬆️ Upgrade pr-pilot-cli to the latest version."""
     if is_installed_via_homebrew():
         if Confirm.ask(
             "Found homebrew installation. Upgrade the [code]pr-pilot-cli[/code] package?"

@@ -89,7 +89,7 @@ main.add_command(config)
 main.add_command(upgrade)
 
 run_command_help = """
-\ud83d\ude80 Run a saved command.
+🚀 Run a saved command.
 
 Create new commands by using the --save-command flag when running a task.
 """
