@@ -96,7 +96,7 @@ class TaskRunner:
             branch=params.branch,
             pr_number=params.pr_number,
         )
-        self.status_indicator.start()
+
         if not params.verbose:
             # Status messages are only visible in verbose mode, so let's print the new task ID
             message = (
@@ -105,7 +105,9 @@ class TaskRunner:
                 f"{branch_str}{pr_link}"
             )
             console.print(Padding(message, (0, 0)))
+            self.status_indicator.start()
         else:
+            self.status_indicator.start()
             self.status_indicator.update(f"Task created: {task.id}")
             self.status_indicator.success(start_again=True)
 

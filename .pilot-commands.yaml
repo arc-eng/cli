@@ -13,7 +13,7 @@ commands:
     snap: false
     spinner: true
     sync: false
-    wait: false
+    wait: true
 - description: Run the tests, analyze the output and provide suggestions
   name: test-analysis
   params:
