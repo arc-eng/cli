@@ -12,23 +12,19 @@ MAX_RECURSION_LEVEL = 3
 
 
 def sh(shell_command, status):
+    """Run a shell command and return the output"""
     status.start()
     status.update(f"Running shell command: {shell_command}")
-    try:
-        if isinstance(shell_command, str):
-            shell_command = shell_command.split()
-        subprocess_params = dict(stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        result = subprocess.run(shell_command, **subprocess_params)
-        output = result.stdout
-        if result.stderr:
-            status.fail()
-            raise click.ClickException(f"Error running shell command: {result.stderr}")
-        status.success(start_again=False)
-        status.stop()
-        return output
-    except Exception as e:
-        click.echo(str(e))
+    if isinstance(shell_command, str):
+        shell_command = shell_command.split()
+    subprocess_params = dict(stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    result = subprocess.run(shell_command, **subprocess_params)
+    if result.stderr:
         status.fail()
+    else:
+        status.success(start_again=False)
+    status.stop()
+    return result.stdout + result.stderr
 
 
 def read_env_var(variable, default=None):
