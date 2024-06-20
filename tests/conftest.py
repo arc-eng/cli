@@ -4,6 +4,12 @@ import pytest
 
 
 @pytest.fixture(autouse=True)
+def mock_default_config_location(tmp_path):
+    with patch("cli.util.CONFIG_LOCATION", tmp_path / "config.yaml"):
+        yield tmp_path / "config.yaml"
+
+
+@pytest.fixture(autouse=True)
 def mock_create_task():
     with patch("cli.task_runner.create_task") as mock:
         yield mock
