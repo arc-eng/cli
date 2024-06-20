@@ -9,6 +9,7 @@ from cli.commands.plan import plan
 from cli.commands.run import RunCommand
 from cli.commands.task import task
 from cli.commands.config import config
+from cli.commands.upgrade import upgrade
 from cli.constants import DEFAULT_MODEL, CONFIG_API_KEY
 from cli.util import load_config
 
@@ -85,9 +86,10 @@ main.add_command(plan)
 main.add_command(grab)
 main.add_command(history)
 main.add_command(config)
+main.add_command(upgrade)
 
 run_command_help = """
-🚀 Run a saved command.
+\ud83d\ude80 Run a saved command.
 
 Create new commands by using the --save-command flag when running a task.
 """
