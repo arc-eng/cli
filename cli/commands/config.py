@@ -9,7 +9,7 @@ from cli.constants import CONFIG_LOCATION
 
 @click.group()
 def config():
-    """Customize PR Pilots behavior."""
+    """🔧 Customize PR Pilots behavior."""
     pass
 
 

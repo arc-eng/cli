@@ -57,7 +57,7 @@ from cli.command_index import CommandIndex, PilotCommand
 @click.argument("prompt", required=False, default=None, type=str)
 @click.pass_context
 def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
-    """🛠️Create a new task for PR Pilot.
+    """➕ Create a new task for PR Pilot.
 
     Examples: https://github.com/pr-pilot-ai/pr-pilot-cli
     """
