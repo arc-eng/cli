@@ -191,12 +191,13 @@ Options:
   --help                    Show this message and exit.
 
 Commands:
+  config   🔧 Customize PR Pilots behavior.
   edit     ✍️ Let PR Pilot edit a file for you.
   grab     🤲 Grab commands, prompts and plans from other repositories.
   history  📜 Access recent tasks.
   plan     📋 Let PR Pilot execute a plan for you.
   run      🚀 Run a saved command.
-  task     🛠️Create a new task for PR Pilot.
+  task     ➕ Create a new task for PR Pilot.
 
 ```
 
@@ -207,7 +208,7 @@ Hand over a task to PR Pilot.
 ```bash
 Usage: pilot task [OPTIONS] [PROMPT]
 
-  🛠️Create a new task for PR Pilot.
+  ➕ Create a new task for PR Pilot.
 
   Examples: https://github.com/pr-pilot-ai/pr-pilot-cli
 
