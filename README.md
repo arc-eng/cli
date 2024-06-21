@@ -54,9 +54,29 @@ Edit PR #{{ env('PR_NUMBER') }} title and description to reflect the changes mad
 Send PR Pilot off to give any PR a title and description according to your guidelines:
 
 ```bash
-PR_NUMBER=153 pilot task -f generate-pr-description.md.jinja2
+➜ PR_NUMBER=153 pilot task -f generate-pr-description.md.jinja2 --save-command
+✔ Task created: 7d5573d2-2717-4a96-8bae-035886420c74 (0:00:00.00)
+✔ Update PR #153 title and description to reflect changes made (0:00:17.87)
+╭──────────────────────────── Result ──────────────────────────────────────────╮
+│ The PR title and description have been updated. You can view the PR here.    │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
 ```
 
+The `--save-command` parameter lets you access this command later via:
+
+```bash
+➜ pilot task -f generate-pr-description.md.jinja2 --save-command
+
+ Save the task parameters as a command:
+
+  Name (e.g. generate-pr-desc): pr-description
+  Short description: Generate title and description for a pull request
+
+ Command saved to .pilot-commands.yaml
+```
+
+You can now run this command with `pilot run pr-description`.
 
 ## 📦 Installation
 First, make sure you have [installed](https://github.com/apps/pr-pilot-ai/installations/new) PR Pilot in your repository.
