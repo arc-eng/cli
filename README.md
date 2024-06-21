@@ -28,12 +28,13 @@
 
 [PR Pilot](https://docs.pr-pilot.ai) assists you in your daily workflow and works with the dev tools you trust and love - exactly when and where you want it.
 
+With a simple and intuitive CLI:
 ```bash
 pilot edit main.py "Add docstrings to all functions and classes"
 ```
 
-With [prompt templates](https://github.com/PR-Pilot-AI/pr-pilot-cli/tree/main/prompts), you can create powerful,
-reusable commands:
+[Prompt templates](https://github.com/PR-Pilot-AI/pr-pilot-cli/tree/main/prompts) let you can create powerful,
+**executable prompt-based commands**, defined as Jinja templates:
 
 ```markdown
 I've made some changes and opened a new PR: #{{ env('PR_NUMBER') }}.
@@ -60,10 +61,9 @@ Send PR Pilot off to give any PR a title and description according to your guide
 ╭──────────────────────────── Result ──────────────────────────────────────────╮
 │ The PR title and description have been updated. You can view the PR here.    │
 ╰──────────────────────────────────────────────────────────────────────────────╯
-
 ```
 
-The `--save-command` parameter lets you access this command later via:
+The `--save-command` parameter makes this call re-usable:
 
 ```bash
 ➜ pilot task -f generate-pr-description.md.jinja2 --save-command
@@ -76,7 +76,17 @@ The `--save-command` parameter lets you access this command later via:
  Command saved to .pilot-commands.yaml
 ```
 
-You can now run this command with `pilot run pr-description`.
+You can now run this command for any PR with `pilot run pr-description`:
+
+```bash
+➜ pilot run pr-description
+Enter value for PR_NUMBER: 83
+╭──────────── Result ─────────────╮
+│ Here is the link to the PR #83  │
+╰─────────────────────────────────╯
+```
+
+To learn more, please visit our [User Guide](https://docs.pr-pilot.ai/user_guide.html).
 
 ## 📦 Installation
 First, make sure you have [installed](https://github.com/apps/pr-pilot-ai/installations/new) PR Pilot in your repository.

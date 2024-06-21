@@ -8,11 +8,11 @@ commands:
     direct: false
     model: gpt-3.5-turbo
     prompt: write a haiku about this project
-    verbose: true
     repo: PR-Pilot-AI/pr-pilot-cli
     snap: false
     spinner: true
     sync: false
+    verbose: true
     wait: true
 - description: Run the tests, analyze the output and provide suggestions
   name: test-analysis
@@ -23,10 +23,10 @@ commands:
     direct: false
     file: prompts/analyze_test_results.md.jinja2
     model: gpt-4o
-    verbose: false
     snap: false
     spinner: true
     sync: true
+    verbose: false
     wait: true
 - description: Assemble a comprehensive daily report and send it to Slack
   name: daily-report
@@ -37,12 +37,12 @@ commands:
     direct: false
     file: prompts/slack-report.md.jinja2
     model: gpt-4o
-    verbose: true
     snap: false
     spinner: true
     sync: false
+    verbose: true
     wait: true
-- description: Generate PR Title and Description
+- description: Generate title and description for a pull request
   name: pr-description
   params:
     cheap: false
@@ -51,8 +51,8 @@ commands:
     direct: false
     file: prompts/generate_pr_description.md.jinja2
     model: gpt-4o
-    verbose: false
     snap: false
-    spinner: false
+    spinner: true
     sync: true
+    verbose: true
     wait: true
