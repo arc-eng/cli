@@ -59,9 +59,9 @@ PR_NUMBER=153 pilot task -f generate-pr-description.md.jinja2
 
 
 ## 📦 Installation
+First, make sure you have [installed](https://github.com/apps/pr-pilot-ai/installations/new) PR Pilot in your repository.
 
-Two options are available for installing the CLI:
-
+Then, install the CLI using one of the following methods:
 
 ### pip
 ```
@@ -77,47 +77,25 @@ brew install pr-pilot-cli
 
 ## 🛠️ Usage
 
-Open a terminal and `ls` into a repository you have [installed](https://github.com/apps/pr-pilot-ai/installations/new) PR Pilot.
-
 In your repository, use the `pilot` command:
 
 ```bash
 pilot task "Tell me about this project!"
-```
-
-**📝 Ask PR Pilot to edit a local file for you:**
-
-```bash
+# 📝 Ask PR Pilot to edit a local file for you:
 pilot edit cli/cli.py "Make sure all functions and classes have docstrings."
-```
-
-**⚡ Generate code quickly and save it as a file:**
-
-```bash
+# ⚡ Generate code quickly and save it as a file:
 pilot task -o test_utils.py --code "Write some unit tests for the utils.py file."
-```
-
-**🔍 Capture part of your screen and add it to a prompt:**
-
-```bash
+# 🔍 Capture part of your screen and add it to a prompt:
 pilot task -o component.html --code --snap "Write a Bootstrap5 component that looks like this."
-```
-
-**📊 Get an organized view of your Github issues:**
-
-```bash
+# 📊 Get an organized view of your Github issues:
 pilot task "Find all open Github issues labeled as 'bug', categorize and prioritize them"
+# 📝 Ask PR Pilot to analyze your test results using prompt templates:
+pilot task -f prompts/analyze-test-results.md.jinja2
 ```
 
-**📝 Generate parts of your documentation with a [template](./prompts/README.md.jinja2):**
+For more detailed examples, please visit our **[demo repository](https://github.com/PR-Pilot-AI/demo/tree/main)**.
 
-```bash
-pilot task --direct -f prompts/README.md.jinja2 -o README.md
-```
-
-To learn more about templates, check out the [prompts](./prompts) directory.
-
-**📝 Execute a step-by-step plan:**
+### 📝 Execute a step-by-step plan
 
 Break down more complex tasks into smaller steps with a plan:
 
