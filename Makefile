@@ -2,6 +2,7 @@ readme:
 	poetry run pilot task --direct -f prompts/README.md.jinja2 -o README.md
 	sed -i '' 's/python -m cli.cli/pilot/g' README.md
 	git add README.md
+	git add prompts/README.md.jinja2
 	git commit -m "docs: update README.md"
 	git push
 homebrew:
