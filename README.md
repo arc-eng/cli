@@ -125,6 +125,40 @@ pilot task -f prompts/analyze-test-results.md.jinja2
 
 For more detailed examples, please visit our **[demo repository](https://github.com/PR-Pilot-AI/demo/tree/main)**.
 
+
+### ⬇️ Grab commands from other repositories
+
+Once saved in a repository, commands can be grabbed from anywhere:
+
+```bash
+➜  code pilot grab commands pr-pilot-ai/core
+
+       pr-pilot-ai/core
+       haiku             Writes a Haiku about your project
+       test-analysis     Run unit tests, analyze the output & provide suggestions
+       daily-report      Assemble a comprehensive daily report & send it to Slack
+       pr-description    Generate PR Title & Description
+       house-keeping     Organize & clean up cfg files (package.json, pom.xml, etc)
+       readme-badges     Generate badges for your README file
+
+[?] Grab:
+   [ ] haiku
+   [X] test-analysis
+   [ ] daily-report
+ > [X] pr-description
+   [ ] house-keeping
+   [ ] readme-badges
+
+
+You can now use the following commands:
+
+  pilot run test-analysis   Run unit tests, analyze the output & provide suggestions
+  pilot run pr-description  Generate PR Title & Description
+```
+
+Our **[core repository](https://github.com/PR-Pilot-AI/core)** contains an ever-growing, curated list of commands
+that we tested and handcrafted for you. You can grab them and use them in your own repositories.
+
 ### 📝 Execute a step-by-step plan
 
 Break down more complex tasks into smaller steps with a plan:
