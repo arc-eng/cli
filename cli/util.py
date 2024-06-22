@@ -8,7 +8,7 @@ import yaml
 from pr_pilot import Task
 from rich.console import Console
 from rich.markdown import Markdown
-from rich.padding import Padding
+from rich.panel import Panel
 
 from cli.constants import CONFIG_LOCATION, CONFIG_API_KEY
 
@@ -144,15 +144,14 @@ class TaskFormatter:
         return Markdown(f"`{self.task.branch}`")
 
 
-class PaddedConsole:
-    def __init__(self, padding=(1, 1)):
-        self.console = Console()
-        self.padding = padding
-
-    def print(self, content):
-        padded_content = Padding(content, self.padding)
-        self.console.print(padded_content)
-
-
 def get_current_branch():
     return os.popen("git rev-parse --abbrev-ref HEAD").read().strip()
+
+
+def markdown_panel(title, content):
+    """Create a Rich panel with markdown content that automatically fits the width"""
+    # Calculate width based on the text content
+    max_line_length = max(len(line) for line in content.split("\n"))
+    padding = 4  # Adjust padding as necessary
+    width = max_line_length + padding
+    return Panel.fit(Markdown(content), title=title, width=width)

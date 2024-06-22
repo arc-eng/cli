@@ -4,11 +4,9 @@ import click.exceptions
 from pr_pilot import Task
 from pr_pilot.util import get_task
 from rich.console import Console
-from rich.markdown import Markdown
-from rich.panel import Panel
 
 from cli.status_indicator import StatusIndicator
-from cli.util import clean_code_block_with_language_specifier
+from cli.util import clean_code_block_with_language_specifier, markdown_panel
 
 POLL_INTERVAL = 2  # seconds
 MAX_RESULT_WAIT_TIME = 60 * 4  # 4 minutes
@@ -86,7 +84,6 @@ class TaskHandler:
                 if not verbose and new_pr_url:
                     result += f"\n\n🆕 [**PR #{self.task.pr_number}**]({new_pr_url})"
                 if print_result:
-                    self.console.print(Panel(Markdown(result), title="Result", expand=False))
-
+                    self.console.print(markdown_panel("Result", result))
         finally:
             self.status.stop()

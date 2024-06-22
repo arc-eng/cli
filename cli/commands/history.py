@@ -3,11 +3,9 @@ from pr_pilot.util import list_tasks
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.padding import Padding
-from rich.panel import Panel
 from rich.table import Table
 
-from cli.util import TaskFormatter
-
+from cli.util import TaskFormatter, markdown_panel
 
 NO_TASKS_MESSAGE = """
 You have no tasks yet. Run a task with `pilot task` to create one.
@@ -81,8 +79,8 @@ def last(ctx, task_number):
         if task.branch:
             table.add_row("Branch", task_formatter.format_branch())
         console.print(Padding(table, (1, 1)))
-        console.print(Panel(Markdown(task.user_request), title="Prompt", expand=False))
-        console.print(Panel(Markdown(task.result), title="Result", expand=False))
+        console.print(markdown_panel("Prompt", task.user_request))
+        console.print(markdown_panel("Result", task.result))
 
 
 @last.command()
