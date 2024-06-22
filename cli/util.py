@@ -80,6 +80,7 @@ def load_config():
 def pull_branch_changes(status_indicator, console, branch, debug=False):
     status_indicator.start()
     status_indicator.update(f"Pull latest changes from {branch}")
+    error = ""
     try:
         # Fetch origin and checkout branch
         subprocess_params = dict(stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -96,10 +97,7 @@ def pull_branch_changes(status_indicator, console, branch, debug=False):
             console.line()
     except Exception as e:
         status_indicator.fail()
-        console.print(
-            "[bold red]An error occurred:"
-            f"[/bold red] {type(e)} {str(e)}\n\n{error if error else ''}"
-        )
+        console.print("[bold red]An error occurred:" f"[/bold red] {type(e)} {str(e)}\n\n{error}")
     finally:
         status_indicator.stop()
 
