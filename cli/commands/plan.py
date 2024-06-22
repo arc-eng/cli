@@ -16,23 +16,16 @@ def plan(ctx, file_path):
     """
     console = Console()
     status_indicator = StatusIndicator(
-        spinner=ctx["spinner"], messages=not ctx.obj["verbose"], console=console
+        spinner=ctx.obj["spinner"], messages=not ctx.obj["verbose"], console=console
     )
 
-    try:
-        runner = PlanExecutor(file_path, status_indicator)
-        runner.run(
-            ctx.obj["wait"],
-            ctx.obj["repo"],
-            ctx.obj["verbose"],
-            ctx.obj["model"],
-            ctx.obj["debug"],
-        )
-        if ctx.obj["sync"]:
-            pull_branch_changes(status_indicator, console, ctx.obj["branch"], ctx.obj["debug"])
-
-    except Exception as e:
-        status_indicator.fail()
-        raise click.ClickException(f"An error occurred: {type(e)} {str(e)}")
-    finally:
-        status_indicator.stop()
+    runner = PlanExecutor(file_path, status_indicator)
+    runner.run(
+        ctx.obj["wait"],
+        ctx.obj["repo"],
+        ctx.obj["verbose"],
+        ctx.obj["model"],
+        ctx.obj["debug"],
+    )
+    if ctx.obj["sync"]:
+        pull_branch_changes(status_indicator, console, ctx.obj["branch"], ctx.obj["debug"])
