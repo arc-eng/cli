@@ -148,6 +148,17 @@ def get_current_branch():
     return os.popen("git rev-parse --abbrev-ref HEAD").read().strip()
 
 
+def is_branch_pushed(branch):
+    return os.popen(f"git branch -r --list origin/{branch}").read().strip() != ""
+
+
+def get_branch_if_pushed():
+    current_branch = get_current_branch()
+    if current_branch not in ["master", "main"] and is_branch_pushed(current_branch):
+        return current_branch
+    return None
+
+
 def markdown_panel(title, content):
     """Create a Rich panel with markdown content that automatically fits the width"""
     # Calculate width based on the text content
