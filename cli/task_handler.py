@@ -68,6 +68,7 @@ class TaskHandler:
                 with open(output_file, "w") as f:
                     if code:
                         f.write(clean_code_block_with_language_specifier(result))
+                        self.status.success(start_again=True)
                         self.status.update(f"Code saved in {output_file}")
                     else:
                         f.write(result)
