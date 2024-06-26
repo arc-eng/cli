@@ -80,3 +80,18 @@ def test_sync_option_syncs_correctly(
     mock_pull_branch_changes.assert_called_once()
     assert mock_create_task.call_args[1]["branch"] == "test-value"
     assert result.exit_code == 0
+
+
+@patch("cli.commands.task.get_branch_if_pushed")
+@patch("cli.commands.task.pull_branch_changes")
+def test_sync_option_syncs_only_pushed_branches(
+    mock_pull_branch_changes,
+    mock_get_branch_if_pushed,
+    runner,
+    mock_create_task,
+):
+    mock_get_branch_if_pushed.return_value = None
+    result = runner.invoke(main, ["--wait", "--sync", "task", "test-prompt"])
+    mock_create_task.assert_called_once()
+    assert mock_create_task.call_args[1]["branch"] is None
+    assert result.exit_code == 0
