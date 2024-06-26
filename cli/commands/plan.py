@@ -3,7 +3,7 @@ from rich.console import Console
 
 from cli.plan_executor import PlanExecutor
 from cli.status_indicator import StatusIndicator
-from cli.util import pull_branch_changes, get_current_branch
+from cli.util import pull_branch_changes, get_branch_if_pushed
 
 
 @click.command()
@@ -19,10 +19,7 @@ def plan(ctx, file_path):
         spinner=ctx.obj["spinner"], messages=ctx.obj["verbose"], console=console
     )
     if ctx.obj["sync"]:
-        # Get current branch from git
-        current_branch = get_current_branch()
-        if current_branch not in ["master", "main"]:
-            ctx.obj["branch"] = current_branch
+        ctx.obj["branch"] = get_branch_if_pushed()
 
     runner = PlanExecutor(file_path, status_indicator)
     runner.run(

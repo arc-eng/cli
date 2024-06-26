@@ -8,7 +8,7 @@ from cli.constants import CHEAP_MODEL
 from cli.models import TaskParameters
 from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
-from cli.util import pull_branch_changes, get_current_branch
+from cli.util import pull_branch_changes, get_branch_if_pushed
 
 
 @click.command()
@@ -67,10 +67,7 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
 
     try:
         if ctx.obj["sync"]:
-            # Get current branch from git
-            current_branch = get_current_branch()
-            if current_branch not in ["master", "main"]:
-                ctx.obj["branch"] = current_branch
+            ctx.obj["branch"] = get_branch_if_pushed()
 
         task_params = TaskParameters(
             wait=ctx.obj["wait"],

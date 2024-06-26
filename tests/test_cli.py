@@ -65,18 +65,33 @@ def test_save_command_param_does_not_run_task(
     assert result.exit_code == 0
 
 
-@patch("cli.commands.task.get_current_branch")
+@patch("cli.commands.task.get_branch_if_pushed")
 @patch("cli.commands.task.pull_branch_changes")
 def test_sync_option_syncs_correctly(
     mock_pull_branch_changes,
-    mock_get_current_branch,
+    mock_get_branch_if_pushed,
     runner,
     mock_create_task,
 ):
     """The --sync option should set the branch to the current branch"""
-    mock_get_current_branch.return_value = "test-value"
+    mock_get_branch_if_pushed.return_value = "test-value"
     result = runner.invoke(main, ["--wait", "--sync", "task", "test-prompt"])
     mock_create_task.assert_called_once()
     mock_pull_branch_changes.assert_called_once()
     assert mock_create_task.call_args[1]["branch"] == "test-value"
+    assert result.exit_code == 0
+
+
+@patch("cli.commands.task.get_branch_if_pushed")
+@patch("cli.commands.task.pull_branch_changes")
+def test_sync_option_syncs_only_pushed_branches(
+    mock_pull_branch_changes,
+    mock_get_branch_if_pushed,
+    runner,
+    mock_create_task,
+):
+    mock_get_branch_if_pushed.return_value = None
+    result = runner.invoke(main, ["--wait", "--sync", "task", "test-prompt"])
+    mock_create_task.assert_called_once()
+    assert mock_create_task.call_args[1]["branch"] is None
     assert result.exit_code == 0
