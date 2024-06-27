@@ -1,6 +1,7 @@
 import os
 from typing import List, Optional
 
+import click
 import yaml
 from click import Command
 from pydantic import BaseModel, Field
@@ -15,13 +16,24 @@ DEFAULT_FILE_PATH = ".pilot-commands.yaml"
 
 
 class PilotCommand(BaseModel):
-    # Should be lower case, no spaces, hyphens
+    """Implementation of 'pilot run' command."""
+
     name: str = Field(..., description="Name of the command", pattern="^[a-z0-9-]+$")
     description: str = Field(..., description="Description of the command")
     params: TaskParameters = Field(..., description="CLI parameters for the command")
 
     def callback(self, *args, **kwargs):
         console = Console()
+
+        # Overwrite parameters
+        self.params.output = kwargs.get("output", self.params.output)
+        self.params.model = kwargs.get("model", self.params.model)
+        self.params.verbose = kwargs.get("verbose", self.params.verbose)
+        self.params.debug = kwargs.get("debug", self.params.debug)
+        self.params.spinner = kwargs.get("spinner", self.params.spinner)
+        self.params.sync = kwargs.get("sync", self.params.sync)
+        self.params.wait = kwargs.get("wait", self.params.wait)
+
         if self.params.sync:
             # Get current branch from git
             current_branch = os.popen("git rev-parse --abbrev-ref HEAD").read().strip()
@@ -37,7 +49,65 @@ class PilotCommand(BaseModel):
         status_indicator.stop()
 
     def to_click_command(self) -> Command:
-        return Command(self.name, callback=self.callback, help=self.description)
+        cmd = Command(self.name, callback=self.callback, help=self.description)
+
+        cmd.params.append(
+            click.Option(
+                ["--output", "-o"],
+                help="💾 Overwrite the output file path.",
+                default=self.params.output,
+                show_default=True,
+            )
+        )
+        cmd.params.append(
+            click.Option(
+                ["--model", "-m"],
+                help="🧠 Overwrite the model to use.",
+                default=self.params.model,
+                show_default=True,
+            )
+        )
+        cmd.params.append(
+            click.Option(
+                ["--verbose"],
+                help="🔊 Print more status messages.",
+                is_flag=True,
+                default=self.params.verbose,
+            )
+        )
+        cmd.params.append(
+            click.Option(
+                ["--debug"],
+                help="🐞 Run in debug mode.",
+                is_flag=True,
+                default=self.params.debug,
+            )
+        )
+        cmd.params.append(
+            click.Option(
+                ["--spinner/--no-spinner"],
+                help="🔄 Display a loading indicator.",
+                is_flag=True,
+                default=self.params.spinner,
+            )
+        )
+        cmd.params.append(
+            click.Option(
+                ["--sync/--no-sync"],
+                help="🔄 Sync local repository state with PR Pilot changes.",
+                is_flag=True,
+                default=self.params.sync,
+            )
+        )
+        cmd.params.append(
+            click.Option(
+                ["--wait/--no-wait"],
+                help="⏳ Wait for the task to complete.",
+                is_flag=True,
+                default=self.params.wait,
+            )
+        )
+        return cmd
 
 
 def find_pilot_commands_file() -> Optional[str]:

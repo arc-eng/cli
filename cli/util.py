@@ -138,8 +138,9 @@ class TaskFormatter:
             return f"[bold red]{self.task.status}[/bold red]"
 
     def format_title(self):
+        task_title = self.task.title.replace("\n", " ")[0:80]
         dashboard_url = f"https://app.pr-pilot.ai/dashboard/tasks/{str(self.task.id)}/"
-        return f"[link={dashboard_url}]{self.task.title}[/link]"
+        return f"[link={dashboard_url}]{task_title}[/link]"
 
     def format_branch(self):
         return Markdown(f"`{self.task.branch}`")
