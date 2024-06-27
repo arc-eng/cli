@@ -1,5 +1,7 @@
 import subprocess
 from unittest.mock import Mock, patch
+import tempfile
+import os
 
 from cli.prompt_template import sh, PromptTemplate
 
@@ -46,20 +48,19 @@ def test_shell_command_execution_with_list_input(mock_subprocess_run):
 def test_prompt_template_render():
     status = Mock()
     template_content = "Hello, {{ name }}!"
-    template_file_path = "test_template.jinja"
 
-    with open(template_file_path, "w") as f:
-        f.write(template_content)
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        template_file_path = os.path.join(tmpdirname, "test_template.jinja")
+        with open(template_file_path, "w") as f:
+            f.write(template_content)
 
-    prompt_template = PromptTemplate(
-        template_file_path=template_file_path,
-        repo="test_repo",
-        model="test_model",
-        status=status,
-        name="World"
-    )
+        prompt_template = PromptTemplate(
+            template_file_path=template_file_path,
+            repo="test_repo",
+            model="test_model",
+            status=status,
+            name="World"
+        )
 
-    result = prompt_template.render()
-    assert result == "Hello, World!"
-
-    os.remove(template_file_path)
+        result = prompt_template.render()
+        assert result == "Hello, World!"
