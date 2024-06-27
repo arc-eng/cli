@@ -80,7 +80,6 @@ class CommandIndex:
         self.file_path = file_path
         if not self.file_path:
             self.file_path = find_pilot_commands_file()
-            print(f"Discovered commands file at {self.file_path}")
         self.commands = self._load_commands()
 
     def _load_commands(self) -> List[PilotCommand]:
