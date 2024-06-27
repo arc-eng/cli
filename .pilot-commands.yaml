@@ -56,3 +56,17 @@ commands:
     sync: true
     verbose: true
     wait: true
+- description: Ask a question about our K8s resources
+  name: k8s-question
+  params:
+    cheap: false
+    code: false
+    debug: false
+    direct: false
+    file: prompts/k8s-question.jinja2
+    model: gpt-4o
+    snap: false
+    spinner: true
+    sync: false
+    verbose: false
+    wait: true

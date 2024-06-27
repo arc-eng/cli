@@ -1,15 +1,15 @@
 import os
 from typing import List, Optional
 
+import yaml
 from click import Command
 from pydantic import BaseModel, Field
-import yaml
 from rich.console import Console
 
 from cli.models import TaskParameters
 from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
-from cli.util import pull_branch_changes
+from cli.util import pull_branch_changes, is_git_repo, get_git_root
 
 DEFAULT_FILE_PATH = ".pilot-commands.yaml"
 
@@ -40,18 +40,47 @@ class PilotCommand(BaseModel):
         return Command(self.name, callback=self.callback, help=self.description)
 
 
+def find_pilot_commands_file() -> Optional[str]:
+    """Discover the location of the .pilot-commands.yaml file.
+
+    The file is searched for in the following order:
+    1. The root of the current Git repository
+    2. The home directory
+
+    :return: The absolute path to the file, or None if not found.
+    """
+    # Check if the current directory is part of a Git repository
+    if is_git_repo():
+        git_root = get_git_root()
+        if git_root:
+            git_repo_file_path = os.path.join(git_root, ".pilot-commands.yaml")
+            if os.path.isfile(git_repo_file_path):
+                return os.path.abspath(git_repo_file_path)
+
+    # If not found in the Git repository, check the home directory
+    home_file_path = os.path.expanduser("~/.pilot-commands.yaml")
+    if os.path.isfile(home_file_path):
+        return os.path.abspath(home_file_path)
+
+    # If the file is not found in either location, return None
+    return None
+
+
 class CommandIndex:
     """
     A class to manage the index of commands stored in a YAML file.
     """
 
-    def __init__(self, file_path: str = DEFAULT_FILE_PATH):
+    def __init__(self, file_path: str = None):
         """
         Initialize the CommandIndex with the given file path.
 
         :param file_path: Path to the YAML file containing commands.
         """
         self.file_path = file_path
+        if not self.file_path:
+            self.file_path = find_pilot_commands_file()
+            print(f"Discovered commands file at {self.file_path}")
         self.commands = self._load_commands()
 
     def _load_commands(self) -> List[PilotCommand]:
