@@ -42,11 +42,12 @@ def sh(shell_command, status):
     result = subprocess.run(shell_command, **subprocess_params)
     if result.stderr:
         status.fail()
+        status.stop()
         console = Console()
         console.print(Padding(result.stderr, (1, 1)))
     else:
         status.success(start_again=False)
-    status.stop()
+        status.stop()
     result = (result.stdout + result.stderr).strip()
     return result
 
