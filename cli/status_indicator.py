@@ -22,7 +22,6 @@ class StatusIndicator:
             self.spinner.ok("✔")
             if start_again:
                 self.spinner.start()
-            self.spinner.start()
 
     def fail(self):
         if self.visible:

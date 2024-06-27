@@ -8,6 +8,7 @@ with three special functions available:
 - `sh`: Execute shell commands and capture the output.
 - `env`: Access environment variables.
 - `subtask`: Let RP Pilot run a task and capture the output.
+- `select`: Select an option from a list.
 
 ## Example of a Prompt Template
 
@@ -127,3 +128,61 @@ This will autonomously generate the documentation for the codebase based on the 
 - `-f` specifies the prompt template file
 - `-o` specifies the output file where the generated documentation will be saved
 - `--direct` tells PR Pilot to render the template directly as output (instead of using it as a prompt)
+
+
+## Select values from a list with `select`
+
+Using the `select` function, you can present a list of options to the user and capture their selection. 
+This is useful for creating interactive prompts that require user input:
+
+```markdown
+{% set pod=select('Select a pod', sh('kubectl get pods -o custom-columns=:metadata.name').split('\n')) %}
+
+Here are the last 10 log lines of a Kubernetes pod named `{{ pod }}`:
+
+{{ sh(['kubectl', '--tail=10', 'logs', pod]) }}
+
+---
+
+I want to know:
+{{ env('QUESTION_ABOUT_LOGS') }}
+```
+
+In this example, the `select` function presents a list of pods retrieved using `kubectl get pods` and captures the user's selection:
+
+```shell
+➜ pilot --verbose task -f prompts/investigate-pod.md.jinja2
+✔ Running shell command: kubectl get pods -o custom-columns=:metadata.name (0:00:00.22)
+[?] Select a pod: 
+   nginx-static-cf7f8fd89-dv6pf
+   nginx-static-cf7f8fd89-qqvg7
+   pr-pilot-app-868489cdf6-5qrt8
+   pr-pilot-app-868489cdf6-8qjrk
+   pr-pilot-app-868489cdf6-g9lh9
+   pr-pilot-db-postgresql-0
+   pr-pilot-redis-master-0
+ > pr-pilot-worker-0
+   pr-pilot-worker-1
+
+✔ Running shell command: kubectl --tail=10 logs pr-pilot-worker-0 (0:00:00.24)
+> Question about logs: Do you see any errors?
+✔ Task created: a011fcbe-9069-4e34-892e-b89459da1ee1 (0:00:00.00)
+✔ Investigate Errors in Kubernetes Pod `pr-pilot-worker-0` Logs (0:00:09.99)
+╭────────────────────────────────────────────────────────────────────────────────────── Result ──────────────────────────────────────────────────────────────────────────────────────╮
+│ Based on the provided log lines, there are no errors visible. All the log entries are marked with INFO level, indicating normal operation. Here is a summary of the log entries:   │
+│                                                                                                                                                                                    │
+│   1 A new branch named investigate-the-output was created.                                                                                                                         │
+│   2 An HTTP POST request to the OpenAI API was successful (HTTP/1.1 200 OK).                                                                                                       │
+│   3 A cost item for a conversation with the model gpt-4o was recorded.                                                                                                             │
+│   4 The branch investigate-the-output was deleted because there were no changes.                                                                                                   │
+│   5 The latest main branch was checked out.                                                                                                                                        │
+│   6 The branch investigate-the-output was deleted.                                                                                                                                 │
+│   7 The project PR-Pilot-AI/demo was checked for open source eligibility.                                                                                                          │
+│   8 A discount of 0.0% was applied.                                                                                                                                                │
+│   9 The total cost was recorded as 4.0 credits.                                                                                                                                    │
+│  10 The remaining budget for the user mlamina was recorded as 291.82 credits.                                                                                                      │
+│                                                                                                                                                                                    │
+│ All these entries indicate normal operations without any errors.                                                                                                                   │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+```

@@ -1,0 +1,10 @@
+{% set pod=select('Select a pod', sh('kubectl get pods -o custom-columns=:metadata.name').split('\n')) %}
+
+Here are the last 10 log lines of a Kubernetes pod named `{{ pod }}`:
+
+```shell
+{{ sh(['kubectl', '--tail=10', 'logs', pod]) }}
+```
+
+I want to know:
+{{ env('QUESTION_ABOUT_LOGS') }}

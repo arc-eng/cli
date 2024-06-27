@@ -1,3 +1,4 @@
+import functools
 import os
 import subprocess
 from datetime import datetime, timezone
@@ -166,3 +167,33 @@ def markdown_panel(title, content):
     padding = 4  # Adjust padding as necessary
     width = max_line_length + padding
     return Panel.fit(Markdown(content), title=title, width=width)
+
+
+@functools.lru_cache()
+def is_git_repo():
+    """Check if the current directory is part of a Git repository."""
+    try:
+        subprocess.run(
+            ["git", "rev-parse", "--is-inside-work-tree"],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        return True
+    except subprocess.CalledProcessError:
+        return False
+
+
+@functools.lru_cache()
+def get_git_root():
+    """Get the root directory of the current Git repository."""
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--show-toplevel"],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        return result.stdout.decode("utf-8").strip()
+    except subprocess.CalledProcessError:
+        return None
