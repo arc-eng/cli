@@ -72,13 +72,39 @@ def wrap_function_with_status(func, status):
 
 class PromptTemplate:
 
-    def __init__(self, template_file_path, repo, model, status, recursion_level=0, **kwargs):
+    def __init__(
+        self, template_file_path, repo, model, status, recursion_level=0, home=None, **kwargs
+    ):
         self.template_file_path = template_file_path
         self.repo = repo
         self.model = model
         self.status = status
         self.variables = kwargs
         self.recursion_level = recursion_level
+        self.home = home
+        if not self.home:
+            self.home = self.determine_template_home()
+
+    def determine_template_home(self):
+        if is_git_repo():
+            # If the template is in a git repo, use the root of the git repo as the home directory
+            return get_git_root()
+        # Otherwise, use the current working
+        return os.getcwd()
+
+    def get_template_file_path(self):
+        """
+        The template file path is relative. If it exists relative to the current working directory
+        AND the current working directory is a sub-dir of self.home, the assemble a path that
+        is relative to self.home.
+        Otherwise, return the template file path as is.
+        """
+        full_template_path = os.path.join(os.getcwd(), self.template_file_path)
+        current_template_path = os.path.dirname(full_template_path)
+        if current_template_path.startswith(self.home) and os.path.exists(full_template_path):
+            # Templates relative to the cwd have priority
+            return os.path.relpath(full_template_path, self.home)
+        return self.template_file_path
 
     def render(self):
 
@@ -115,16 +141,10 @@ class PromptTemplate:
             finally:
                 status.stop()
 
-        env = jinja2.Environment(loader=jinja2.FileSystemLoader(os.getcwd()))
+        env = jinja2.Environment(loader=jinja2.FileSystemLoader(self.home))
         env.globals.update(env=read_env_var)
         env.globals.update(select=select)
         env.globals.update(subtask=wrap_function_with_status(subtask, self.status))
         env.globals.update(sh=wrap_function_with_status(sh, self.status))
-
-        if is_git_repo():
-            git_root = get_git_root()
-            if git_root:
-                env.loader = jinja2.FileSystemLoader(git_root)
-
-        template = env.get_template(self.template_file_path)
+        template = env.get_template(self.get_template_file_path())
         return template.render(self.variables)
