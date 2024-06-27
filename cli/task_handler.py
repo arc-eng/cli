@@ -10,6 +10,7 @@ from cli.util import clean_code_block_with_language_specifier, markdown_panel
 
 POLL_INTERVAL = 2  # seconds
 MAX_RESULT_WAIT_TIME = 60 * 4  # 4 minutes
+MAX_TITLE_LENGTH = 100
 
 
 class TaskHandler:
@@ -43,8 +44,8 @@ class TaskHandler:
                     and not self.task.title == "A title"
                     and not task_title == self.task.title
                 ):
-                    task_title = self.task.title
-                    self.status.update(self.task.title)
+                    task_title = self.task.title.replace("\n", " ")[0:MAX_TITLE_LENGTH]
+                    self.status.update(task_title)
                 if self.task.status == "running":
                     time.sleep(POLL_INTERVAL)
             if self.task.status == "failed":
