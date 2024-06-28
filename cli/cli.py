@@ -14,6 +14,8 @@ from cli.commands.chat import chat
 from cli.constants import DEFAULT_MODEL, CONFIG_API_KEY
 from cli.util import load_config
 
+from rich import print
+
 
 @click.group()
 @click.option(
@@ -79,6 +81,9 @@ def main(ctx, wait, repo, spinner, verbose, model, branch, sync, debug):
         ctx.obj["verbose"] = user_config.get("verbose", False)
     else:
         ctx.obj["verbose"] = verbose
+
+    if debug:
+        print(ctx.obj)
 
 
 main.add_command(task)

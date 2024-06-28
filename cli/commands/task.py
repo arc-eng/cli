@@ -95,7 +95,7 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
                     (1, 1),
                 )
             )
-            name = click.prompt("  Name (e.g. generate-pr-desc)", type=str)
+            name = click.prompt("  Name (e.g. my-new-cmd)", type=str)
             description = click.prompt("  Short description", type=str)
             command = PilotCommand(name=name, description=description, params=task_params)
             command_index.add_command(command)
