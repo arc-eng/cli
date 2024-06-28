@@ -28,7 +28,9 @@ class TaskRunner:
         os.system(screenshot_command)
         return Path("/tmp/screenshot.png")
 
-    def run_task(self, params: TaskParameters) -> Optional[Task]:
+    def run_task(
+        self, params: TaskParameters, print_result=True, print_task_id=True
+    ) -> Optional[Task]:
 
         console = Console()
         screenshot = self.take_screenshot() if params.snap else None
@@ -104,7 +106,8 @@ class TaskRunner:
                 f"[link=https://app.pr-pilot.ai/dashboard/tasks/{task.id}/]{task.id}[/link][/bold]"
                 f"{branch_str}{pr_link}"
             )
-            console.print(Padding(message, (0, 0)))
+            if print_task_id:
+                console.print(Padding(message, (0, 0)))
             self.status_indicator.start()
         else:
             self.status_indicator.start()
@@ -116,7 +119,9 @@ class TaskRunner:
         task_handler = None
         if params.wait:
             task_handler = TaskHandler(task, self.status_indicator)
-            task_handler.wait_for_result(params.output, params.verbose, code=params.code)
+            task_handler.wait_for_result(
+                params.output, params.verbose, code=params.code, print_result=print_result
+            )
         self.status_indicator.stop()
         if params.debug:
             console.print(task)
