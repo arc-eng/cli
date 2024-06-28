@@ -10,6 +10,7 @@ from cli.commands.run import RunCommand
 from cli.commands.task import task
 from cli.commands.config import config
 from cli.commands.upgrade import upgrade
+from cli.commands.chat import chat
 from cli.constants import DEFAULT_MODEL, CONFIG_API_KEY
 from cli.util import load_config
 
@@ -87,6 +88,7 @@ main.add_command(grab)
 main.add_command(history)
 main.add_command(config)
 main.add_command(upgrade)
+main.add_command(chat)
 
 run_command_help = """
 🚀 Run a saved command.
