@@ -26,9 +26,8 @@
 [black]: https://github.com/psf/black
 [license]: https://github.com/PR-Pilot-AI/pr-pilot-cli/blob/main/LICENSE
 
-[PR Pilot](https://docs.pr-pilot.ai) assists you in your daily workflow.
+[PR Pilot](https://docs.pr-pilot.ai) is **simple and intuitive CLI** that assists you in your daily work:
 
-With a **simple and intuitive CLI**:
 ```bash
 pilot edit main.py "Add docstrings to all functions and classes"
 ```
@@ -239,6 +238,7 @@ Options:
   --help                    Show this message and exit.
 
 Commands:
+  chat     💬 Chat with PR Pilot.
   config   🔧 Customize PR Pilots behavior.
   edit     ✍️ Let PR Pilot edit a file for you.
   grab     🤲 Grab commands, prompts and plans from other repositories.
@@ -247,7 +247,6 @@ Commands:
   run      🚀 Run a saved command.
   task     ➕ Create a new task for PR Pilot.
   upgrade  ⬆️ Upgrade pr-pilot-cli to the latest version.
-
 ```
 
 #### Commands
@@ -272,7 +271,6 @@ Options:
   -o, --output PATH  💾 Output file for the result.
   --save-command     💾 Save the task parameters as a command for later use.
   --help             Show this message and exit.
-
 ```
 
 Let PR Pilot edit a file for you.
@@ -296,7 +294,6 @@ Usage: pilot edit [OPTIONS] FILE_PATH [PROMPT]
 Options:
   --snap  📸 Add a screenshot to your prompt.
   --help  Show this message and exit.
-
 ```
 
 Let PR Pilot execute a step-by-step plan.
@@ -310,7 +307,6 @@ Usage: pilot plan [OPTIONS] FILE_PATH
 
 Options:
   --help  Show this message and exit.
-
 ```
 
 

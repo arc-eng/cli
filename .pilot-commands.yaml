@@ -53,6 +53,6 @@ commands:
     model: gpt-4o
     snap: false
     spinner: true
-    sync: true
-    verbose: true
-    wait: true
+    sync: false
+    verbose: false
+    wait: false
