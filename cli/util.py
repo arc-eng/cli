@@ -7,6 +7,7 @@ import click
 import humanize
 import yaml
 from pr_pilot import Task
+from rich import box
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
@@ -161,13 +162,15 @@ def get_branch_if_pushed():
     return None
 
 
-def markdown_panel(title, content):
+def markdown_panel(title, content, hide_frame=False):
     """Create a Rich panel with markdown content that automatically fits the width"""
     # Calculate width based on the text content
     max_line_length = max(len(line) for line in content.split("\n"))
     padding = 4  # Adjust padding as necessary
     width = max_line_length + padding
-    return Panel.fit(Markdown(content), title=title, width=width)
+    return Panel.fit(
+        Markdown(content), title=title, width=width, box=box.MINIMAL if hide_frame else box.ROUNDED
+    )
 
 
 @functools.lru_cache()

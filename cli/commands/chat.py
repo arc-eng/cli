@@ -4,17 +4,16 @@ from typing import List, Optional
 
 import click
 from pydantic import BaseModel, Field
-from rich.console import Console
-from rich.markdown import Markdown
-from rich.padding import Padding
-from rich.prompt import Confirm
 from rich import print
+from rich.console import Console
+from rich.panel import Panel
+from rich.prompt import Confirm
 
 from cli.detect_repository import detect_repository
 from cli.models import TaskParameters
 from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
-from cli.util import get_branch_if_pushed
+from cli.util import get_branch_if_pushed, markdown_panel
 
 
 class ChatMessage(BaseModel):
@@ -24,10 +23,9 @@ class ChatMessage(BaseModel):
     def print(self):
         """Print the chat message"""
         if self.role == "user":
-            print("[bold green]You:[/bold green]")
+            print(Panel(f"[blue]{self.content}[/blue]", expand=False, title="You"))
         elif self.role == "assistant":
-            print("[bold blue]Assistant:[/bold blue]")
-        print(Padding(Markdown(self.content), (1, 1)))
+            print(markdown_panel(None, self.content, hide_frame=True))
 
 
 class ChatHistory(BaseModel):
@@ -92,7 +90,9 @@ def chat(ctx, branch, history):
 
     if chat_history.file:
         # There is an existing conversation. Load and print it.
-        welcome_message = f"Continuing conversation from [code]{chat_history.file}[/code]"
+        welcome_message = (
+            f"Continuing conversation from [code][yellow]{chat_history.file}[/yellow][/code]"
+        )
         chat_history.load()
         chat_history.print()
     else:
@@ -109,10 +109,10 @@ def chat(ctx, branch, history):
 
     if branch:
         welcome_message += f" in branch [code]{branch}[/code]"
-    print(welcome_message)
+    print("[dim]" + welcome_message + "[/dim]\n")
 
     while True:
-        user_input = console.input("[bold green]You:[/bold green] ")
+        user_input = console.input("[bold blue]You:[/bold blue] ")
         if user_input.strip() == "":
             break
         chat_history.append(ChatMessage(role="user", content=user_input))
@@ -133,7 +133,7 @@ def chat(ctx, branch, history):
     # If we have a file, automatically save the chat history
     if chat_history.file:
         chat_history.dump()
-        print(f"Chat history saved to {chat_history.file}")
+        print(f"Chat history saved to [code][yellow]{chat_history.file}[/yellow][/code]")
     # Otherwise, ask the user if they want to save the chat history
     elif Confirm.ask("Do you want to save the chat history as a JSON file?", default=False):
         file_path = console.input("Enter the file path to save the chat history: ")
