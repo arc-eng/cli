@@ -26,11 +26,16 @@
 [black]: https://github.com/psf/black
 [license]: https://github.com/PR-Pilot-AI/pr-pilot-cli/blob/main/LICENSE
 
-[PR Pilot](https://docs.pr-pilot.ai) assists you in your daily workflow and works with the dev tools you trust and love - exactly when and where you want it.
+[PR Pilot](https://docs.pr-pilot.ai) is **simple and intuitive CLI** that assists you in your daily work:
 
-With a **simple and intuitive CLI**:
 ```bash
 pilot edit main.py "Add docstrings to all functions and classes"
+```
+
+**It works with [the dev tools you trust and love](https://docs.pr-pilot.ai/integrations.html)** - exactly when and where you want it.
+
+```bash
+pilot task "Find all bug issues on Github and Linear opened yesterday, post them to #bugs-daily on Slack."
 ```
 
 [Prompt templates](https://github.com/PR-Pilot-AI/pr-pilot-cli/tree/main/prompts) let you can create powerful,
