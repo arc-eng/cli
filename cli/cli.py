@@ -1,21 +1,17 @@
-import os
-
 import click
+from rich import print
 
+from cli.commands.chat import chat
+from cli.commands.config import config
 from cli.commands.edit import edit
 from cli.commands.grab import grab
 from cli.commands.history import history
 from cli.commands.plan import plan
 from cli.commands.run import RunCommand
 from cli.commands.task import task
-from cli.commands.config import config
 from cli.commands.upgrade import upgrade
-from cli.commands.chat import chat
-from cli.commands.auth import auth
-from cli.constants import DEFAULT_MODEL, CONFIG_API_KEY
-from cli.util import load_config
-
-from rich import print
+from cli.constants import DEFAULT_MODEL
+from cli.user_config import UserConfig
 
 
 @click.group()
@@ -55,10 +51,8 @@ def main(ctx, wait, repo, spinner, verbose, model, branch, sync, debug):
     Delegate routine work to AI with confidence and predictability.
     """
 
-    user_config = load_config()
-
-    if not os.getenv("PR_PILOT_API_KEY"):
-        os.environ["PR_PILOT_API_KEY"] = user_config[CONFIG_API_KEY]
+    user_config = UserConfig()
+    user_config.set_api_key_env_var()
 
     # If repo is set manually, don't auto sync
     if repo:
@@ -66,7 +60,7 @@ def main(ctx, wait, repo, spinner, verbose, model, branch, sync, debug):
     else:
         if sync is None:
             # Sync is not set, so let's see if it's set in user config
-            sync = user_config.get("auto_sync", False)
+            sync = user_config.auto_sync_enabled
 
     ctx.ensure_object(dict)
     ctx.obj["wait"] = wait
@@ -79,7 +73,7 @@ def main(ctx, wait, repo, spinner, verbose, model, branch, sync, debug):
 
     if verbose is None:
         # Verbose is not set, so let's see if it's set in user config
-        ctx.obj["verbose"] = user_config.get("verbose", False)
+        ctx.obj["verbose"] = user_config.verbose
     else:
         ctx.obj["verbose"] = verbose
 
@@ -95,7 +89,6 @@ main.add_command(history)
 main.add_command(config)
 main.add_command(upgrade)
 main.add_command(chat)
-main.add_command(auth)
 
 run_command_help = """
 🚀 Run a saved command.

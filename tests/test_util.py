@@ -1,25 +1,15 @@
-import os
 from datetime import timezone, datetime
-from unittest.mock import patch, mock_open
+from unittest.mock import patch
 
 import humanize
 import pytest
-import yaml
 from pr_pilot import Task
 from rich.markdown import Markdown
 
-from cli.constants import CONFIG_API_KEY
 from cli.util import (
     clean_code_block_with_language_specifier,
-    load_config,
     TaskFormatter,
 )
-
-
-@pytest.fixture
-@patch("cli.util.Console")
-def mock_console(mock_console_class):
-    return mock_console_class.return_value
 
 
 @pytest.fixture
@@ -45,17 +35,6 @@ def foo():
     response = "def foo():\n    pass"
     expected = "def foo():\n    pass"
     assert clean_code_block_with_language_specifier(response) == expected
-
-
-def test_load_config(mock_console):
-    config_data = {CONFIG_API_KEY: "test_api_key"}
-
-    # Make sure PR_PILOT_API_KEY env var has priority over config file
-    with patch.dict(os.environ, {"PR_PILOT_API_KEY": "test_api_key_env"}):
-        with patch("os.path.exists", return_value=False):
-            with patch("builtins.open", mock_open(read_data=yaml.dump(config_data))):
-                config = load_config()
-                assert config == {CONFIG_API_KEY: "test_api_key_env"}
 
 
 @pytest.fixture
