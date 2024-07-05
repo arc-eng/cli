@@ -57,8 +57,8 @@ class ChatHistory(BaseModel):
 
     def to_prompt(self):
         """Convert chat history to a prompt"""
-        history = "\n---\n".join(
-            [f"{msg.role.capitalize()}: {msg.content}" for msg in self.messages]
+        history = "\n\n---\n\n".join(
+            [f"{msg.role.upper()}: {msg.content}" for msg in self.messages]
         )
         prompt = "We're having a conversation. Here's the chat history:\n\n" + history
         return prompt + "\n\n---\nRespond to the last message above."
