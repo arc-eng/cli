@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Optional
 
 import click
-from pr_pilot import Task
+from pr_pilot import Task, ApiException
 from pr_pilot.util import create_task
 from rich.console import Console
 from rich.markdown import Markdown
@@ -15,12 +15,12 @@ from cli.models import TaskParameters
 from cli.prompt_template import PromptTemplate
 from cli.status_indicator import StatusIndicator
 from cli.task_handler import TaskHandler
-from cli.util import load_config
+from cli.user_config import UserConfig
 
 
 class TaskRunner:
     def __init__(self, status_indicator: StatusIndicator):
-        self.config = load_config()
+        self.config = UserConfig()
         self.status_indicator = status_indicator
 
     def take_screenshot(self):
@@ -89,15 +89,24 @@ class TaskRunner:
             if params.pr_number
             else ""
         )
-        task = create_task(
-            params.repo,
-            params.prompt,
-            log=False,
-            gpt_model=params.model,
-            image=screenshot,
-            branch=params.branch,
-            pr_number=params.pr_number,
-        )
+        try:
+            task = create_task(
+                params.repo,
+                params.prompt,
+                log=False,
+                gpt_model=params.model,
+                image=screenshot,
+                branch=params.branch,
+                pr_number=params.pr_number,
+            )
+        except ApiException as e:
+            if e.data:
+                console.print(e.data)
+            elif e.body:
+                console.print(e.body)
+            else:
+                console.print(f"An error occurred: {e}")
+            raise click.Abort()
 
         if not params.verbose:
             # Status messages are only visible in verbose mode, so let's print the new task ID

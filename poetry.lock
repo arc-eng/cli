@@ -162,13 +162,13 @@ test = ["pytest (>=6)"]
 
 [[package]]
 name = "filelock"
-version = "3.15.3"
+version = "3.15.4"
 description = "A platform independent file lock."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "filelock-3.15.3-py3-none-any.whl", hash = "sha256:0151273e5b5d6cf753a61ec83b3a9b7d8821c39ae9af9d7ecf2f9e2f17404103"},
-    {file = "filelock-3.15.3.tar.gz", hash = "sha256:e1199bf5194a2277273dacd50269f0d87d0682088a3c561c15674ea9005d8635"},
+    {file = "filelock-3.15.4-py3-none-any.whl", hash = "sha256:6ca1fffae96225dab4c6eaf1c4f4f28cd2568d3ec2a44e15a08520504de468e7"},
+    {file = "filelock-3.15.4.tar.gz", hash = "sha256:2207938cbc1844345cb01a5a95524dae30f0ce089eba5b00378295a17e3e90cb"},
 ]
 
 [package.extras]
@@ -233,13 +233,13 @@ files = [
 
 [[package]]
 name = "inquirer"
-version = "3.2.5"
+version = "3.3.0"
 description = "Collection of common interactive command line user interfaces, based on Inquirer.js"
 optional = false
 python-versions = ">=3.8.1"
 files = [
-    {file = "inquirer-3.2.5-py3-none-any.whl", hash = "sha256:017fefa077f023d23b4e9fc310ab33d005789d4558b1121d9611aee27411a63b"},
-    {file = "inquirer-3.2.5.tar.gz", hash = "sha256:4f3773e840aa1346d10b1f958728a0a621adc288065b33a95dade6e214b26b60"},
+    {file = "inquirer-3.3.0-py3-none-any.whl", hash = "sha256:c4be527e8c4e7a1b2c909aa064ef6f1a4466be42224290f21f07f6d5947171f4"},
+    {file = "inquirer-3.3.0.tar.gz", hash = "sha256:2722cec4460b289aab21fc35a3b03c932780ff4e8004163955a8215e20cfd35e"},
 ]
 
 [package.dependencies]

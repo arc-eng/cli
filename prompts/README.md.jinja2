@@ -110,6 +110,15 @@ brew install pr-pilot-cli
 ```
 
 
+### ⚙️ Options and Parameters
+
+The CLI has global parameters and options that can be used to customize its behavior.
+
+
+```bash
+{{ sh('python -m cli.cli --help') }}
+```
+
 ## 🛠️ Usage
 
 In your repository, use the `pilot` command:
@@ -164,7 +173,7 @@ You can now use the following commands:
 Our **[core repository](https://github.com/PR-Pilot-AI/core)** contains an ever-growing, curated list of commands
 that we tested and handcrafted for you. You can grab them and use them in your own repositories.
 
-### 📝 Execute a step-by-step plan
+### 📝 Advanced Usage: Execute a step-by-step plan
 
 Break down more complex tasks into smaller steps with a plan:
 
@@ -212,37 +221,6 @@ Save this as part of your code base. Next time you need a new page, simply adjus
 If you don't like the result, simply close the PR and delete the branch.
 
 You can iterate on the plan until you are satisfied with the result.
-
-### ⚙️ Options and Parameters
-
-The CLI has global parameters and options that can be used to customize its behavior.
-
-
-```bash
-{{ sh('python -m cli.cli --help') }}
-```
-
-#### Commands
-
-Hand over a task to PR Pilot.
-
-```bash
-{{ sh('python -m cli.cli task --help') }}
-```
-
-Let PR Pilot edit a file for you.
-
-```bash
-{{ sh('python -m cli.cli edit --help') }}
-```
-
-Let PR Pilot execute a step-by-step plan.
-
-```bash
-{{ sh('python -m cli.cli plan --help') }}
-```
-
-
 
 
 ## ⚙️ Configuration

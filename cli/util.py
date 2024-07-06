@@ -3,16 +3,11 @@ import os
 import subprocess
 from datetime import datetime, timezone
 
-import click
 import humanize
-import yaml
 from pr_pilot import Task
 from rich import box
-from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
-
-from cli.constants import CONFIG_LOCATION, CONFIG_API_KEY
 
 
 def clean_code_block_with_language_specifier(response):
@@ -28,55 +23,6 @@ def clean_code_block_with_language_specifier(response):
 
     clean_response = "\n".join(cleaned_lines)
     return clean_response
-
-
-def collect_user_preferences():
-    console = Console()
-    api_key_url = "https://app.pr-pilot.ai/dashboard/api-keys/"
-    console.print(f"Please create an API key at {api_key_url}.")
-    api_key = click.prompt("PR Pilot API key")
-
-    console.line()
-    console.print(
-        "[green]Since it's the first time you're using PR Pilot, "
-        "let's set some default values.[/green]"
-    )
-    console.line()
-    auto_sync = click.confirm(
-        "When a new PR/branch is created, do you want it checked out automatically?"
-    )
-    verbose = click.confirm("Do you want to see detailed status messages?")
-    console.line()
-    with open(CONFIG_LOCATION, "w") as f:
-        f.write(
-            yaml.dump(
-                {
-                    CONFIG_API_KEY: api_key,
-                    "auto_sync": auto_sync,
-                    "verbose": verbose,
-                }
-            )
-        )
-    console.print(f"Configuration saved in [code]{CONFIG_LOCATION}[/code]")
-
-
-def load_config():
-    """Load the configuration from the default location. If it doesn't exist,
-    ask user to enter API key and save config."""
-    console = Console()
-    if not os.path.exists(CONFIG_LOCATION) and not os.getenv("PR_PILOT_API_KEY"):
-        collect_user_preferences()
-
-    if not os.path.exists(CONFIG_LOCATION) and os.getenv("PR_PILOT_API_KEY"):
-        console.print(
-            "[bold yellow]Using API key from environment variable PR_PILOT_API_KEY[/bold yellow]"
-        )
-        config = {CONFIG_API_KEY: os.getenv("PR_PILOT_API_KEY")}
-    else:
-        with open(CONFIG_LOCATION) as f:
-            config = yaml.safe_load(f)
-
-    return config
 
 
 def pull_branch_changes(status_indicator, console, branch, debug=False):
@@ -201,3 +147,7 @@ def get_git_root():
         return result.stdout.decode("utf-8").strip()
     except subprocess.CalledProcessError:
         return None
+
+
+def get_api_host():
+    return os.getenv("PR_PILOT_HOST", "https://app.pr-pilot.ai")
