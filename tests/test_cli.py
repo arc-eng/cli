@@ -16,7 +16,7 @@ def runner():
 @patch.dict(os.environ, {}, clear=True)
 def test_main_loads_user_config(mock_user_config, runner):
     result = runner.invoke(main, ["history"])
-    mock_user_config.set_api_key_env_var.assert_called_once()
+    mock_user_config.return_value.set_api_key_env_var.assert_called_once()
     assert result.exit_code == 0
 
 
