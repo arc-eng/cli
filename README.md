@@ -110,6 +110,42 @@ brew install pr-pilot-cli
 ```
 
 
+### ⚙️ Options and Parameters
+
+The CLI has global parameters and options that can be used to customize its behavior.
+
+
+```bash
+Usage: pilot [OPTIONS] COMMAND [ARGS]...
+
+  PR Pilot CLI - https://docs.pr-pilot.ai
+
+  Delegate routine work to AI with confidence and predictability.
+
+Options:
+  --wait / --no-wait        Wait for PR Pilot to finish the task.
+  --repo TEXT               Github repository in the format owner/repo.
+  --spinner / --no-spinner  Display a loading indicator.
+  --verbose                 Display status messages
+  -m, --model TEXT          GPT model to use.
+  -b, --branch TEXT         Run the task on a specific branch.
+  --sync / --no-sync        Run task on your current branch and pull PR Pilots
+                            changes when done.
+  --debug                   Display debug information.
+  --help                    Show this message and exit.
+
+Commands:
+  chat     💬 Chat with PR Pilot.
+  config   🔧 Customize PR Pilots behavior.
+  edit     ✍️ Let PR Pilot edit a file for you.
+  grab     🤲 Grab commands, prompts and plans from other repositories.
+  history  📜 Access recent tasks.
+  plan     📋 Let PR Pilot execute a plan for you.
+  run      🚀 Run a saved command.
+  task     ➕ Create a new task for PR Pilot.
+  upgrade  ⬆️ Upgrade pr-pilot-cli to the latest version.
+```
+
 ## 🛠️ Usage
 
 In your repository, use the `pilot` command:
@@ -164,7 +200,7 @@ You can now use the following commands:
 Our **[core repository](https://github.com/PR-Pilot-AI/core)** contains an ever-growing, curated list of commands
 that we tested and handcrafted for you. You can grab them and use them in your own repositories.
 
-### 📝 Execute a step-by-step plan
+### 📝 Advanced Usage: Execute a step-by-step plan
 
 Break down more complex tasks into smaller steps with a plan:
 
@@ -212,104 +248,6 @@ Save this as part of your code base. Next time you need a new page, simply adjus
 If you don't like the result, simply close the PR and delete the branch.
 
 You can iterate on the plan until you are satisfied with the result.
-
-### ⚙️ Options and Parameters
-
-The CLI has global parameters and options that can be used to customize its behavior.
-
-
-```bash
-Usage: pilot [OPTIONS] COMMAND [ARGS]...
-
-  PR Pilot CLI - https://docs.pr-pilot.ai
-
-  Delegate routine work to AI with confidence and predictability.
-
-Options:
-  --wait / --no-wait        Wait for PR Pilot to finish the task.
-  --repo TEXT               Github repository in the format owner/repo.
-  --spinner / --no-spinner  Display a loading indicator.
-  --verbose                 Display status messages
-  -m, --model TEXT          GPT model to use.
-  -b, --branch TEXT         Run the task on a specific branch.
-  --sync / --no-sync        Run task on your current branch and pull PR Pilots
-                            changes when done.
-  --debug                   Display debug information.
-  --help                    Show this message and exit.
-
-Commands:
-  chat     💬 Chat with PR Pilot.
-  config   🔧 Customize PR Pilots behavior.
-  edit     ✍️ Let PR Pilot edit a file for you.
-  grab     🤲 Grab commands, prompts and plans from other repositories.
-  history  📜 Access recent tasks.
-  plan     📋 Let PR Pilot execute a plan for you.
-  run      🚀 Run a saved command.
-  task     ➕ Create a new task for PR Pilot.
-  upgrade  ⬆️ Upgrade pr-pilot-cli to the latest version.
-```
-
-#### Commands
-
-Hand over a task to PR Pilot.
-
-```bash
-Usage: pilot task [OPTIONS] [PROMPT]
-
-  ➕ Create a new task for PR Pilot.
-
-  Examples: https://github.com/pr-pilot-ai/pr-pilot-cli
-
-Options:
-  --snap             📸 Select a portion of your screen to add as an image to
-                     the task.
-  --cheap            💸 Use the cheapest GPT model (gpt-3.5-turbo)
-  --code             💻 Optimize prompt and settings for generating code
-  -f, --file PATH    📂 Generate prompt from a template file.
-  --direct           🔄 Do not feed the rendered template as a prompt into PR
-                     Pilot, but render it directly as output.
-  -o, --output PATH  💾 Output file for the result.
-  --save-command     💾 Save the task parameters as a command for later use.
-  --help             Show this message and exit.
-```
-
-Let PR Pilot edit a file for you.
-
-```bash
-Usage: pilot edit [OPTIONS] FILE_PATH [PROMPT]
-
-  ✍️ Let PR Pilot edit a file for you.
-
-  Examples:
-
-  - ✍️ Quickly add docstrings to a Python file:
-    pilot edit main.py "Add docstrings for all classes, functions and parameters"
-
-  - ♻️ Refactor and clean up code:
-    pilot edit main.js "Break up large functions, organize the file and add comments"
-
-  - 🧩 Implement placeholders:
-    pilot edit "I left placeholder comments in the file. Please replace them with the actual code"
-
-Options:
-  --snap  📸 Add a screenshot to your prompt.
-  --help  Show this message and exit.
-```
-
-Let PR Pilot execute a step-by-step plan.
-
-```bash
-Usage: pilot plan [OPTIONS] FILE_PATH
-
-  📋 Let PR Pilot execute a plan for you.
-
-  Learn more: https://docs.pr-pilot.ai/user_guide.html
-
-Options:
-  --help  Show this message and exit.
-```
-
-
 
 
 ## ⚙️ Configuration
