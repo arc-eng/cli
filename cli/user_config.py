@@ -69,26 +69,28 @@ class UserConfig:
     def load_config(self):
         """Load the configuration from the default location. If it doesn't exist,
         run through the auth process and save config."""
-        if not os.path.exists(self.config_location):
-            # Config file does not exist, create it
-            if not os.getenv("PR_PILOT_API_KEY"):
-                console.print(
-                    "[bold yellow]No configuration file found. "
-                    "Starting authentication ...[/bold yellow]"
-                )
-                self.config = {CONFIG_API_KEY: self.authenticate()}
-            else:
-                console.print(
-                    "[bold yellow]Using API key from environment variable "
-                    "PR_PILOT_API_KEY[/bold yellow]"
-                )
-                self.config = {CONFIG_API_KEY: os.getenv("PR_PILOT_API_KEY")}
-            self.collect_user_preferences()
-
-        else:
+        if os.path.exists(self.config_location):
             # Config file exists, load it
             with open(self.config_location) as f:
                 self.config = yaml.safe_load(f)
+            if os.getenv("PR_PILOT_API_KEY"):
+                # Override the config file with the environment variable
+                self.config[CONFIG_API_KEY] = os.getenv("PR_PILOT_API_KEY")
+            return
+
+        # Config file does not exist, create it
+        if not os.getenv("PR_PILOT_API_KEY"):
+            console.print(
+                "[bold yellow]No configuration file found. "
+                "Starting authentication ...[/bold yellow]"
+            )
+            self.config = {CONFIG_API_KEY: self.authenticate()}
+            self.collect_user_preferences()
+            with open(self.config_location, "w") as f:
+                f.write(yaml.dump(self.config))
+        else:
+            console.print("[dim]Using API key from environment variable PR_PILOT_API_KEY[/dim]")
+            self.config = {CONFIG_API_KEY: os.getenv("PR_PILOT_API_KEY")}
 
     def set_api_key_env_var(self):
         """Set the API key as an environment variable."""

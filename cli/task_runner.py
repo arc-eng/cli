@@ -100,7 +100,12 @@ class TaskRunner:
                 pr_number=params.pr_number,
             )
         except ApiException as e:
-            console.print(e.data)
+            if e.data:
+                console.print(e.data)
+            elif e.body:
+                console.print(e.body)
+            else:
+                console.print(f"An error occurred: {e}")
             raise click.Abort()
 
         if not params.verbose:
