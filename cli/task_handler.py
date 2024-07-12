@@ -83,7 +83,7 @@ class TaskHandler:
             self.status.stop()
             if result:
                 # If verbose mode is disabled, we still want to show the PR URL
-                if not verbose and new_pr_url:
+                if new_pr_url:
                     result += f"\n\n🆕 [**PR #{self.task.pr_number}**]({new_pr_url})"
                 if print_result:
                     self.console.print(markdown_panel("Result", result))
