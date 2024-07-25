@@ -1,12 +1,12 @@
 import time
-
 import click.exceptions
 from pr_pilot import Task
 from pr_pilot.util import get_task
 from rich.console import Console
-
 from cli.status_indicator import StatusIndicator
 from cli.util import clean_code_block_with_language_specifier, markdown_panel
+import websockets
+import asyncio
 
 POLL_INTERVAL = 2  # seconds
 MAX_RESULT_WAIT_TIME = 60 * 4  # 4 minutes
@@ -32,7 +32,7 @@ class TaskHandler:
         """
         self.status.start()
         self.status.update("Just a sec ...")
-        try:
+        try {
             start_time = time.time()
             task_title = None
             while self.task.status not in ["completed", "failed"]:
@@ -48,7 +48,7 @@ class TaskHandler:
                     self.status.update(task_title)
                 if self.task.status == "running":
                     time.sleep(POLL_INTERVAL)
-            if self.task.status == "failed":
+            if self.task.status == "failed"]:
                 raise click.ClickException(f"Task failed: {self.task.result}")
 
             result = self.task.result
@@ -89,3 +89,20 @@ class TaskHandler:
                     self.console.print(markdown_panel("Result", result))
         finally:
             self.status.stop()
+
+    async def stream_task_events(self, task_id):
+        """
+        Connect to the websocket and stream task events.
+        :param task_id: The ID of the task to stream events for.
+        """
+        websocket_url = f"wss://app.pr-pilot.ai/api/task/{task_id}/stream"
+        async with websockets.connect(websocket_url) as websocket:
+            async for message in websocket:
+                self.console.print(message)
+
+    def start_streaming(self, task_id):
+        """
+        Start the asyncio event loop to stream task events.
+        :param task_id: The ID of the task to stream events for.
+        """
+        asyncio.run(self.stream_task_events(task_id))
