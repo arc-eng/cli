@@ -1,22 +1,25 @@
+import json
 import time
 import click.exceptions
 from pr_pilot import Task
 from pr_pilot.util import get_task
 from rich.console import Console
 from cli.status_indicator import StatusIndicator
-from cli.util import clean_code_block_with_language_specifier, markdown_panel
+from cli.user_config import UserConfig
+from cli.util import clean_code_block_with_language_specifier, markdown_panel, get_api_host
 import websockets
 import asyncio
 
 POLL_INTERVAL = 2  # seconds
 MAX_RESULT_WAIT_TIME = 60 * 4  # 4 minutes
 MAX_TITLE_LENGTH = 100
+IGNORED_EVENT_ACTIONS = ["clone_repo"]
 
 
 class TaskHandler:
     def __init__(self, task: Task, status_indicator: StatusIndicator):
         self.task = task
-        self.dashboard_url = f"https://app.pr-pilot.ai/dashboard/tasks/{task.id}"
+        self.dashboard_url = f"{get_api_host()}/dashboard/tasks/{task.id}"
         self.console = Console()
         self.status = status_indicator
         self.task_runs_on_pr = self.task.pr_number is not None
@@ -31,8 +34,8 @@ class TaskHandler:
         :return:
         """
         self.status.start()
-        self.status.update("Just a sec ...")
-        try {
+        self.status.update_spinner_message("Just a sec ...")
+        try:
             start_time = time.time()
             task_title = None
             while self.task.status not in ["completed", "failed"]:
@@ -45,10 +48,10 @@ class TaskHandler:
                     and not task_title == self.task.title
                 ):
                     task_title = self.task.title.replace("\n", " ")[0:MAX_TITLE_LENGTH]
-                    self.status.update(task_title)
+                    self.status.update_spinner_message(task_title)
                 if self.task.status == "running":
                     time.sleep(POLL_INTERVAL)
-            if self.task.status == "failed"]:
+            if self.task.status == "failed":
                 raise click.ClickException(f"Task failed: {self.task.result}")
 
             result = self.task.result
@@ -61,7 +64,7 @@ class TaskHandler:
                 )
                 if not self.task_runs_on_pr:
                     # We found a new PR number, let the user know
-                    self.status.update(f"Opened Pull Request: {new_pr_url}")
+                    self.status.update_spinner_message(f"Opened Pull Request: {new_pr_url}")
                     self.status.success(start_again=True)
 
             # User wants output in a file
@@ -70,10 +73,10 @@ class TaskHandler:
                 with open(output_file, "w") as f:
                     if code:
                         f.write(clean_code_block_with_language_specifier(result))
-                        self.status.update(f"Code saved in {output_file}")
+                        self.status.update_spinner_message(f"Code saved in {output_file}")
                     else:
                         f.write(result)
-                        self.status.update(f"Result saved in {output_file}")
+                        self.status.update_spinner_message(f"Result saved in {output_file}")
 
                 self.status.success()
                 self.status.stop()
@@ -95,10 +98,42 @@ class TaskHandler:
         Connect to the websocket and stream task events.
         :param task_id: The ID of the task to stream events for.
         """
-        websocket_url = f"wss://app.pr-pilot.ai/api/task/{task_id}/stream"
-        async with websockets.connect(websocket_url) as websocket:
-            async for message in websocket:
-                self.console.print(message)
+        self.status.start()
+        api_key = UserConfig().api_key
+        websocket_host = get_api_host().replace("https://", "wss://").replace("http://", "ws://")
+        websocket_url = f"{websocket_host}/ws/tasks/{task_id}/events/"
+        headers = {"X-Api-Key": api_key}
+        try:
+            async with websockets.connect(websocket_url, extra_headers=headers) as websocket:
+                async for message in websocket:
+                    json_message = json.loads(message)
+                    # self.console.print(json_message)
+                    msg_type = json_message.get("type")
+                    if msg_type == "title_update":
+                        title = json_message.get("data")
+                        self.task.title = title
+                        self.status.update_spinner_message(title)
+                    if msg_type == "status_update":
+                        new_status = json_message.get("data").get("status")
+                        message = json_message.get("data").get("message", "")
+                        if new_status == "completed":
+                            self.status.success()
+                            self.status.stop()
+                            self.console.print(markdown_panel("Result", message))
+                            return
+                        elif new_status == "failed":
+                            self.status.fail()
+                            self.status.stop()
+                            self.console.print(markdown_panel("Task Failed", message))
+                    if msg_type == "event":
+                        event = json_message.get("data")
+                        action = event.get("action")
+                        if action not in IGNORED_EVENT_ACTIONS:
+                            self.status.log_message(event.get("message"))
+        except websockets.exceptions.ConnectionClosedError:
+            self.status.update_spinner_message("Connection closed.")
+            self.status.fail()
+            self.status.stop()
 
     def start_streaming(self, task_id):
         """

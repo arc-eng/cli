@@ -1,8 +1,9 @@
 from rich.console import Console
+from rich.markdown import Markdown
 from yaspin import yaspin
 
 
-MAX_MSG_LEN = 80
+MAX_MSG_LEN = 100
 
 
 class StatusIndicator:
@@ -13,19 +14,29 @@ class StatusIndicator:
         self.messages = messages
         self.console = console if console else Console()
 
-    def update(self, text):
+    def update_spinner_message(self, text):
         if self.visible:
             self.spinner.text = text
 
+    def log_message(self, text):
+        self.spinner.hide()
+        markdown_txt = Markdown(text)
+        self.console.print("[green]✔[/green]", markdown_txt, sep=" ", end=" ")
+        self.spinner.show()
+
     def success(self, start_again=False):
         if self.visible and self.messages:
-            self.spinner.ok("✔")
+            self.log_message(self.spinner.text)
+            self.spinner.text = ""
+            self.spinner.ok("✔ SUCCESS")
             if start_again:
                 self.spinner.start()
 
     def fail(self):
         if self.visible:
-            self.spinner.fail("❌ ")
+            self.log_message(self.spinner.text)
+            self.spinner.text = ""
+            self.spinner.fail("❌ FAILURE")
             self.spinner.stop()
 
     def start(self):

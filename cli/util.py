@@ -27,7 +27,7 @@ def clean_code_block_with_language_specifier(response):
 
 def pull_branch_changes(status_indicator, console, branch, debug=False):
     status_indicator.start()
-    status_indicator.update(f"Pull latest changes from {branch}")
+    status_indicator.update_spinner_message(f"Pull latest changes from {branch}")
     error = ""
     try:
         # Fetch origin and checkout branch

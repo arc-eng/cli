@@ -35,7 +35,7 @@ def sh(shell_command, status):
     status.start()
     if isinstance(shell_command, str):
         shell_command = shell_command.split()
-    status.update(f"Running shell command: {' '.join(shell_command)}")
+    status.update_spinner_message(f"Running shell command: {' '.join(shell_command)}")
     subprocess_params = dict(
         stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=os.environ.copy()
     )
@@ -118,7 +118,9 @@ class PromptTemplate:
             if os.path.exists(potential_file_path):
 
                 if self.recursion_level >= MAX_RECURSION_LEVEL:
-                    status.update(f"Abort loading {prompt}. Maximum recursion level reached.")
+                    status.update_spinner_message(
+                        f"Abort loading {prompt}. Maximum recursion level reached."
+                    )
                     status.fail()
                     return ""
                 sub_template = PromptTemplate(
@@ -132,7 +134,7 @@ class PromptTemplate:
                 prompt = sub_template.render()
 
             try:
-                status.update("Creating sub-task ...")
+                status.update_spinner_message("Creating sub-task ...")
                 task = create_task(self.repo, prompt, log=False, gpt_model=self.model)
                 task_handler = TaskHandler(task, status)
                 return task_handler.wait_for_result(verbose=False, print_result=False)
@@ -142,9 +144,9 @@ class PromptTemplate:
                 status.stop()
 
         env = jinja2.Environment(loader=jinja2.FileSystemLoader(self.home))
-        env.globals.update(env=read_env_var)
-        env.globals.update(select=select)
-        env.globals.update(subtask=wrap_function_with_status(subtask, self.status))
-        env.globals.update(sh=wrap_function_with_status(sh, self.status))
+        env.globals.update_spinner_message(env=read_env_var)
+        env.globals.update_spinner_message(select=select)
+        env.globals.update_spinner_message(subtask=wrap_function_with_status(subtask, self.status))
+        env.globals.update_spinner_message(sh=wrap_function_with_status(sh, self.status))
         template = env.get_template(self.get_template_file_path())
         return template.render(self.variables)
