@@ -31,7 +31,7 @@ def grab_commands(ctx, repo):
     """
     console = Console()
     status_indicator = StatusIndicator(
-        spinner=ctx.obj["spinner"], messages=ctx.obj["verbose"], console=console
+        spinner=ctx.obj["spinner"], display_log_messages=ctx.obj["verbose"], console=console
     )
     status_indicator.start()
     full_repo_url = f"git@github.com:{repo}.git"

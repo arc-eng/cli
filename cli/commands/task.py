@@ -62,7 +62,7 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
     """
     console = Console()
     status_indicator = StatusIndicator(
-        spinner=ctx.obj["spinner"], messages=ctx.obj["verbose"], console=console
+        spinner=ctx.obj["spinner"], display_log_messages=ctx.obj["verbose"], console=console
     )
 
     try:

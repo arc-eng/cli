@@ -117,6 +117,7 @@ class TaskRunner:
             )
             if print_task_id:
                 console.print(Padding(message, (0, 0)))
+        self.status_indicator.update_spinner_message("One sec ...")
         self.status_indicator.start()
 
         if params.debug:
@@ -127,7 +128,9 @@ class TaskRunner:
             # task_handler.wait_for_result(
             #     params.output, params.verbose, code=params.code, print_result=print_result
             # )
-            task_handler.start_streaming(task.id)
+            task_handler.start_streaming(
+                params.output, params.verbose, code=params.code, print_result=print_result
+            )
 
         self.status_indicator.stop()
         if params.debug:

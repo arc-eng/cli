@@ -8,24 +8,28 @@ MAX_MSG_LEN = 100
 
 class StatusIndicator:
 
-    def __init__(self, spinner=True, messages=True, console=None):
+    def __init__(
+        self, spinner=True, display_log_messages=True, console=None, display_spinner_text=True
+    ):
         self.spinner = yaspin("Let's go", timer=True)
         self.visible = spinner
-        self.messages = messages
+        self.display_spinner_text = display_spinner_text
+        self.display_log_messages = display_log_messages
         self.console = console if console else Console()
 
     def update_spinner_message(self, text):
-        if self.visible:
+        if self.visible and self.display_spinner_text:
             self.spinner.text = text
 
     def log_message(self, text):
-        self.spinner.hide()
-        markdown_txt = Markdown(text)
-        self.console.print("[green]✔[/green]", markdown_txt, sep=" ", end=" ")
-        self.spinner.show()
+        if self.display_log_messages:
+            self.spinner.hide()
+            markdown_txt = Markdown(text)
+            self.console.print("[green]✔[/green]", markdown_txt, sep=" ", end=" ")
+            self.spinner.show()
 
     def success(self, start_again=False):
-        if self.visible and self.messages:
+        if self.visible and self.display_log_messages:
             self.log_message(self.spinner.text)
             self.spinner.text = ""
             self.spinner.ok("✔ SUCCESS")

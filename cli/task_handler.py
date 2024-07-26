@@ -93,10 +93,16 @@ class TaskHandler:
         finally:
             self.status.stop()
 
-    async def stream_task_events(self, task_id):
+    async def stream_task_events(
+        self, task_id, output_file=None, log_messages=True, code=False, print_result=True
+    ):
         """
-        Connect to the websocket and stream task events.
+        Connect to the websocket and stream task events until the task is completed or failed.
         :param task_id: The ID of the task to stream events for.
+        :param output_file: Optional file to save the result.
+        :param log_messages: Print status messages.
+        :param code: If True, the result will be treated as code
+        :param print_result: If True, the result will be printed on the command line.
         """
         self.status.start()
         api_key = UserConfig().api_key
@@ -107,7 +113,6 @@ class TaskHandler:
             async with websockets.connect(websocket_url, extra_headers=headers) as websocket:
                 async for message in websocket:
                     json_message = json.loads(message)
-                    # self.console.print(json_message)
                     msg_type = json_message.get("type")
                     if msg_type == "title_update":
                         title = json_message.get("data")
@@ -116,10 +121,20 @@ class TaskHandler:
                     if msg_type == "status_update":
                         new_status = json_message.get("data").get("status")
                         message = json_message.get("data").get("message", "")
+                        self.task.result = message
                         if new_status == "completed":
                             self.status.success()
                             self.status.stop()
-                            self.console.print(markdown_panel("Result", message))
+                            if output_file:
+                                with open(output_file, "w") as f:
+                                    if code:
+                                        self.status.log_message(f"Save code to `{output_file}`")
+                                        f.write(clean_code_block_with_language_specifier(message))
+                                    else:
+                                        self.status.log_message(f"Save result to `{output_file}`")
+                                        f.write(message)
+                            elif print_result:
+                                self.console.print(markdown_panel(None, message, hide_frame=True))
                             return
                         elif new_status == "failed":
                             self.status.fail()
@@ -128,16 +143,21 @@ class TaskHandler:
                     if msg_type == "event":
                         event = json_message.get("data")
                         action = event.get("action")
-                        if action not in IGNORED_EVENT_ACTIONS:
+                        if action not in IGNORED_EVENT_ACTIONS and log_messages:
                             self.status.log_message(event.get("message"))
         except websockets.exceptions.ConnectionClosedError:
             self.status.update_spinner_message("Connection closed.")
             self.status.fail()
             self.status.stop()
 
-    def start_streaming(self, task_id):
+    def start_streaming(self, output_file=None, log_messages=True, code=False, print_result=True):
         """
         Start the asyncio event loop to stream task events.
-        :param task_id: The ID of the task to stream events for.
+        :param output_file: Optional file to save the result.
+        :param log_messages: Print status messages.
+        :param code: If True, the result will be treated as code
+        :param print_result: If True, the result will be printed on the command line.
         """
-        asyncio.run(self.stream_task_events(task_id))
+        asyncio.run(
+            self.stream_task_events(self.task.id, output_file, log_messages, code, print_result)
+        )
