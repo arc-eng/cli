@@ -137,7 +137,7 @@ class PromptTemplate:
                 status.update_spinner_message("Creating sub-task ...")
                 task = create_task(self.repo, prompt, log=False, gpt_model=self.model)
                 task_handler = TaskHandler(task, status)
-                return task_handler.wait_for_result(verbose=False, print_result=False)
+                return task_handler.start_streaming(log_messages=False, print_result=False)
             except Exception as e:
                 raise click.ClickException(f"Error creating sub-task: {e}")
             finally:

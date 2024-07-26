@@ -125,10 +125,7 @@ class TaskRunner:
         task_handler = None
         if params.wait:
             task_handler = TaskHandler(task, self.status_indicator)
-            # task_handler.wait_for_result(
-            #     params.output, params.verbose, code=params.code, print_result=print_result
-            # )
-            task_handler.start_streaming(
+            task_handler.wait_for_result(
                 params.output, params.verbose, code=params.code, print_result=print_result
             )
 
