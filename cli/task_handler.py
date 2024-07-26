@@ -140,6 +140,7 @@ class TaskHandler:
                             self.status.fail()
                             self.status.stop()
                             self.console.print(markdown_panel("Task Failed", message))
+                            return
                     if msg_type == "event":
                         event = json_message.get("data")
                         action = event.get("action")

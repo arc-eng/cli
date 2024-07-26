@@ -144,9 +144,9 @@ class PromptTemplate:
                 status.stop()
 
         env = jinja2.Environment(loader=jinja2.FileSystemLoader(self.home))
-        env.globals.update_spinner_message(env=read_env_var)
-        env.globals.update_spinner_message(select=select)
-        env.globals.update_spinner_message(subtask=wrap_function_with_status(subtask, self.status))
-        env.globals.update_spinner_message(sh=wrap_function_with_status(sh, self.status))
+        env.globals.update(env=read_env_var)
+        env.globals.update(select=select)
+        env.globals.update(subtask=wrap_function_with_status(subtask, self.status))
+        env.globals.update(sh=wrap_function_with_status(sh, self.status))
         template = env.get_template(self.get_template_file_path())
         return template.render(self.variables)
