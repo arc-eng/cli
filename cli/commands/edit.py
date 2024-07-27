@@ -35,7 +35,7 @@ def edit(ctx, snap, file_path, prompt):
     """
     console = Console()
     status_indicator = StatusIndicator(
-        spinner=ctx.obj["spinner"], messages=ctx.obj["verbose"], console=console
+        spinner=ctx.obj["spinner"], display_log_messages=ctx.obj["verbose"], console=console
     )
 
     if not prompt:

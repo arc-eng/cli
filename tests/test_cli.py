@@ -1,5 +1,5 @@
 import os
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 import pytest
 from click.testing import CliRunner
@@ -11,6 +11,16 @@ from cli.constants import CODE_PRIMER
 @pytest.fixture
 def runner():
     return CliRunner()
+
+
+@pytest.fixture(autouse=True)
+def mock_task_handler():
+    with patch("cli.task_runner.TaskHandler") as mock:
+        mock.return_value = MagicMock(
+            start_streaming=MagicMock(),
+            wait_for_result=MagicMock(),
+        )
+        yield mock
 
 
 @patch.dict(os.environ, {}, clear=True)

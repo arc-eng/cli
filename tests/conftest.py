@@ -36,19 +36,6 @@ def mock_list_tasks():
 
 
 @pytest.fixture(autouse=True)
-def mock_get_task():
-    with patch("cli.task_handler.get_task") as mock:
-        mock.return_value = MagicMock(
-            id="1234",
-            title="Mock title",
-            status="completed",
-            prompt="Mock prompt",
-            result="Mock result",
-        )
-        yield mock
-
-
-@pytest.fixture(autouse=True)
 def mock_console():
     with patch("cli.task_handler.Console") as mock:
         yield mock

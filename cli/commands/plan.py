@@ -16,7 +16,7 @@ def plan(ctx, file_path):
     """
     console = Console()
     status_indicator = StatusIndicator(
-        spinner=ctx.obj["spinner"], messages=ctx.obj["verbose"], console=console
+        spinner=ctx.obj["spinner"], display_log_messages=ctx.obj["verbose"], console=console
     )
     if ctx.obj["sync"]:
         ctx.obj["branch"] = get_branch_if_pushed()

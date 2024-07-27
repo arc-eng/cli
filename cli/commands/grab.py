@@ -31,7 +31,7 @@ def grab_commands(ctx, repo):
     """
     console = Console()
     status_indicator = StatusIndicator(
-        spinner=ctx.obj["spinner"], messages=ctx.obj["verbose"], console=console
+        spinner=ctx.obj["spinner"], display_log_messages=ctx.obj["verbose"], console=console
     )
     status_indicator.start()
     full_repo_url = f"git@github.com:{repo}.git"
@@ -59,7 +59,7 @@ def grab_commands(ctx, repo):
 
 def clone_repository(status_indicator, full_repo_url, tmp_dir):
     """Clone the repository to a temporary directory."""
-    status_indicator.update(f"Loading commands from {full_repo_url}")
+    status_indicator.update_spinner_message(f"Loading commands from {full_repo_url}")
     subprocess.run(
         ["git", "clone", "--depth", "1", full_repo_url, tmp_dir],
         check=True,

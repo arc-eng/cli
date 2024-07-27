@@ -117,11 +117,8 @@ class TaskRunner:
             )
             if print_task_id:
                 console.print(Padding(message, (0, 0)))
-            self.status_indicator.start()
-        else:
-            self.status_indicator.start()
-            self.status_indicator.update(f"Task created: {task.id}")
-            self.status_indicator.success(start_again=True)
+        self.status_indicator.update_spinner_message("One sec ...")
+        self.status_indicator.start()
 
         if params.debug:
             console.print(task)
@@ -131,6 +128,7 @@ class TaskRunner:
             task_handler.wait_for_result(
                 params.output, params.verbose, code=params.code, print_result=print_result
             )
+
         self.status_indicator.stop()
         if params.debug:
             console.print(task)

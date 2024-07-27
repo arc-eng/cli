@@ -84,7 +84,9 @@ class ChatHistory(BaseModel):
 def chat(ctx, branch, history):
     """💬 Chat with PR Pilot."""
     console = Console()
-    status_indicator = StatusIndicator(messages=False, spinner=True, console=console)
+    status_indicator = StatusIndicator(
+        display_log_messages=True, spinner=True, console=console, display_spinner_text=False
+    )
     task_runner = TaskRunner(status_indicator)
     chat_history = ChatHistory(file=history, messages=[])
 
@@ -111,12 +113,28 @@ def chat(ctx, branch, history):
         welcome_message += f" in branch [code]{branch}[/code]"
     print("[dim]" + welcome_message + "[/dim]\n")
 
+    run_chat(branch, chat_history, console, ctx, task_runner)
+
+    # If we have a file, automatically save the chat history
+    if chat_history.file:
+        chat_history.dump()
+        print(f"Chat history saved to [code][yellow]{chat_history.file}[/yellow][/code]")
+    # Otherwise, ask the user if they want to save the chat history
+    elif Confirm.ask("Do you want to save the chat history as a JSON file?", default=False):
+        file_path = console.input("Enter the file path to save the chat history: ")
+        chat_history.file = file_path
+        chat_history.dump()
+        print(f"Chat history saved to [code]{file_path}[/code]")
+
+
+def run_chat(branch, chat_history, console, ctx, task_runner):
     while True:
         user_input = console.input("[bold blue]You:[/bold blue] ")
         if user_input.strip() == "":
             break
         chat_history.append(ChatMessage(role="user", content=user_input))
         params = TaskParameters(
+            verbose=True,
             prompt=chat_history.to_prompt(),
             wait=True,
             sync=False,
@@ -129,14 +147,3 @@ def chat(ctx, branch, history):
             response = ChatMessage(role="assistant", content=task.result)
             chat_history.append(response)
             response.print()
-
-    # If we have a file, automatically save the chat history
-    if chat_history.file:
-        chat_history.dump()
-        print(f"Chat history saved to [code][yellow]{chat_history.file}[/yellow][/code]")
-    # Otherwise, ask the user if they want to save the chat history
-    elif Confirm.ask("Do you want to save the chat history as a JSON file?", default=False):
-        file_path = console.input("Enter the file path to save the chat history: ")
-        chat_history.file = file_path
-        chat_history.dump()
-        print(f"Chat history saved to [code]{file_path}[/code]")

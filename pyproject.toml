@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pr-pilot-cli"
-version = "1.13.1"
+version = "1.14.0"
 description = "CLI for PR Pilot, a text-to-task automation platform."
 authors = ["Marco Lamina <marco@pr-pilot.ai>"]
 license = "GPL-3.0"
@@ -23,6 +23,7 @@ rich = "13.7.1"
 jinja2 = "3.1.4"
 humanize = "^4.9.0"
 inquirer = "^3.2.5"
+websockets = "^12.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^8.2.0"

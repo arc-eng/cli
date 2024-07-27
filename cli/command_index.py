@@ -40,7 +40,9 @@ class PilotCommand(BaseModel):
             if current_branch not in ["master", "main"]:
                 self.params.branch = current_branch
         status_indicator = StatusIndicator(
-            spinner=self.params.spinner, messages=not self.params.verbose, console=console
+            spinner=self.params.spinner,
+            display_log_messages=not self.params.verbose,
+            console=console,
         )
         runner = TaskRunner(status_indicator)
         finished_task = runner.run_task(self.params)
