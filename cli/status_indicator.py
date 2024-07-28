@@ -23,10 +23,12 @@ class StatusIndicator:
 
     def log_message(self, text):
         if self.display_log_messages:
-            self.spinner.hide()
+            if self.visible:
+                self.spinner.hide()
             markdown_txt = Markdown(text)
             self.console.print("[green]✔[/green]", markdown_txt, sep=" ", end=" ")
-            self.spinner.show()
+            if self.visible:
+                self.spinner.show()
 
     def success(self, start_again=False):
         if self.visible and self.display_log_messages:
