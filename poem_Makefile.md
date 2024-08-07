@@ -1,50 +1,44 @@
-### Poem 1: Ode to the Makefile
+# Poem about Makefile
 
-In the heart of the project, a file so grand,
-The Makefile stands, with commands at hand.
-It builds and it cleans, with a single call,
-A maestro of tasks, it handles them all.
+**Ode to the Makefile**
 
-From readme to homebrew, it knows the way,
-To automate tasks, day by day.
-With every target, and every rule,
-The Makefile's wisdom, is a coder's tool.
+In the realm of code, a script so fine,
+The Makefile stands, a true design.
+With targets set and commands so clear,
+It builds our world, year after year.
 
-So here's to the Makefile, our guiding light,
-In the world of code, it shines so bright.
-A testament to automation, a coder's best friend,
-In every project, on it we depend.
+From README updates to hooks that bind,
+The Makefile's tasks are well-defined.
+A symphony of scripts, in harmony,
+It orchestrates our code's destiny.
 
-### Poem 2: The Makefile's Tale
+So here's to the Makefile, robust and true,
+A tool for all that we pursue.
+In every project, it plays its part,
+The Makefile, the coder's heart.
 
-Once upon a project, in a land of code,
-Lived a Makefile, with tales to be told.
-It spoke of targets, and tasks to be done,
-A roadmap for coders, from sun to sun.
+**Sonnet for the Makefile**
 
-With commands to run, and files to create,
-It orchestrated builds, never late.
-From readme updates, to homebrew's brew,
-The Makefile's tale, always true.
+Within the lines of Makefile's script,
+Lies order, structure, and command.
+With every target, dependencies gripped,
+It guides the build with steady hand.
 
-In the Makefile's embrace, automation did flow,
-Helping every coder, to learn and grow.
-A story of efficiency, in lines penned,
-The Makefile's tale, a coder's friend.
+From poetry installs to commits so neat,
+The Makefile ensures tasks are complete.
+In structured form, it stands so grand,
+A testament to the coder's plan.
 
-### Poem 3: The Makefile's Song
+Oh Makefile, with your rules so clear,
+You lead us through the build with cheer.
+In every line, a task defined,
+Ensuring that our code's aligned.
 
-In the symphony of code, the Makefile sings,
-Of targets and commands, and many things.
-A chorus of rules, in harmony they stand,
-Guiding the coder, with a gentle hand.
+So let us honor you, dear Makefile,
+For making every build so worthwhile.
 
-From build to clean, it lays out the score,
-A melody of automation, forevermore.
-With every command, and every rule,
-The Makefile's song, we all fuel.
+**Haiku for the Makefile**
 
-So let us sing, in joyous refrain,
-The Makefile's song, again and again.
-For in its verses, we find our way,
-In the world of code, it leads the day.
+Targets set with care,
+Commands in a script so fair,
+Makefile, always there.
