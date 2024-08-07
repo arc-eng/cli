@@ -1,0 +1,8 @@
+- title: Daily digest of
+  args:
+    file_path: Path to the file to translate
+    new_language: Target language
+  instructions: |
+    1. Read the file
+    2. Translate the content into the new language
+    3. Write the file to <original_name>.<new_lang>.<original_ending>

@@ -5,6 +5,7 @@ import click.exceptions
 import websockets
 from pr_pilot import Task
 from rich.console import Console
+from websockets.frames import CloseCode
 
 from cli.status_indicator import StatusIndicator
 from cli.user_config import UserConfig
@@ -38,45 +39,66 @@ class TaskHandler:
         :param code: If True, the result will be treated as code
         :param print_result: If True, the result will be printed on the command line.
         """
+        max_retries = 3
+        retry_count = 0
         self.status.start()
         api_key = UserConfig().api_key
         websocket_host = get_api_host().replace("https://", "wss://").replace("http://", "ws://")
         websocket_url = f"{websocket_host}/ws/tasks/{task_id}/events/"
         headers = {"X-Api-Key": api_key}
-        try:
-            async with websockets.connect(websocket_url, extra_headers=headers) as websocket:
-                async for message in websocket:
-                    json_message = json.loads(message)
-                    msg_type = json_message.get("type")
-                    if msg_type == MSG_TITLE_UPDATE:
-                        title = json_message.get("data")
-                        self.task.title = title
-                        self.status.update_spinner_message(title)
-                    if msg_type == MSG_STATUS_UPDATE:
-                        new_status = json_message.get("data").get("status")
-                        message = json_message.get("data").get("message", "")
-                        self.task.result = message
-                        if new_status == STATUS_COMPLETED:
-                            self.status.success()
-                            self.status.stop()
-                            if output_file:
-                                await self.write_result_to_file(code, message, output_file)
-                            elif print_result:
-                                self.console.print(markdown_panel(None, message, hide_frame=True))
-                            return message
-                        elif new_status == STATUS_FAILED:
-                            self.status.fail()
-                            self.status.stop()
-                            raise click.ClickException(f"Task failed: {self.task.result}")
-                    if msg_type == MSG_EVENT:
-                        event = json_message.get("data")
-                        action = event.get("action")
-                        if action not in IGNORED_EVENT_ACTIONS and log_messages:
-                            self.status.log_message(event.get("message"))
-        except websockets.exceptions.ConnectionClosedError:
-            self.status.update_spinner_message("Connection closed.")
-            self.status.fail()
-            self.status.stop()
+
+        while retry_count < max_retries:
+            try:
+                async with websockets.connect(websocket_url, extra_headers=headers) as websocket:
+                    async for message in websocket:
+                        json_message = json.loads(message)
+                        msg_type = json_message.get("type")
+                        if msg_type == MSG_TITLE_UPDATE:
+                            title = json_message.get("data")
+                            self.task.title = title
+                            self.status.update_spinner_message(title)
+                        if msg_type == MSG_STATUS_UPDATE:
+                            new_status = json_message.get("data").get("status")
+                            message = json_message.get("data").get("message", "")
+                            self.task.result = message
+                            if new_status == STATUS_COMPLETED:
+                                self.status.hide()
+                                if output_file:
+                                    await self.write_result_to_file(code, message, output_file)
+                                elif print_result:
+                                    self.console.print(
+                                        markdown_panel(None, message, hide_frame=True)
+                                    )
+                                self.status.show()
+                                title = self.task.title.strip()
+                                if title == "A title":
+                                    message = "Done"
+                                else:
+                                    message = f"Done: {title}"
+                                self.status.success(message=message)
+                                return message
+                            elif new_status == STATUS_FAILED:
+                                self.status.fail()
+                                raise click.ClickException(f"Task failed: {self.task.result}")
+                        if msg_type == MSG_EVENT:
+                            event = json_message.get("data")
+                            action = event.get("action")
+                            if action not in IGNORED_EVENT_ACTIONS and log_messages:
+                                self.status.log_message(event.get("message"))
+            except websockets.exceptions.ConnectionClosedError as e:
+                if e.code == CloseCode.ABNORMAL_CLOSURE:
+                    retry_count += 1
+                    self.status.warning("Connection was interrupted, reconnecting...")
+                else:
+                    self.status.warning(
+                        f"Unexpected Connection Error: {str(e.code)} - "
+                        f"{str(e)}. Retry {retry_count} of {max_retries}."
+                    )
+                    await asyncio.sleep(1)
+            except Exception as e:
+                self.status.fail(
+                    f"Unexpected error: {str(e)}. Retry {retry_count} of {max_retries}."
+                )
 
     async def write_result_to_file(self, code, message, output_file):
         """Write the result to a file.
