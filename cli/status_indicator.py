@@ -38,10 +38,10 @@ class StatusIndicator:
             if start_again:
                 self.spinner.start()
 
-    def fail(self):
+    def fail(self, error=""):
         if self.visible:
             self.log_message(self.spinner.text)
-            self.spinner.text = ""
+            self.spinner.text = error
             self.spinner.fail("❌ FAILURE")
             self.spinner.stop()
 

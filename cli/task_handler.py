@@ -73,9 +73,8 @@ class TaskHandler:
                         action = event.get("action")
                         if action not in IGNORED_EVENT_ACTIONS and log_messages:
                             self.status.log_message(event.get("message"))
-        except websockets.exceptions.ConnectionClosedError:
-            self.status.update_spinner_message("Connection closed.")
-            self.status.fail()
+        except websockets.exceptions.ConnectionClosedError as e:
+            self.status.fail(str(e))
             self.status.stop()
 
     async def write_result_to_file(self, code, message, output_file):
