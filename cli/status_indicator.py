@@ -21,20 +21,29 @@ class StatusIndicator:
         if self.visible and self.display_spinner_text:
             self.spinner.text = text
 
-    def log_message(self, text):
-        if self.display_log_messages:
-            if self.visible:
-                self.spinner.hide()
-            markdown_txt = Markdown(text)
-            self.console.print("[green]✔[/green]", markdown_txt, sep=" ", end=" ")
-            if self.visible:
-                self.spinner.show()
+    def hide(self):
+        if self.visible:
+            self.spinner.hide()
 
-    def success(self, start_again=False):
+    def show(self):
+        if self.visible:
+            self.spinner.show()
+
+    def log_message(self, text, character="✔", color="green"):
+        if self.display_log_messages:
+            self.hide()
+            markdown_txt = Markdown(text)
+            self.console.print(f"[{color}]{character}[/{color}]", markdown_txt, sep=" ", end=" ")
+            self.show()
+
+    def warning(self, message):
+        return self.log_message(message, "!", "yellow")
+
+    def success(self, start_again=False, message="SUCCESS"):
         if self.visible and self.display_log_messages:
             self.log_message(self.spinner.text)
             self.spinner.text = ""
-            self.spinner.ok("✔ SUCCESS")
+            self.spinner.ok(f"✔ {message}")
             if start_again:
                 self.spinner.start()
 

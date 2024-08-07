@@ -27,7 +27,7 @@ def clean_code_block_with_language_specifier(response):
 
 def pull_branch_changes(status_indicator, console, branch, debug=False):
     status_indicator.start()
-    status_indicator.update_spinner_message(f"Pull latest changes from {branch}")
+    status_indicator.update_spinner_message(f"Pulling changes from branch: {branch}")
     error = ""
     try:
         # Fetch origin and checkout branch
@@ -38,11 +38,12 @@ def pull_branch_changes(status_indicator, console, branch, debug=False):
         result = subprocess.run(["git", "pull", "origin", branch], **subprocess_params)
         output = result.stdout
         error = result.stderr
-        status_indicator.success()
         if debug:
             console.line()
             console.print(output)
             console.line()
+        status_indicator.update_spinner_message("")
+        status_indicator.log_message(f"Pull latest changes from `{branch}`")
     except Exception as e:
         status_indicator.fail()
         console.print("[bold red]An error occurred:" f"[/bold red] {type(e)} {str(e)}\n\n{error}")
