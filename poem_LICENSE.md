@@ -1,50 +1,44 @@
-### Poem 1: The License's Guard
+# Poem about LICENSE
 
-In the realm of code, a guardian stands,
-The LICENSE file, with guiding hands.
-It speaks of freedom, rights to bestow,
-On every coder, wherever they go.
+**Ode to the LICENSE**
 
-With terms and conditions, it lays the law,
-Ensuring fairness, without a flaw.
-A protector of rights, both yours and mine,
-In the world of software, it draws the line.
+In legal terms, so dense and grand,
+The LICENSE stands, a guiding hand.
+With freedoms vast and rights so clear,
+It guards the code we hold so dear.
 
-So here's to the LICENSE, our legal shield,
-In the battle for freedom, it does not yield.
-A testament to justice, in every clause,
-For the love of code, it fights the cause.
+Permissions granted, none denied,
+In GPL, our trust resides.
+To share, to change, to freely use,
+The LICENSE ensures we never lose.
 
-### Poem 2: The License's Oath
+So here's to the LICENSE, firm and just,
+In open source, it builds our trust.
+A shield, a sword, a guiding light,
+The LICENSE keeps our code in sight.
 
-Upon the code, an oath is sworn,
-In the LICENSE file, it is born.
-To share and modify, with freedom's grace,
-A promise to keep, in every case.
+**Sonnet for the LICENSE**
 
-It speaks of rights, and duties too,
-A balance of power, for me and you.
-With every clause, it sets the stage,
-For a world of software, free from cage.
+Within the text of GPL's embrace,
+Lies freedom's promise, clear and true.
+A covenant that time cannot erase,
+Ensuring all can share and view.
 
-In the LICENSE's words, we find our way,
-A path of fairness, day by day.
-An oath of freedom, in code we trust,
-In the LICENSE file, it is just.
+With every clause, a right preserved,
+To modify, to share, to learn.
+The LICENSE stands, our code's reserve,
+In every line, its principles burn.
 
-### Poem 3: The License's Song
+Oh LICENSE, with your terms so fair,
+You guard the work that we create.
+In open source, your truths we share,
+A testament to a collaborative fate.
 
-In the symphony of code, the LICENSE sings,
-Of rights and freedoms, and many things.
-A chorus of clauses, in harmony they stand,
-Guiding the coder, with a gentle hand.
+So let us honor you, dear LICENSE file,
+For keeping open source so versatile.
 
-From terms to conditions, it lays out the score,
-A melody of justice, forevermore.
-With every right, and every clause,
-The LICENSE's song, we all applause.
+**Haiku for the LICENSE**
 
-So let us sing, in joyous refrain,
-The LICENSE's song, again and again.
-For in its verses, we find our way,
-In the world of code, it leads the day.
+Freedoms in each line,
+GPL, our code's design,
+LICENSE, so divine.
