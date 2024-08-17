@@ -83,8 +83,11 @@ class TaskHandler:
                         if msg_type == MSG_EVENT:
                             event = json_message.get("data")
                             action = event.get("action")
+                            target = event.get("target")
                             if action not in IGNORED_EVENT_ACTIONS and log_messages:
                                 self.status.log_message(event.get("message"))
+                            if str(action).replace("_", "-") == "push-branch":
+                                self.task.branch = target.strip()
             except websockets.exceptions.ConnectionClosedError as e:
                 if e.code == CloseCode.ABNORMAL_CLOSURE:
                     retry_count += 1

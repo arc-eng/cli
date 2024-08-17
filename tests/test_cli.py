@@ -75,7 +75,7 @@ def test_save_command_param_does_not_run_task(
 
 
 @patch("cli.commands.task.get_branch_if_pushed")
-@patch("cli.commands.task.pull_branch_changes")
+@patch("cli.task_runner.pull_branch_changes")
 def test_sync_option_syncs_correctly(
     mock_pull_branch_changes,
     mock_get_branch_if_pushed,
@@ -92,7 +92,7 @@ def test_sync_option_syncs_correctly(
 
 
 @patch("cli.commands.task.get_branch_if_pushed")
-@patch("cli.commands.task.pull_branch_changes")
+@patch("cli.task_runner.pull_branch_changes")
 def test_sync_option_syncs_only_pushed_branches(
     mock_pull_branch_changes,
     mock_get_branch_if_pushed,

@@ -8,7 +8,7 @@ from cli.constants import CHEAP_MODEL
 from cli.models import TaskParameters
 from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
-from cli.util import pull_branch_changes, get_branch_if_pushed
+from cli.util import get_branch_if_pushed
 
 
 @click.command()
@@ -111,12 +111,7 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
             return
 
         runner = TaskRunner(status_indicator)
-        finished_task = runner.run_task(task_params)
-
-        if ctx.obj["sync"]:
-            branch = finished_task.branch if finished_task else ctx.obj["branch"]
-            if branch:
-                pull_branch_changes(status_indicator, console, branch, ctx.obj["debug"])
+        runner.run_task(task_params)
 
     finally:
         status_indicator.stop()
