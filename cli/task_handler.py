@@ -95,10 +95,6 @@ class TaskHandler:
                         f"{str(e)}. Retry {retry_count} of {max_retries}."
                     )
                     await asyncio.sleep(1)
-            except Exception as e:
-                self.status.fail(
-                    f"Unexpected error: {str(e)}. Retry {retry_count} of {max_retries}."
-                )
 
     async def write_result_to_file(self, code, message, output_file):
         """Write the result to a file.
