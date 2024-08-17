@@ -16,6 +16,7 @@ from cli.prompt_template import PromptTemplate
 from cli.status_indicator import StatusIndicator
 from cli.task_handler import TaskHandler
 from cli.user_config import UserConfig
+from cli.util import pull_branch_changes
 
 
 class TaskRunner:
@@ -128,6 +129,10 @@ class TaskRunner:
             task_handler.wait_for_result(
                 params.output, params.verbose, code=params.code, print_result=print_result
             )
+            if params.sync and task_handler.task.branch:
+                pull_branch_changes(
+                    self.status_indicator, console, task_handler.task.branch, params.debug
+                )
 
         self.status_indicator.stop()
         if params.debug:
