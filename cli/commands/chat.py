@@ -137,7 +137,7 @@ def run_chat(branch, chat_history, console, ctx, task_runner):
             verbose=True,
             prompt=chat_history.to_prompt(),
             wait=True,
-            sync=False,
+            sync=ctx.obj["sync"],
             branch=branch,
             repo=ctx.obj["repo"],
             model=ctx.obj["model"],
