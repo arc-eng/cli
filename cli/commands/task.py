@@ -56,7 +56,6 @@ from cli.util import get_branch_if_pushed
 )
 @click.argument("prompt", required=False, default=None, type=str)
 @click.pass_context
-
 def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
     """➕ Create a new task for PR Pilot.
 
@@ -70,10 +69,6 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
     try:
         if ctx.obj["sync"]:
             ctx.obj["branch"] = get_branch_if_pushed()
-
-        # Read from stdin if prompt is not provided and stdin is not a tty (i.e., data is piped)
-        if not prompt and not sys.stdin.isatty():
-            prompt = sys.stdin.read().strip()
 
         task_params = TaskParameters(
             wait=ctx.obj["wait"],
@@ -117,7 +112,12 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
             return
 
         runner = TaskRunner(status_indicator)
-        runner.run_task(task_params)
+
+        if not sys.stdin.isatty():
+            # Read from stdin if stdin is not a tty (i.e., data is piped)
+            runner.run_task(task_params, piped_data=sys.stdin.read().strip())
+        else:
+            runner.run_task(task_params)
 
     finally:
         status_indicator.stop()
