@@ -10,6 +10,7 @@ from cli.commands.plan import plan
 from cli.commands.run import RunCommand
 from cli.commands.task import task
 from cli.commands.upgrade import upgrade
+from cli.commands.pr import pr
 from cli.constants import DEFAULT_MODEL
 from cli.user_config import UserConfig
 
@@ -45,6 +46,7 @@ from cli.user_config import UserConfig
 )
 @click.option("--debug", is_flag=True, default=False, help="Display debug information.")
 @click.pass_context
+
 def main(ctx, wait, repo, spinner, verbose, model, branch, sync, debug):
     """PR Pilot CLI - https://docs.pr-pilot.ai
 
@@ -89,6 +91,7 @@ main.add_command(history)
 main.add_command(config)
 main.add_command(upgrade)
 main.add_command(chat)
+main.add_command(pr)
 
 run_command_help = """
 🚀 Run a saved command.
