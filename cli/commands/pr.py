@@ -1,26 +1,42 @@
+import webbrowser
+
 import click
-from pr_pilot import PRPilot
-import subprocess
+import pr_pilot
+from pr_pilot import RepoBranchInput
+from pr_pilot.util import _get_config_from_env
+from rich.console import Console
+
+from cli.detect_repository import detect_repository
+from cli.status_indicator import StatusIndicator
+from cli.util import get_current_branch
+
 
 @click.command()
-def pr():
-    """Retrieve the PR number for the current branch."""
-    try:
-        # Identify the current Github repo
-        repo_url = subprocess.check_output(['git', 'config', '--get', 'remote.origin.url']).strip().decode('utf-8')
-        repo = repo_url.split('.git')[0].split(':')[-1]
+@click.pass_context
+def pr(ctx):
+    """🌐 Find and open the pull request for the current branch."""
+    # Identify the current Github repo
+    if not ctx.obj["repo"]:
+        ctx.obj["repo"] = detect_repository()
+    repo = ctx.obj["repo"]
 
-        # Identify the current branch
-        branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).strip().decode('utf-8')
+    # Identify the current branch
+    branch = get_current_branch()
+    status_indicator = StatusIndicator(
+        spinner=ctx.obj["spinner"], display_log_messages=ctx.obj["verbose"], console=Console()
+    )
+    status_indicator.update_spinner_message(
+        f"Looking for PR number for {repo} on branch {branch}..."
+    )
+    status_indicator.start()
 
-        # Initialize PR Pilot SDK
-        pr_pilot = PRPilot()
-
-        # Retrieve the PR number
-        pr_number = pr_pilot.get_pr_number(repo, branch)
-
-        click.echo(f"PR Number for {repo} on branch {branch}: {pr_number}")
-    except subprocess.CalledProcessError as e:
-        click.echo(f"Error retrieving Git information: {e}")
-    except Exception as e:
-        click.echo(f"Error: {e}")
+    # Retrieve the PR number
+    with pr_pilot.ApiClient(_get_config_from_env()) as api_client:
+        api_instance = pr_pilot.PRRetrievalApi(api_client)
+        if not repo:
+            raise Exception("Repository not found.")
+        response = api_instance.resolve_pr_create(RepoBranchInput(github_repo=repo, branch=branch))
+        status_indicator.stop()
+        pr_link = f"https://github.com/{repo}/pull/{response.pr_number}"
+        status_indicator.log_message(f"Found PR: [bold][{pr_link}](#{response.pr_number})[/bold]")
+        webbrowser.open(pr_link)
