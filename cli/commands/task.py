@@ -2,6 +2,7 @@ import click
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.padding import Padding
+import sys
 
 from cli.command_index import CommandIndex, PilotCommand
 from cli.constants import CHEAP_MODEL
@@ -111,7 +112,12 @@ def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
             return
 
         runner = TaskRunner(status_indicator)
-        runner.run_task(task_params)
+
+        if not sys.stdin.isatty():
+            # Read from stdin if stdin is not a tty (i.e., data is piped)
+            runner.run_task(task_params, piped_data=sys.stdin.read().strip())
+        else:
+            runner.run_task(task_params)
 
     finally:
         status_indicator.stop()

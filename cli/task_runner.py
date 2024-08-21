@@ -30,7 +30,7 @@ class TaskRunner:
         return Path("/tmp/screenshot.png")
 
     def run_task(
-        self, params: TaskParameters, print_result=True, print_task_id=True
+        self, params: TaskParameters, print_result=True, print_task_id=True, piped_data=None
     ) -> Optional[Task]:
 
         console = Console()
@@ -80,6 +80,9 @@ class TaskRunner:
                     )
                     console.line()
                 return
+
+        if piped_data:
+            params.prompt = f"```\n{piped_data}\n```\n\n" + params.prompt
 
         branch_str = f" on branch [code]{params.branch}[/code]" if params.branch else ""
         pr_link = (
