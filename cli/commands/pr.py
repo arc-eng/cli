@@ -38,5 +38,5 @@ def pr(ctx):
         response = api_instance.resolve_pr_create(RepoBranchInput(github_repo=repo, branch=branch))
         status_indicator.stop()
         pr_link = f"https://github.com/{repo}/pull/{response.pr_number}"
-        status_indicator.log_message(f"Found PR: [bold][{pr_link}](#{response.pr_number})[/bold]")
+        status_indicator.log_message(f"Found PR {pr_link}")
         webbrowser.open(pr_link)
