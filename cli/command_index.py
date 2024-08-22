@@ -12,7 +12,7 @@ from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
 from cli.util import pull_branch_changes, is_git_repo, get_git_root
 
-DEFAULT_FILE_PATH = ".pilot-commands.yaml"
+COMMAND_FILE_PATH = ".pilot-commands.yaml"
 
 
 class PilotCommand(BaseModel):
@@ -128,19 +128,6 @@ def find_pilot_commands_file() -> Optional[str]:
             git_repo_file_path = os.path.join(git_root, ".pilot-commands.yaml")
             if os.path.isfile(git_repo_file_path):
                 return os.path.abspath(git_repo_file_path)
-            else:
-                # Create the file if it doesn't exist
-                with open(git_repo_file_path, "w") as file:
-                    file.write("commands: []")
-    else:
-        return None
-
-    # If not found in the Git repository, check the home directory
-    home_file_path = os.path.expanduser("~/.pilot-commands.yaml")
-    if os.path.isfile(home_file_path):
-        return os.path.abspath(home_file_path)
-
-    # If the file is not found in either location, return None
     return None
 
 
@@ -158,7 +145,7 @@ class CommandIndex:
         self.file_path = file_path
         if not self.file_path:
             self.file_path = find_pilot_commands_file()
-        self.commands = self._load_commands()
+        self.commands = self._load_commands() if self.file_path else []
 
     def _load_commands(self) -> List[PilotCommand]:
         """
