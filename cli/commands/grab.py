@@ -86,9 +86,7 @@ def grab_skills(ctx, repo):
         if not answers:
             return
 
-        skills_imported, files_imported = import_skills(
-            answers, remote_index, local_index, tmp_dir
-        )
+        skills_imported, files_imported = import_skills(answers, remote_index, local_index, tmp_dir)
         local_index.save_skills()
         display_imported_skills(console, skills_imported)
 
@@ -246,7 +244,7 @@ def display_imported_skills(console, skills_imported):
     """Display the imported skills."""
     console.line()
     if skills_imported:
-        console.print("You can now use the following skills:")
+        console.print("I now have the following skill(s) in this repository:")
         table = Table(box=None, show_header=False)
         table.add_column("Skill", style="bold")
         table.add_column("Description", style="magenta")
