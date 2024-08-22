@@ -3,6 +3,7 @@ import webbrowser
 import click
 import pr_pilot
 from pr_pilot import RepoBranchInput
+from pr_pilot.exceptions import NotFoundException
 from pr_pilot.util import _get_config_from_env
 from rich.console import Console
 
@@ -36,7 +37,16 @@ def pr(ctx, no_browser):
         api_instance = pr_pilot.PRRetrievalApi(api_client)
         if not repo:
             raise Exception("Repository not found.")
-        response = api_instance.resolve_pr_create(RepoBranchInput(github_repo=repo, branch=branch))
+        try:
+            response = api_instance.resolve_pr_create(
+                RepoBranchInput(github_repo=repo, branch=branch)
+            )
+        except NotFoundException:
+            status_indicator.stop()
+            status_indicator.log_message(
+                f"No PR found for branch `{branch}` on repository `{repo}`."
+            )
+            return
         status_indicator.stop()
         pr_link = f"https://github.com/{repo}/pull/{response.pr_number}"
         status_indicator.log_message(f"Branch `{branch}` has PR [#{response.pr_number}]({pr_link})")
