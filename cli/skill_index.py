@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 from cli.util import is_git_repo, get_git_root
 
-DEFAULT_FILE_PATH = ".pilot-skills.yaml"
+SKILL_FILE_PATH = ".pilot-skills.yaml"
 
 
 class AgentSkill(BaseModel):
@@ -33,22 +33,9 @@ def find_pilot_skills_file() -> Optional[str]:
     if is_git_repo():
         git_root = get_git_root()
         if git_root:
-            git_repo_file_path = os.path.join(git_root, ".pilot-skills.yaml")
+            git_repo_file_path = os.path.join(git_root, SKILL_FILE_PATH)
             if os.path.isfile(git_repo_file_path):
                 return os.path.abspath(git_repo_file_path)
-            else:
-                # Create the file if it doesn't exist
-                with open(git_repo_file_path, "w") as file:
-                    file.write("skills: []")
-    else:
-        return None
-
-    # If not found in the Git repository, check the home directory
-    home_file_path = os.path.expanduser("~/.pilot-skills.yaml")
-    if os.path.isfile(home_file_path):
-        return os.path.abspath(home_file_path)
-
-    # If the file is not found in either location, return None
     return None
 
 
@@ -66,18 +53,19 @@ class SkillIndex:
         self.file_path = file_path
         if not self.file_path:
             self.file_path = find_pilot_skills_file()
-        self.skills = self._load_skills()
 
-    def _load_skills(self) -> List[dict]:
+        self.skills = self._load_skills() if self.file_path else []
+
+    def _load_skills(self) -> List[AgentSkill]:
         """
         Load skills from the YAML file.
 
-        :return: A list of skill dictionaries.
+        :return: A list of AgentSkill objects.
         """
         try:
             with open(self.file_path, "r") as file:
                 data = yaml.safe_load(file)
-                return data.get("skills", [])
+                return [AgentSkill(**skill) for skill in data]
         except FileNotFoundError:
             return []
 
@@ -87,49 +75,49 @@ class SkillIndex:
         """
         with open(self.file_path, "w") as file:
             yaml.dump(
-                {"skills": self.skills},
+                [skill.dict() for skill in self.skills],
                 file,
             )
 
-    def add_skill(self, new_skill: dict) -> None:
+    def add_skill(self, new_skill: AgentSkill) -> None:
         """
         Add a new skill to the list and save it.
 
-        :param new_skill: The skill dictionary to add.
+        :param new_skill: The AgentSkill object to add.
 
         :raises ValueError: If a skill with the same name already exists.
         """
         for skill in self.skills:
-            if skill.get("name") == new_skill.get("name"):
-                raise ValueError(f"Skill with name '{new_skill.get('name')}' already exists")
+            if skill.title == new_skill.title:
+                raise ValueError(f"Skill with title '{new_skill.title}' already exists")
         self.skills.append(new_skill)
         self.save_skills()
 
-    def get_skills(self) -> List[dict]:
+    def get_skills(self) -> List[AgentSkill]:
         """
         Get the list of skills.
 
-        :return: A list of skill dictionaries.
+        :return: A list of AgentSkill objects.
         """
         return self.skills
 
-    def get_skill(self, skill_name: str) -> Optional[dict]:
+    def get_skill(self, skill_title: str) -> Optional[AgentSkill]:
         """
-        Get a skill by name.
+        Get a skill by title.
 
-        :param skill_name: The name of the skill.
-        :return: The skill dictionary, or None if not found.
+        :param skill_title: The title of the skill.
+        :return: The AgentSkill object, or None if not found.
         """
         for skill in self.skills:
-            if skill.get("name") == skill_name:
+            if skill.title == skill_title:
                 return skill
         return None
 
-    def remove_skill(self, skill_name: str) -> None:
+    def remove_skill(self, skill_title: str) -> None:
         """
-        Remove a skill by name.
+        Remove a skill by title.
 
-        :param skill_name: The name of the skill to remove.
+        :param skill_title: The title of the skill to remove.
         """
-        self.skills = [skill for skill in self.skills if skill.get("name") != skill_name]
+        self.skills = [skill for skill in self.skills if skill.title != skill_title]
         self.save_skills()

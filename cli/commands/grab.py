@@ -10,7 +10,8 @@ from rich.prompt import Confirm
 from rich.table import Table
 from rich.text import Text
 
-from cli.command_index import DEFAULT_FILE_PATH, CommandIndex
+from cli.command_index import COMMAND_FILE_PATH, CommandIndex
+from cli.skill_index import SkillIndex, SKILL_FILE_PATH
 from cli.status_indicator import StatusIndicator
 
 
@@ -37,10 +38,10 @@ def grab_commands(ctx, repo):
     full_repo_url = f"git@github.com:{repo}.git"
     with tempfile.TemporaryDirectory() as tmp_dir:
         clone_repository(status_indicator, full_repo_url, tmp_dir)
-        full_path = os.path.join(tmp_dir, DEFAULT_FILE_PATH)
+        full_path = os.path.join(tmp_dir, COMMAND_FILE_PATH)
         if not os.path.exists(full_path):
             click.ClickException(
-                f"Repository {full_repo_url} does not contain a {DEFAULT_FILE_PATH} file."
+                f"Repository {full_repo_url} does not contain a {COMMAND_FILE_PATH} file."
             )
         status_indicator.stop()
         remote_index = CommandIndex(full_path)
@@ -73,20 +74,20 @@ def grab_skills(ctx, repo):
     full_repo_url = f"git@github.com:{repo}.git"
     with tempfile.TemporaryDirectory() as tmp_dir:
         clone_repository(status_indicator, full_repo_url, tmp_dir)
-        full_path = os.path.join(tmp_dir, DEFAULT_FILE_PATH)
+        full_path = os.path.join(tmp_dir, SKILL_FILE_PATH)
         if not os.path.exists(full_path):
             click.ClickException(
-                f"Repository {full_repo_url} does not contain a {DEFAULT_FILE_PATH} file."
+                f"Repository {full_repo_url} does not contain a {SKILL_FILE_PATH} file."
             )
         status_indicator.stop()
-        remote_index = CommandIndex(full_path)
-        local_index = CommandIndex()
+        remote_index = SkillIndex(full_path)
+        local_index = SkillIndex()
         display_skills(console, repo, local_index, remote_index)
         answers = prompt_user_for_skills(local_index, remote_index)
         if not answers:
             return
 
-        skills_imported, files_imported = import_skills(answers, remote_index, local_index, tmp_dir)
+        skills_imported = import_skills(answers, remote_index, local_index, tmp_dir)
         local_index.save_skills()
         display_imported_skills(console, skills_imported)
 
@@ -126,17 +127,17 @@ def display_skills(console, repo, local_index, remote_index):
     table = Table(box=None, show_header=True)
     table.add_column(repo)
     table.add_column("")
-    local_skill_names = [skill.name for skill in local_index.get_skills()]
+    local_skill_titles = [skill.title for skill in local_index.get_skills()]
     for skill in remote_index.get_skills():
-        if skill.name in local_skill_names:
-            # give name grey color if already exists in local index
+        if skill.title in local_skill_titles:
+            # give title grey color if already exists in local index
             table.add_row(
-                Text(skill.name, style="bright_black"),
-                Text(skill.description, style="bright_black"),
+                Text(skill.title, style="bright_black"),
+                Text(skill.instructions, style="bright_black"),
             )
         else:
             table.add_row(
-                Text(skill.name, style="bold blue"), Text(skill.description, style="bold")
+                Text(skill.title, style="bold blue"), Text(skill.instructions, style="bold")
             )
     console.print(Padding(table, (1, 6)))
 
@@ -159,10 +160,14 @@ def prompt_user_for_commands(local_index, remote_index):
 
 def prompt_user_for_skills(local_index, remote_index):
     """Prompt the user to select skills to import."""
-    local_skill_names = [skill.name for skill in local_index.get_skills()]
+    local_skill_titles = [skill.title for skill in local_index.get_skills()]
     choices = [
-        skill.name for skill in remote_index.get_skills() if skill.name not in local_skill_names
+        skill.title for skill in remote_index.get_skills() if skill.title not in local_skill_titles
     ]
+    if not choices:
+        console = Console()
+        console.print("No new skills found in the repository.")
+        return []
     questions = [
         inquirer.Checkbox(
             "skills",
@@ -195,7 +200,6 @@ def import_commands(answers, remote_index, local_index, tmp_dir):
 
 def import_skills(answers, remote_index, local_index, tmp_dir):
     """Import the selected skills into the local index."""
-    files_imported = []
     skills_imported = []
     for skill_name in answers["skills"]:
         remote_skill = remote_index.get_skill(skill_name)
@@ -205,12 +209,8 @@ def import_skills(answers, remote_index, local_index, tmp_dir):
                 continue
         local_index.remove_skill(skill_name)
         local_index.add_skill(remote_skill)
-        if remote_skill.params.file:
-            full_path = os.path.join(tmp_dir, remote_skill.params.file)
-            copy_file_to_local_directory(full_path, remote_skill.params.file)
-            files_imported.append(remote_skill.params.file)
         skills_imported.append(remote_skill)
-    return skills_imported, files_imported
+    return skills_imported
 
 
 def copy_file_to_local_directory(source_path, destination_path):
@@ -249,10 +249,14 @@ def display_imported_skills(console, skills_imported):
         table.add_column("Skill", style="bold")
         table.add_column("Description", style="magenta")
         for skill in skills_imported:
+            args = ", ".join([f"{arg.name}={arg.default}" for arg in skill.args])
             table.add_row(
-                f"[code]pilot run [green]{skill.name}[/green][code]",
-                skill.description,
+                f"[green]{skill.title}[/green]",
+                args,
             )
         console.print(Padding(table, (1, 1)))
+        console.print(
+            "You can now refer to these skills in your prompts and I will use them to assist you."
+        )
     else:
         console.print("No skills imported.")
