@@ -70,12 +70,6 @@ class TaskHandler:
                                         markdown_panel(None, message, hide_frame=True)
                                     )
                                 self.status.show()
-                                title = self.task.title.strip()
-                                if title == "A title":
-                                    message = "Done"
-                                else:
-                                    message = f"Done: {title}"
-                                self.status.success(message=message)
                                 return message
                             elif new_status == STATUS_FAILED:
                                 self.status.fail()
