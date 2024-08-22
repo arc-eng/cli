@@ -1,20 +1,22 @@
-- title: Add new CLI command
-  args:
+- args:
+    expected_output: Expected output of the command
     name: Name of the command
     purpose: What the command does
-    expected_output: Expected output of the command
   instructions: |
     Add a new CLI command by doing the following:
     1. Read `cli/cli.py` and `cli/commands/task.py` to understand how the CLI commands are implemented
     2. Implement the new command in `cli/commands/<command-name>.py`
     3. Integrate the new command in `cli/cli.py`
-- title: Modify a CLI command
-  args:
-      name: Name of the command
-      expected_change: How the command implementation needs to change
+  result: A short summary of your actions
+  title: Add new CLI command
+- args:
+    expected_change: How the command implementation needs to change
+    name: Name of the command
   instructions: |
-      Modify an existing CLI command by doing the following:
-      1. List the `cli/commands` directory to find the file where the command is implemented
-      2. Read the file and understand how the command is implemented
-      3. Modify the command implementation to meet the new requirements
-      4. Write the changes back to the file
+    Modify an existing CLI command by doing the following:
+    1. List the `cli/commands` directory to find the file where the command is implemented
+    2. Read the file and understand how the command is implemented
+    3. Modify the command implementation to meet the new requirements
+    4. Write the changes back to the file
+  result: A short summary of your actions
+  title: Modify a CLI command

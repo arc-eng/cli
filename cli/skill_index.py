@@ -9,6 +9,16 @@ from cli.util import is_git_repo, get_git_root
 SKILL_FILE_PATH = ".pilot-skills.yaml"
 
 
+def str_presenter(dumper, data):
+    if "\n" in data:  # Check if the string contains newlines
+        return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
+    return dumper.represent_scalar("tag:yaml.org,2002:str", data)
+
+
+# Add the custom representer to handle multiline strings
+yaml.add_representer(str, str_presenter)
+
+
 class AgentSkill(BaseModel):
     """User-defined skill for the PR Pilot agent."""
 
@@ -18,6 +28,17 @@ class AgentSkill(BaseModel):
     result: Optional[str] = Field(
         "A short summary of your actions", title="Expected result of the skill"
     )
+
+    def dict(self, *args, **kwargs):
+        original_dict = super().dict(*args, **kwargs)
+        # Reorder the dictionary as desired
+        ordered_dict = {
+            "title": original_dict["title"],
+            "args": original_dict["args"],
+            "instructions": original_dict["instructions"],
+            "result": original_dict["result"],
+        }
+        return ordered_dict
 
 
 def find_pilot_skills_file() -> Optional[str]:
@@ -77,6 +98,8 @@ class SkillIndex:
             yaml.dump(
                 [skill.dict() for skill in self.skills],
                 file,
+                default_flow_style=False,
+                allow_unicode=True,
             )
 
     def add_skill(self, new_skill: AgentSkill) -> None:

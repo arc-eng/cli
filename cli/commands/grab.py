@@ -247,12 +247,9 @@ def display_imported_skills(console, skills_imported):
         console.print("I now have the following skill(s) in this repository:")
         table = Table(box=None, show_header=False)
         table.add_column("Skill", style="bold")
-        table.add_column("Description", style="magenta")
         for skill in skills_imported:
-            args = ", ".join([f"{arg.name}={arg.default}" for arg in skill.args])
             table.add_row(
                 f"[green]{skill.title}[/green]",
-                args,
             )
         console.print(Padding(table, (1, 1)))
         console.print(
