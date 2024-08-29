@@ -41,7 +41,7 @@ class PilotCommand(BaseModel):
                 self.params.branch = current_branch
         status_indicator = StatusIndicator(
             spinner=self.params.spinner,
-            display_log_messages=not self.params.verbose,
+            display_log_messages=self.params.verbose,
             console=console,
         )
         runner = TaskRunner(status_indicator)
