@@ -27,6 +27,20 @@ class TaskHandler:
         self.console = Console()
         self.status = status_indicator
         self.task_runs_on_pr = self.task.pr_number is not None
+        self.action_character_map = {
+            "invoke_skill": "└─┐",
+            "finish_skill": "┌─┘",
+            "push_branch": "●",
+            "checkout_branch": "○",
+            "write_file": "💾",
+            "list_directory": "📁",
+            "search_code": "🔍",
+            "search": "🌐",
+            "search_issues": "🔍",
+            "read_github_issue": "📖",
+            "read_pull_request": "📖",
+            # Add more mappings as needed
+        }
 
     async def stream_task_events(
         self, task_id, output_file=None, log_messages=True, code=False, print_result=True
@@ -79,8 +93,32 @@ class TaskHandler:
                             action = event.get("action")
                             target = event.get("target")
                             if action not in IGNORED_EVENT_ACTIONS and log_messages:
-                                self.status.log_message(event.get("message"))
+                                character = self.action_character_map.get(action, "✔")
+                                if action == "invoke_skill":
+                                    self.status.log_message(
+                                        event.get("message"),
+                                        character=character,
+                                        character_color="dim",
+                                    )
+                                    self.status.indent = 2
+                                elif action == "finish_skill":
+                                    self.status.indent = 0
+                                    self.status.log_message(
+                                        "Skill finished",
+                                        character=character,
+                                        character_color="dim",
+                                        dim_text=True,
+                                    )
+                                elif action == "push_branch" or action == "checkout_branch":
+                                    self.status.log_message(
+                                        event.get("message"), character=character, dim_text=True
+                                    )
+                                else:
+                                    self.status.log_message(
+                                        event.get("message"), character=character
+                                    )
                             if str(action).replace("_", "-") == "push-branch":
+                                # The agent created a new branch, let's save it to the task object
                                 self.task.branch = target.strip()
             except websockets.exceptions.ConnectionClosedError as e:
                 if e.code == CloseCode.ABNORMAL_CLOSURE:
