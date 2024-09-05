@@ -32,13 +32,14 @@ class TaskHandler:
             "finish_skill": "┌─┘",
             "push_branch": "●",
             "checkout_branch": "○",
-            "write_file": "💾",
-            "list_directory": "📁",
-            "search_code": "🔍",
-            "search": "🌐",
-            "search_issues": "🔍",
-            "read_github_issue": "📖",
-            "read_pull_request": "📖",
+            "write_file": "✎",
+            "list_directory": "▸",
+            "search_code": "∷",
+            "search": "⌕",
+            "search_issues": "⌕",
+            "read_github_issue": "≡",
+            "read_pull_request": "≡",
+            "read_files": "≡",
             # Add more mappings as needed
         }
 
