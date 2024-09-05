@@ -20,3 +20,9 @@
     4. Write the changes back to the file
   result: A short summary of your actions
   title: Modify a CLI command
+- title: Run a skills test
+  args:
+    param: The word 'test'
+  instructions: |
+      Read 'README.md' and write a Haiku about it
+  result: Only the Haiku

@@ -84,7 +84,7 @@ class TaskHandler:
                             action = event.get("action")
                             target = event.get("target")
                             if action not in IGNORED_EVENT_ACTIONS and log_messages:
-                                character = self.action_character_map.get(action, "")
+                                character = self.action_character_map.get(action, "✔")
                                 self.status.log_message(event.get("message"), character=character)
                                 if action == "invoke_skill":
                                     self.status.indent = 2
