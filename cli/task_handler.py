@@ -27,6 +27,11 @@ class TaskHandler:
         self.console = Console()
         self.status = status_indicator
         self.task_runs_on_pr = self.task.pr_number is not None
+        self.action_character_map = {
+            "invoke_skill": "⏳",
+            "finish_skill": "✅",
+            # Add more mappings as needed
+        }
 
     async def stream_task_events(
         self, task_id, output_file=None, log_messages=True, code=False, print_result=True
@@ -79,7 +84,12 @@ class TaskHandler:
                             action = event.get("action")
                             target = event.get("target")
                             if action not in IGNORED_EVENT_ACTIONS and log_messages:
-                                self.status.log_message(event.get("message"))
+                                character = self.action_character_map.get(action, "")
+                                self.status.log_message(event.get("message"), character=character)
+                                if action == "invoke_skill":
+                                    self.status.indent = 2
+                                elif action == "finish_skill":
+                                    self.status.indent = 0
                             if str(action).replace("_", "-") == "push-branch":
                                 self.task.branch = target.strip()
             except websockets.exceptions.ConnectionClosedError as e:
