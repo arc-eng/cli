@@ -96,15 +96,22 @@ class TaskHandler:
                                 character = self.action_character_map.get(action, "✔")
                                 if action == "invoke_skill":
                                     self.status.log_message(
-                                        event.get("message"), character=character
+                                        event.get("message"),
+                                        character=character,
+                                        character_color="dim",
                                     )
                                     self.status.indent = 2
                                 elif action == "finish_skill":
                                     self.status.indent = 0
-                                    self.status.log_message("Done", character=character)
+                                    self.status.log_message(
+                                        "Skill finished",
+                                        character=character,
+                                        character_color="dim",
+                                        dim_text=True,
+                                    )
                                 elif action == "push_branch" or action == "checkout_branch":
                                     self.status.log_message(
-                                        event.get("message"), character=character, dim=True
+                                        event.get("message"), character=character, dim_text=True
                                     )
                                 else:
                                     self.status.log_message(

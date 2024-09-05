@@ -44,7 +44,7 @@ def pull_branch_changes(status_indicator, console, branch, debug=False):
             console.line()
         status_indicator.update_spinner_message("")
         status_indicator.log_message(
-            f"Pull latest changes from `{branch}`", dim=True, character="↻"
+            f"Pull latest changes from `{branch}`", dim_text=True, character="↻"
         )
     except Exception as e:
         status_indicator.fail()

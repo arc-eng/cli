@@ -35,16 +35,19 @@ class StatusIndicator:
         if self.visible:
             self.spinner.show()
 
-    def log_message(self, text, character="✔", color="green", dim=False):
+    def log_message(self, text, character="✔", character_color="green", dim_text=False):
         if self.display_log_messages:
             self.hide()
             markdown_txt = Markdown(text)
-            if dim:
-                color = f"dim {color}"
+            if dim_text:
+                character_color = f"dim {character_color}"
                 markdown_txt = Markdown(text, style="dim")
             indent_space = " " * self.indent
             self.console.print(
-                f"{indent_space}[{color}]{character}[/{color}]", markdown_txt, sep=" ", end=" "
+                f"{indent_space}[{character_color}]{character}[/{character_color}]",
+                markdown_txt,
+                sep=" ",
+                end=" ",
             )
             self.show()
 
