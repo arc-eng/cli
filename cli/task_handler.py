@@ -28,8 +28,17 @@ class TaskHandler:
         self.status = status_indicator
         self.task_runs_on_pr = self.task.pr_number is not None
         self.action_character_map = {
-            "invoke_skill": "⏳",
-            "finish_skill": "✅",
+            "invoke_skill": "└─┐",
+            "finish_skill": "┌─┘",
+            "push_branch": "●",
+            "checkout_branch": "○",
+            "write_file": "💾",
+            "list_directory": "📁",
+            "search_code": "🔍",
+            "search": "🌐",
+            "search_issues": "🔍",
+            "read_github_issue": "📖",
+            "read_pull_request": "📖",
             # Add more mappings as needed
         }
 
@@ -85,12 +94,24 @@ class TaskHandler:
                             target = event.get("target")
                             if action not in IGNORED_EVENT_ACTIONS and log_messages:
                                 character = self.action_character_map.get(action, "✔")
-                                self.status.log_message(event.get("message"), character=character)
                                 if action == "invoke_skill":
+                                    self.status.log_message(
+                                        event.get("message"), character=character
+                                    )
                                     self.status.indent = 2
                                 elif action == "finish_skill":
                                     self.status.indent = 0
+                                    self.status.log_message("Done", character=character)
+                                elif action == "push_branch" or action == "checkout_branch":
+                                    self.status.log_message(
+                                        event.get("message"), character=character, dim=True
+                                    )
+                                else:
+                                    self.status.log_message(
+                                        event.get("message"), character=character
+                                    )
                             if str(action).replace("_", "-") == "push-branch":
+                                # The agent created a new branch, let's save it to the task object
                                 self.task.branch = target.strip()
             except websockets.exceptions.ConnectionClosedError as e:
                 if e.code == CloseCode.ABNORMAL_CLOSURE:

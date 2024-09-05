@@ -24,5 +24,7 @@
   args:
     param: The word 'test'
   instructions: |
-      Read 'README.md' and write a Haiku about it
+    1. Find all open Github issues
+    2. Read one of them
+    3. Read `README.md` and write a Haiku about everything
   result: Only the Haiku
