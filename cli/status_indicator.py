@@ -9,13 +9,14 @@ MAX_MSG_LEN = 100
 class StatusIndicator:
 
     def __init__(
-        self, spinner=True, display_log_messages=True, console=None, display_spinner_text=True
+        self, spinner=True, display_log_messages=True, console=None, display_spinner_text=True, indent=0
     ):
         self.spinner = yaspin("Let's go", timer=True)
         self.visible = spinner
         self.display_spinner_text = display_spinner_text
         self.display_log_messages = display_log_messages
         self.console = console if console else Console()
+        self.indent = indent
 
     def update_spinner_message(self, text):
         if self.visible and self.display_spinner_text:
@@ -33,7 +34,8 @@ class StatusIndicator:
         if self.display_log_messages:
             self.hide()
             markdown_txt = Markdown(text)
-            self.console.print(f"[{color}]{character}[/{color}]", markdown_txt, sep=" ", end=" ")
+            indent_space = ' ' * self.indent
+            self.console.print(f"[{color}]{character}[/{color}]", indent_space, markdown_txt, sep=" ", end=" ")
             self.show()
 
     def warning(self, message):
