@@ -10,7 +10,7 @@ from rich.console import Console
 from cli.models import TaskParameters
 from cli.status_indicator import StatusIndicator
 from cli.task_runner import TaskRunner
-from cli.util import pull_branch_changes, is_git_repo, get_git_root
+from cli.util import is_git_repo, get_git_root
 
 COMMAND_FILE_PATH = ".pilot-commands.yaml"
 
@@ -45,9 +45,7 @@ class PilotCommand(BaseModel):
             console=console,
         )
         runner = TaskRunner(status_indicator)
-        finished_task = runner.run_task(self.params)
-        if self.params.sync and finished_task.branch:
-            pull_branch_changes(status_indicator, console, finished_task.branch, self.params.debug)
+        runner.run_task(self.params)
         status_indicator.stop()
 
     def to_click_command(self) -> Command:

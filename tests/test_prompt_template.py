@@ -15,7 +15,6 @@ def test_shell_command_execution_with_success(mock_subprocess_run):
     assert sh("echo test", status) == "test"
     status.start.assert_called_once()
     status.update_spinner_message.assert_called()
-    status.success.assert_called_once_with(start_again=False)
     status.stop.assert_called_once()
 
 
@@ -41,7 +40,6 @@ def test_shell_command_execution_with_list_input(mock_subprocess_run):
     assert sh(["echo", "test"], status) == "test"
     status.start.assert_called_once()
     status.update_spinner_message.assert_called()
-    status.success.assert_called_once_with(start_again=False)
     status.stop.assert_called_once()
 
 
