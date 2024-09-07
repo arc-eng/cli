@@ -47,6 +47,7 @@ def sh(shell_command, status):
         console = Console()
         console.print(Padding(result.stderr, (1, 1)))
     else:
+        status.success(start_again=False)  # Add this line
         status.stop()
         status.log_message(f"Run shell command `{' '.join(shell_command)}`")
     result = (result.stdout + result.stderr).strip()
