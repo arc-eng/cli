@@ -26,7 +26,7 @@ commands:
     snap: false
     spinner: true
     sync: true
-    verbose: false
+    verbose: true
     wait: true
 - description: Assemble a comprehensive daily report and send it to Slack
   name: daily-report

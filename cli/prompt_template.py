@@ -35,6 +35,7 @@ def sh(shell_command, status):
     status.start()
     if isinstance(shell_command, str):
         shell_command = shell_command.split()
+
     status.update_spinner_message(f"Running shell command: {' '.join(shell_command)}")
     subprocess_params = dict(
         stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=os.environ.copy()
@@ -46,8 +47,8 @@ def sh(shell_command, status):
         console = Console()
         console.print(Padding(result.stderr, (1, 1)))
     else:
-        status.success(start_again=False)
         status.stop()
+        status.log_message(f"Run shell command `{' '.join(shell_command)}`")
     result = (result.stdout + result.stderr).strip()
     return result
 
