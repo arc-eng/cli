@@ -1,3 +1,4 @@
+### README.md
 <div align="center">
 <img src="https://avatars.githubusercontent.com/ml/17635?s=140&v=" width="100" alt="PR Pilot Logo">
 </div>
@@ -10,7 +11,7 @@
 </p>
 
 
-# PR Pilot Command-Line Interface
+# 🚀 PR Pilot Command-Line Interface
 [![Unit Tests](https://github.com/PR-Pilot-AI/pr-pilot-cli/actions/workflows/unit_tests.yml/badge.svg)][tests]
 [![PyPI](https://img.shields.io/pypi/v/pr-pilot-cli.svg)][pypi status]
 [![Python Version](https://img.shields.io/pypi/pyversions/pr-pilot-cli)][pypi status]
@@ -98,12 +99,12 @@ First, make sure you have [installed](https://github.com/apps/pr-pilot-ai/instal
 
 Then, install the CLI using one of the following methods:
 
-### pip
+### 🐍 pip
 ```
 pip install --upgrade pr-pilot-cli
 ```
 
-### Homebrew:
+### 🍺 Homebrew:
 ```
 brew tap pr-pilot-ai/homebrew-tap
 brew install pr-pilot-cli
