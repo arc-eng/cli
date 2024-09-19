@@ -31,12 +31,6 @@ def mock_user_config(mock_default_config_location):
 
 
 @pytest.fixture(autouse=True)
-def mock_list_tasks():
-    with patch("cli.commands.history.list_tasks") as mock:
-        yield mock
-
-
-@pytest.fixture(autouse=True)
 def mock_console():
     with patch("cli.task_handler.Console") as mock:
         yield mock

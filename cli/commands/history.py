@@ -1,5 +1,6 @@
 import click
-from pr_pilot.util import list_tasks
+from arcane.engine import ArcaneEngine
+
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.padding import Padding
@@ -16,7 +17,8 @@ You have no tasks yet. Run a task with `pilot task` to create one.
 @click.pass_context
 def history(ctx):
     """📜 Access recent tasks."""
-    tasks = list_tasks()
+    engine = ArcaneEngine()
+    tasks = engine.list_tasks()
     ctx.obj["tasks"] = tasks
 
     if ctx.invoked_subcommand is None:

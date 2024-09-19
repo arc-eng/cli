@@ -3,7 +3,7 @@ import json
 
 import click.exceptions
 import websockets
-from pr_pilot import Task
+from arcane import Task
 from rich.console import Console
 from websockets.frames import CloseCode
 
