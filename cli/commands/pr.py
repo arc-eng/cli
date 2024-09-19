@@ -1,10 +1,11 @@
 import webbrowser
 
+import arcane
 import click
-import pr_pilot
-from pr_pilot import RepoBranchInput
-from pr_pilot.exceptions import NotFoundException
-from pr_pilot.util import _get_config_from_env
+from arcane import RepoBranchInput
+from arcane.exceptions import NotFoundException
+from arcane.util import _get_config_from_env
+
 from rich.console import Console
 
 from cli.detect_repository import detect_repository
@@ -33,8 +34,8 @@ def pr(ctx, no_browser):
     status_indicator.start()
 
     # Retrieve the PR number
-    with pr_pilot.ApiClient(_get_config_from_env()) as api_client:
-        api_instance = pr_pilot.PRRetrievalApi(api_client)
+    with arcane.ApiClient(_get_config_from_env()) as api_client:
+        api_instance = arcane.PRRetrievalApi(api_client)
         if not repo:
             raise Exception("Repository not found.")
         try:
