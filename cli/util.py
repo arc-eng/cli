@@ -4,7 +4,7 @@ import subprocess
 from datetime import datetime, timezone
 
 import humanize
-from pr_pilot import Task
+from arcane import Task
 from rich import box
 from rich.markdown import Markdown
 from rich.panel import Panel

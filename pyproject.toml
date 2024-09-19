@@ -1,14 +1,14 @@
 [tool.poetry]
 name = "pr-pilot-cli"
-version = "1.19.3"
+version = "1.20.0"
 description = "CLI for PR Pilot, a text-to-task automation platform."
-authors = ["Marco Lamina <marco@pr-pilot.ai>"]
+authors = ["Marco Lamina <marco@arcane.engineer>"]
 license = "GPL-3.0"
 readme = "README.md"
 packages = [{include = "cli"}]
 documentation = "https://docs.pr-pilot.ai"
 homepage = "https://www.pr-pilot.ai"
-repository = "https://github.com/pr-pilot-ai/pr-pilot-cli"
+repository = "https://github.com/arc-eng/cli"
 
 [tool.black]
 line-length = 100
@@ -16,7 +16,7 @@ line-length = 100
 [tool.poetry.dependencies]
 python = "~3.10.0"
 click = "8.1.7"
-pr-pilot = "1.7.0"
+arcane-engine = "1.8.0"
 pyyaml = "6.0.1"
 yaspin = "3.0.2"
 rich = "13.7.1"

@@ -12,9 +12,10 @@ def mock_default_config_location(tmp_path):
 
 
 @pytest.fixture(autouse=True)
-def mock_create_task():
-    with patch("cli.task_runner.create_task") as mock:
-        yield mock
+def mock_engine():
+    with patch("cli.task_runner.ArcaneEngine") as mock:
+        mock.return_value = MagicMock()
+        yield mock.return_value
 
 
 @pytest.fixture(autouse=True)
@@ -30,9 +31,10 @@ def mock_user_config(mock_default_config_location):
 
 
 @pytest.fixture(autouse=True)
-def mock_list_tasks():
-    with patch("cli.commands.history.list_tasks") as mock:
-        yield mock
+def mock_engine_in_history_command():
+    with patch("cli.commands.history.ArcaneEngine") as mock:
+        mock.return_value = MagicMock()
+        yield mock.return_value
 
 
 @pytest.fixture(autouse=True)

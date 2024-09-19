@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import humanize
 import pytest
-from pr_pilot import Task
+from arcane import Task
 from rich.markdown import Markdown
 
 from cli.util import (

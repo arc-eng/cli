@@ -6,7 +6,7 @@
   <component name="FrameworkDetectionExcludesConfiguration">
     <type id="django" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_22" project-jdk-name="Poetry (pr-pilot-cli)" project-jdk-type="Python SDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_22" project-jdk-name="Poetry (cli)" project-jdk-type="Python SDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

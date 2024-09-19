@@ -4,7 +4,7 @@ import subprocess
 import click
 import inquirer
 import jinja2
-from pr_pilot.util import create_task
+from arcane.engine import ArcaneEngine
 from rich.console import Console
 from rich.padding import Padding
 from rich.prompt import Prompt
@@ -136,7 +136,8 @@ class PromptTemplate:
 
             try:
                 status.update_spinner_message("Creating sub-task ...")
-                task = create_task(self.repo, prompt, log=False, gpt_model=self.model)
+                engine = ArcaneEngine()
+                task = engine.create_task(self.repo, prompt, log=False, gpt_model=self.model)
                 task_handler = TaskHandler(task, status)
                 return task_handler.wait_for_result(log_messages=False, print_result=False)
             except Exception as e:

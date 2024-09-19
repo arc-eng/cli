@@ -3,8 +3,8 @@ from pathlib import Path
 from typing import Optional
 
 import click
-from pr_pilot import Task, ApiException
-from pr_pilot.util import create_task
+from arcane import Task, ApiException
+from arcane.engine import ArcaneEngine
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.padding import Padding
@@ -94,7 +94,8 @@ class TaskRunner:
             else ""
         )
         try:
-            task = create_task(
+            engine = ArcaneEngine()
+            task = engine.create_task(
                 params.repo,
                 params.prompt,
                 log=False,
