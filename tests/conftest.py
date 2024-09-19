@@ -31,6 +31,13 @@ def mock_user_config(mock_default_config_location):
 
 
 @pytest.fixture(autouse=True)
+def mock_engine_in_history_command():
+    with patch("cli.commands.history.ArcaneEngine") as mock:
+        mock.return_value = MagicMock()
+        yield mock.return_value
+
+
+@pytest.fixture(autouse=True)
 def mock_console():
     with patch("cli.task_handler.Console") as mock:
         yield mock
