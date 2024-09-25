@@ -16,7 +16,7 @@ line-length = 100
 [tool.poetry.dependencies]
 python = "~3.10.0"
 click = "8.1.7"
-arcane-engine = "1.9.0"
+arcane-engine = "1.9.1"
 pyyaml = "6.0.1"
 yaspin = "3.0.2"
 rich = "13.7.1"
