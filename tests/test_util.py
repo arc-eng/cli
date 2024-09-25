@@ -62,6 +62,6 @@ def test_task_formatter(sample_task):
     assert formatter.format_status() == "[bold yellow]running[/bold yellow]"
     assert (
         formatter.format_title()
-        == "[link=https://app.pr-pilot.ai/dashboard/tasks/1/]Test Task[/link]"
+        == "[link=https://arcane.engineer/dashboard/tasks/1/]Test Task[/link]"
     )
     assert formatter.format_branch().markup == Markdown("`test-branch`").markup

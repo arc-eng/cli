@@ -149,7 +149,7 @@ class TaskFormatter:
             str: The formatted title.
         """
         task_title = self.task.title.replace("\n", " ")[0:80]
-        dashboard_url = f"https://app.pr-pilot.ai/dashboard/tasks/{str(self.task.id)}/"
+        dashboard_url = f"https://arcane.engineer/dashboard/tasks/{str(self.task.id)}/"
         return f"[link={dashboard_url}]{task_title}[/link]"
 
     def format_branch(self):
@@ -266,4 +266,4 @@ def get_api_host():
     Returns:
         str: The API host URL.
     """
-    return os.getenv("PR_PILOT_HOST", "https://app.pr-pilot.ai")
+    return os.getenv("PR_PILOT_HOST", "https://arcane.engineer")

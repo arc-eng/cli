@@ -24,13 +24,13 @@ files = [
 
 [[package]]
 name = "arcane-engine"
-version = "1.8.0"
+version = "1.9.0"
 description = "Python SDK for Arcane Engine, a text-to-task automation platform."
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "arcane_engine-1.8.0-py3-none-any.whl", hash = "sha256:e4f174f0379f6a9c829ebb246007b6fbc0eef12ad2c043547991384ba8b73e84"},
-    {file = "arcane_engine-1.8.0.tar.gz", hash = "sha256:b0054edda3489e3fbb8b26e6cc5abce1413d51fff832b723139084cf4dad50fb"},
+    {file = "arcane_engine-1.9.0-py3-none-any.whl", hash = "sha256:76353ad1c8b7d732fce99ed558195469cb81520fb16911b87c763ab032526fd4"},
+    {file = "arcane_engine-1.9.0.tar.gz", hash = "sha256:0ebcdbd2ae388462f7c9950d0b7c1b03453dddc8ea9b19d64b117b74bb569b3b"},
 ]
 
 [package.dependencies]
@@ -1006,4 +1006,4 @@ termcolor = "2.3.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "39a36baceca9f02de92c7662e961f7a829fc4f2f9c0c4a4f48efb7bca5abe293"
+content-hash = "c3bdb0a2ff467da4158a5823db00a4db2449dacc2682142d1f20ede5ba0d2b8f"

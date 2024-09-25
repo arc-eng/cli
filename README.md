@@ -254,7 +254,7 @@ You can iterate on the plan until you are satisfied with the result.
 The configuration file is located at `~/.pr-pilot.yaml`.
 
 ```yaml
-# Your API Key from https://app.pr-pilot.ai/dashboard/api-keys/
+# Your API Key from https://arcane.engineer/dashboard/api-keys/
 api_key: YOUR_API_KEY
 
 # Default Github repository if not running CLI in a repository directory

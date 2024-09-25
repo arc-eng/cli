@@ -117,7 +117,7 @@ class TaskRunner:
             # Status messages are only visible in verbose mode, so let's print the new task ID
             message = (
                 f"✔ [bold][green]Task created[/green]: "
-                f"[link=https://app.pr-pilot.ai/dashboard/tasks/{task.id}/]{task.id}[/link][/bold]"
+                f"[link=https://arcane.engineer/dashboard/tasks/{task.id}/]{task.id}[/link][/bold]"
                 f"{branch_str}{pr_link}"
             )
             if print_task_id:
