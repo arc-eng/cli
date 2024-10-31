@@ -30,7 +30,7 @@ class PlanExecutor:
     def run(self, wait, repo, verbose, model, debug):
         """Run all steps in a given plan
 
-        :param wait: Wait for PR Pilot to finish the plan
+        :param wait: Wait for Arcane Engine to finish the plan
         :param repo: Github repository in the format owner/repo
         :param verbose: Display more status messages
         :param model: GPT model to use

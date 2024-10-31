@@ -82,7 +82,7 @@ class ChatHistory(BaseModel):
 )
 @click.pass_context
 def chat(ctx, branch, history):
-    """💬 Chat with PR Pilot."""
+    """💬 Chat with Arcane Engine."""
     console = Console()
     status_indicator = StatusIndicator(
         display_log_messages=True, spinner=True, console=console, display_spinner_text=False

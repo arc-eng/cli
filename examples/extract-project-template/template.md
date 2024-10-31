@@ -1,5 +1,5 @@
 ### Project Structure and Dependencies
-Here's the information you requested about the `PR-Pilot-AI/pr-pilot-cli` project:
+Here's the information you requested about the `arc-eng/cli` project:
 
 1. **Primary Language and Framework:**
    - The project primarily uses Python. This is inferred from the presence of Python-specific files like `requirements.txt` and `setup.py`.
@@ -34,14 +34,14 @@ Here's the information you requested about the `PR-Pilot-AI/pr-pilot-cli` projec
 These details provide a comprehensive overview of the project's technical and legal setup.
 
 ### README File
-The `README.md` file for the PR Pilot CLI project is structured and organized as follows:
+The `README.md` file for the Arcane Engine CLI project is structured and organized as follows:
 
 ### Structure and Sections:
 1. **Header**: Includes a centered logo and navigation links (Install, Documentation, Blog, Website).
-2. **Introduction**: Briefly describes the purpose and functionality of PR Pilot CLI.
+2. **Introduction**: Briefly describes the purpose and functionality of Arcane Engine CLI.
 3. **Usage**: Explains how to use the CLI with examples for various tasks.
 4. **Options and Parameters**: Detailed list of command-line options and parameters.
-5. **Installation**: Steps to install PR Pilot CLI via pip and Homebrew.
+5. **Installation**: Steps to install Arcane Engine CLI via pip and Homebrew.
 6. **Configuration**: Information about the configuration file location.
 7. **Contributing**: Encourages contributions and links to the GitHub repository.
 8. **License**: Specifies the licensing information (GPL-3).
@@ -57,10 +57,10 @@ The `README.md` file for the PR Pilot CLI project is structured and organized as
 ### Use of Emojis:
 - The README does not use emojis within the text. It maintains a professional tone suitable for a technical document.
 
-This structure ensures that users can quickly find the information they need about installation, usage, and customization of the PR Pilot CLI.
+This structure ensures that users can quickly find the information they need about installation, usage, and customization of the Arcane Engine CLI.
 
 ### Build System & CI/CD
-### Build System Details of the PR Pilot CLI Project
+### Build System Details of the Arcane Engine CLI Project
 
 **Build System Used:**
 - The project uses `Makefile` as its build system.
@@ -91,4 +91,4 @@ This structure ensures that users can quickly find the information they need abo
 - The `.github` directory contains the CI/CD workflows.
 - The `Makefile` can also be part of the CI/CD process, as it defines how to build and test the project.
 
-These details should give you a comprehensive understanding of the build system used in the PR Pilot CLI project. If you need more specific details about any of the components, feel free to ask!
+These details should give you a comprehensive understanding of the build system used in the Arcane Engine CLI project. If you need more specific details about any of the components, feel free to ask!

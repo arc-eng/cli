@@ -1,8 +1,8 @@
 class PrPilotCli < Formula
   include Language::Python::Virtualenv
 
-  desc "CLI for PR Pilot, a text-to-task automation platform for Github."
-  homepage "https://www.pr-pilot.ai"
+  desc "CLI for Arcane Engine, a text-to-task automation platform for Github."
+  homepage "https://arcane.engineer"
   license "GPL-3.0"
 
 {{ PACKAGE_URL }}

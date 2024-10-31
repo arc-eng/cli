@@ -40,7 +40,7 @@ from cli.util import get_branch_if_pushed
     "--direct",
     is_flag=True,
     default=False,
-    help="🔄 Do not feed the rendered template as a prompt into PR Pilot, "
+    help="🔄 Do not feed the rendered template as a prompt into Arcane Engine, "
     "but render it directly as output.",
 )
 @click.option(
@@ -57,9 +57,9 @@ from cli.util import get_branch_if_pushed
 @click.argument("prompt", required=False, default=None, type=str)
 @click.pass_context
 def task(ctx, snap, cheap, code, file, direct, output, save_command, prompt):
-    """➕ Create a new task for PR Pilot.
+    """➕ Create a new task for Arcane Engine.
 
-    Examples: https://github.com/pr-pilot-ai/pr-pilot-cli
+    Examples: https://github.com/arc-eng/cli
     """
     console = Console()
     status_indicator = StatusIndicator(

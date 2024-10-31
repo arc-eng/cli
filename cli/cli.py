@@ -20,7 +20,7 @@ from cli.user_config import UserConfig
     "--wait/--no-wait",
     is_flag=True,
     default=True,
-    help="Wait for PR Pilot to finish the task.",
+    help="Wait for Arcane Engine to finish the task.",
 )
 @click.option("--repo", help="Github repository in the format owner/repo.", required=False)
 @click.option(
@@ -42,13 +42,13 @@ from cli.user_config import UserConfig
     "--sync/--no-sync",
     is_flag=True,
     default=None,
-    help="Run task on your current branch and pull PR Pilots changes when done.",
+    help="Run task on your current branch and pull Arcane Engines changes when done.",
 )
 @click.option("--debug", is_flag=True, default=False, help="Display debug information.")
 @click.pass_context
 
 def main(ctx, wait, repo, spinner, verbose, model, branch, sync, debug):
-    """PR Pilot CLI - https://docs.pr-pilot.ai
+    """Arcane Engine CLI - https://docs.arcane.engineer
 
     Delegate routine work to AI with confidence and predictability.
     """

@@ -20,7 +20,7 @@ yaml.add_representer(str, str_presenter)
 
 
 class AgentSkill(BaseModel):
-    """User-defined skill for the PR Pilot agent."""
+    """User-defined skill for the Arcane Engine agent."""
 
     title: str = Field(..., title="Short title of the skill")
     args: Optional[dict] = Field(None, title="Arguments required to perform the skill")

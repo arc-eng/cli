@@ -2,7 +2,7 @@
 
 ## What are Prompt Templates?
 
-Prompt templates in PR Pilot are a superset of [Jinja templates](https://jinja.palletsprojects.com/en/3.1.x/),
+Prompt templates in Arcane Engine are a superset of [Jinja templates](https://jinja.palletsprojects.com/en/3.1.x/),
 with three special functions available:
 
 - `sh`: Execute shell commands and capture the output.
@@ -34,14 +34,14 @@ If the tests are green, do nothing. Otherwise:
 ### Explanation:
 
 The goal is to dynamically generate a prompt that includes the output of running unit tests and provides instructions 
-for PR Pilot on how to analyze the results. Here's what each part does:
+for Arcane Engine on how to analyze the results. Here's what each part does:
 
 - `{{ sh('pytest') }}`: This line dynamically inserts the output of the `pytest` command, which runs unit tests.
 - `{% if env('PR_NUMBER') %}`: This conditional block checks if a PR number is set in the environment (e.g. when run as a Github Action). If it is, it includes a step to comment on the PR with the analysis of the test results.
 
 ## How to Use Prompt Templates
 
-To use a prompt template, you can pass it as a file to PR Pilot using the `-f` or `--file` option. For example:
+To use a prompt template, you can pass it as a file to Arcane Engine using the `-f` or `--file` option. For example:
 
 ```bash
 pilot -f analyze_test_results.md.jinja2
@@ -50,7 +50,7 @@ pilot -f analyze_test_results.md.jinja2
 This will trigger the following:
 1. Run the tests in the local environment
 2. Capture the output of the tests as part of the prompt
-3. Send the prompt to PR Pilot, where it will autonomously:
+3. Send the prompt to Arcane Engine, where it will autonomously:
     1. Read the test results and identify failing parts
     2. Read the relevant files to understand the problem
     3. Write a structured analysis of the test results
@@ -69,9 +69,9 @@ multiple subtasks for generating documentation for different parts of the codeba
 Here's a simplified example:
 
 ```markdown
-# Task Processing in PR Pilot
+# Task Processing in Arcane Engine
 
-The lifecycle of a task within PR Pilot involves several key components: `TaskEngine`, `TaskScheduler`, and `TaskWorker`.
+The lifecycle of a task within Arcane Engine involves several key components: `TaskEngine`, `TaskScheduler`, and `TaskWorker`.
 
 ## Domain Model
 
@@ -82,7 +82,7 @@ Read the following files:
 - engine/task_worker.py
 - engine/task.py
 
-Generate a Mermaid class diagram to illustrate the domain model of the task processing in PR Pilot. Add a clear and concise text description.
+Generate a Mermaid class diagram to illustrate the domain model of the task processing in Arcane Engine. Add a clear and concise text description.
 {% endset %}
 
 {{ subtask(domain_model_prompt) }}
@@ -106,9 +106,9 @@ In this example, the `subtask` function is used to generate a class diagram and 
 For better readability and maintainability, the prompts could even be stored in their own separate files and included in the main prompt template:
 
 ```markdown
-# Task Processing in PR Pilot
+# Task Processing in Arcane Engine
 
-The lifecycle of a task within PR Pilot involves several key components: `TaskEngine`, `TaskScheduler`, and `TaskWorker`.
+The lifecycle of a task within Arcane Engine involves several key components: `TaskEngine`, `TaskScheduler`, and `TaskWorker`.
 
 ## Domain Model
 
@@ -127,7 +127,7 @@ pilot --direct -f task_processing_docs.md.jinja2 -o docs/task_processing.md
 This will autonomously generate the documentation for the codebase based on the defined subtasks in the prompt template:
 - `-f` specifies the prompt template file
 - `-o` specifies the output file where the generated documentation will be saved
-- `--direct` tells PR Pilot to render the template directly as output (instead of using it as a prompt)
+- `--direct` tells Arcane Engine to render the template directly as output (instead of using it as a prompt)
 
 
 ## Select values from a list with `select`

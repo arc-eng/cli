@@ -1,44 +1,44 @@
 <div align="center">
-<img src="https://avatars.githubusercontent.com/ml/17635?s=140&v=" width="100" alt="PR Pilot Logo">
+<img src="https://avatars.githubusercontent.com/ml/17635?s=140&v=" width="100" alt="Arcane Engine Logo">
 </div>
 
 <p align="center">
   <a href="https://github.com/apps/pr-pilot-ai/installations/new"><b>Install</b></a> |
-  <a href="https://docs.pr-pilot.ai">Documentation</a> |
-  <a href="https://www.pr-pilot.ai/blog">Blog</a> |
-  <a href="https://www.pr-pilot.ai">Website</a>
+  <a href="https://docs.arcane.engineer">Documentation</a> |
+  <a href="https://arcane.engineer/blog">Blog</a> |
+  <a href="https://arcane.engineer">Website</a>
 </p>
 
 
-# PR Pilot Command-Line Interface
-[![Unit Tests](https://github.com/PR-Pilot-AI/pr-pilot-cli/actions/workflows/unit_tests.yml/badge.svg)][tests]
-[![PyPI](https://img.shields.io/pypi/v/pr-pilot-cli.svg)][pypi status]
-[![Python Version](https://img.shields.io/pypi/pyversions/pr-pilot-cli)][pypi status]
-[![License](https://img.shields.io/pypi/l/pr-pilot-cli)][license]
+# Arcane Engine Command-Line Interface
+[![Unit Tests](https://github.com/arc-eng/cli/actions/workflows/unit_tests.yml/badge.svg)][tests]
+[![PyPI](https://img.shields.io/pypi/v/arcane-cli.svg)][pypi status]
+[![Python Version](https://img.shields.io/pypi/pyversions/arcane-cli)][pypi status]
+[![License](https://img.shields.io/pypi/l/arcane-cli)][license]
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)][pre-commit]
 <br>
 
-[pypi status]: https://pypi.org/project/pr-pilot-cli/
-[tests]: https://github.com/PR-Pilot-AI/pr-pilot-cli/actions/workflows/unit_tests.yml
+[pypi status]: https://pypi.org/project/arcane-cli/
+[tests]: https://github.com/arc-eng/cli/actions/workflows/unit_tests.yml
 [codecov]: https://app.codecov.io/gh/magmax/python-inquirer
 [pre-commit]: https://github.com/pre-commit/pre-commit
 [black]: https://github.com/psf/black
-[license]: https://github.com/PR-Pilot-AI/pr-pilot-cli/blob/main/LICENSE
+[license]: https://github.com/arc-eng/cli/blob/main/LICENSE
 
-[PR Pilot](https://docs.pr-pilot.ai) is **simple and intuitive CLI** that assists you in your daily work:
+[Arcane Engine](https://docs.arcane.engineer) is **simple and intuitive CLI** that assists you in your daily work:
 
 ```bash
 pilot edit main.py "Add docstrings to all functions and classes"
 ```
 
-**It works with [the dev tools you trust and love](https://docs.pr-pilot.ai/integrations.html)** - exactly when and where you want it.
+**It works with [the dev tools you trust and love](https://docs.arcane.engineer/integrations.html)** - exactly when and where you want it.
 
 ```bash
 pilot task "Find all bug issues on Github and Linear opened yesterday, post them to #bugs-daily on Slack."
 ```
 
-[Prompt templates](https://github.com/PR-Pilot-AI/pr-pilot-cli/tree/main/prompts) let you can create powerful,
+[Prompt templates](https://github.com/arc-eng/cli/tree/main/prompts) let you can create powerful,
 **executable prompt-based commands**, defined as Jinja templates:
 
 ```markdown
@@ -57,7 +57,7 @@ Use the following guidelines:
 Edit PR #{{ env('PR_NUMBER') }} title and description to reflect the changes made in this PR.
 ```
 
-Send PR Pilot off to give any PR a title and description **according to your guidelines**:
+Send Arcane Engine off to give any PR a title and description **according to your guidelines**:
 
 ```bash
 ➜ PR_NUMBER=153 pilot task -f generate-pr-description.md.jinja2 --save-command
@@ -91,22 +91,22 @@ Enter value for PR_NUMBER: 83
 ╰─────────────────────────────────╯
 ```
 
-To learn more, please visit our **[User Guide](https://docs.pr-pilot.ai/user_guide.html)** and **[demo repository](https://github.com/PR-Pilot-AI/demo/tree/main)**.
+To learn more, please visit our **[User Guide](https://docs.arcane.engineer/user_guide.html)** and **[demo repository](https://github.com/PR-Pilot-AI/demo/tree/main)**.
 
 ## 📦 Installation
-First, make sure you have [installed](https://github.com/apps/pr-pilot-ai/installations/new) PR Pilot in your repository.
+First, make sure you have [installed](https://github.com/apps/pr-pilot-ai/installations/new) Arcane Engine in your repository.
 
 Then, install the CLI using one of the following methods:
 
 ### pip
 ```
-pip install --upgrade pr-pilot-cli
+pip install --upgrade arcane-cli
 ```
 
 ### Homebrew:
 ```
 brew tap pr-pilot-ai/homebrew-tap
-brew install pr-pilot-cli
+brew install arcane-cli
 ```
 
 
@@ -118,32 +118,32 @@ The CLI has global parameters and options that can be used to customize its beha
 ```bash
 Usage: pilot [OPTIONS] COMMAND [ARGS]...
 
-  PR Pilot CLI - https://docs.pr-pilot.ai
+  Arcane Engine CLI - https://docs.arcane.engineer
 
   Delegate routine work to AI with confidence and predictability.
 
 Options:
-  --wait / --no-wait        Wait for PR Pilot to finish the task.
+  --wait / --no-wait        Wait for Arcane Engine to finish the task.
   --repo TEXT               Github repository in the format owner/repo.
   --spinner / --no-spinner  Display a loading indicator.
   --verbose                 Display status messages
   -m, --model TEXT          GPT model to use.
   -b, --branch TEXT         Run the task on a specific branch.
-  --sync / --no-sync        Run task on your current branch and pull PR Pilots
+  --sync / --no-sync        Run task on your current branch and pull Arcane Engines
                             changes when done.
   --debug                   Display debug information.
   --help                    Show this message and exit.
 
 Commands:
-  chat     💬 Chat with PR Pilot.
-  config   🔧 Customize PR Pilots behavior.
-  edit     ✍️ Let PR Pilot edit a file for you.
+  chat     💬 Chat with Arcane Engine.
+  config   🔧 Customize Arcane Engines behavior.
+  edit     ✍️ Let Arcane Engine edit a file for you.
   grab     🤲 Grab commands, prompts and plans from other repositories.
   history  📜 Access recent tasks.
-  plan     📋 Let PR Pilot execute a plan for you.
+  plan     📋 Let Arcane Engine execute a plan for you.
   run      🚀 Run a saved command.
-  task     ➕ Create a new task for PR Pilot.
-  upgrade  ⬆️ Upgrade pr-pilot-cli to the latest version.
+  task     ➕ Create a new task for Arcane Engine.
+  upgrade  ⬆️ Upgrade arcane-cli to the latest version.
 ```
 
 ## 🛠️ Usage
@@ -152,7 +152,7 @@ In your repository, use the `pilot` command:
 
 ```bash
 pilot task "Tell me about this project!"
-# 📝 Ask PR Pilot to edit a local file for you:
+# 📝 Ask Arcane Engine to edit a local file for you:
 pilot edit cli/cli.py "Make sure all functions and classes have docstrings."
 # ⚡ Generate code quickly and save it as a file:
 pilot task -o test_utils.py --code "Write some unit tests for the utils.py file."
@@ -160,7 +160,7 @@ pilot task -o test_utils.py --code "Write some unit tests for the utils.py file.
 pilot task -o component.html --code --snap "Write a Bootstrap5 component that looks like this."
 # 📊 Get an organized view of your Github issues:
 pilot task "Find all open Github issues labeled as 'bug', categorize and prioritize them"
-# 📝 Ask PR Pilot to analyze your test results using prompt templates:
+# 📝 Ask Arcane Engine to analyze your test results using prompt templates:
 pilot task -f prompts/analyze-test-results.md.jinja2
 ```
 
@@ -238,7 +238,7 @@ You can run this plan with:
 pilot plan add_page.yaml
 ```
 
-PR Pilot will then autonomously:
+Arcane Engine will then autonomously:
 * Create a new branch and open a PR
 * Implement the HTML template and view controller
 * Integrate the new page into the navigation
@@ -271,4 +271,4 @@ verbose: false
 Contributors are welcome to improve the CLI by submitting pull requests or reporting issues. For more details, check the project's GitHub repository.
 
 ## 📜 License
-The PR Pilot CLI is open-source software licensed under the GPL-3 license.
+The Arcane Engine CLI is open-source software licensed under the GPL-3 license.
