@@ -10,9 +10,9 @@ from cli.util import pull_branch_changes, get_branch_if_pushed
 @click.argument("file_path", type=click.Path(exists=True))
 @click.pass_context
 def plan(ctx, file_path):
-    """📋 Let PR Pilot execute a plan for you.
+    """📋 Let Arcane Engine execute a plan for you.
 
-    Learn more: https://docs.pr-pilot.ai/user_guide.html
+    Learn more: https://docs.arcane.engineer/user_guide.html
     """
     console = Console()
     status_indicator = StatusIndicator(

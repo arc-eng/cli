@@ -16,7 +16,7 @@ from cli.util import pull_branch_changes
 @click.argument("prompt", required=False, default=None, type=str)
 @click.pass_context
 def edit(ctx, snap, file_path, prompt):
-    """✍️ Let PR Pilot edit a file for you.
+    """✍️ Let Arcane Engine edit a file for you.
 
     Examples:
 

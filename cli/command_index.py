@@ -94,7 +94,7 @@ class PilotCommand(BaseModel):
         cmd.params.append(
             click.Option(
                 ["--sync/--no-sync"],
-                help="🔄 Sync local repository state with PR Pilot changes.",
+                help="🔄 Sync local repository state with Arcane Engine changes.",
                 is_flag=True,
                 default=self.params.sync,
             )

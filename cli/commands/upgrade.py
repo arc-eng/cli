@@ -7,21 +7,21 @@ from rich.prompt import Confirm
 
 @click.command()
 def upgrade():
-    """⬆️ Upgrade pr-pilot-cli to the latest version."""
+    """⬆️ Upgrade arcane-engine-cli to the latest version."""
     if is_installed_via_homebrew():
         if Confirm.ask(
-            "Found homebrew installation. Upgrade the [code]pr-pilot-cli[/code] package?"
+            "Found homebrew installation. Upgrade the [code]arcane-engine-cli[/code] package?"
         ):
             subprocess.run(["brew", "update"], check=True)
-            subprocess.run(["brew", "upgrade", "pr-pilot-cli"], check=True)
+            subprocess.run(["brew", "upgrade", "arcane-engine-cli"], check=True)
     else:
-        if Confirm.ask("Upgrade the [code]pr-pilot-cli[/code] package with pip?"):
+        if Confirm.ask("Upgrade the [code]arcane-engine-cli[/code] package with pip?"):
             subprocess.run(
-                [sys.executable, "-m", "pip", "install", "--upgrade", "pr-pilot-cli"], check=True
+                [sys.executable, "-m", "pip", "install", "--upgrade", "arcane-engine-cli"], check=True
             )
 
 
 def is_installed_via_homebrew() -> bool:
-    """Check if pr-pilot-cli is installed via Homebrew."""
-    result = subprocess.run(["brew", "list", "pr-pilot-cli"], capture_output=True)
+    """Check if arcane-engine-cli is installed via Homebrew."""
+    result = subprocess.run(["brew", "list", "arcane-engine-cli"], capture_output=True)
     return result.returncode == 0

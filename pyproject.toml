@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "pr-pilot-cli"
+name = "arcane-engine-cli"
 version = "1.20.2"
-description = "CLI for PR Pilot, a text-to-task automation platform."
+description = "CLI for Arcane Engine, a text-to-task automation platform."
 authors = ["Marco Lamina <marco@arcane.engineer>"]
 license = "GPL-3.0"
 readme = "README.md"
 packages = [{include = "cli"}]
-documentation = "https://docs.pr-pilot.ai"
-homepage = "https://www.pr-pilot.ai"
+documentation = "https://docs.arcane.engineer"
+homepage = "https://arcane.engineer"
 repository = "https://github.com/arc-eng/cli"
 
 [tool.black]

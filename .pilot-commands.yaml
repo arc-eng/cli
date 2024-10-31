@@ -8,7 +8,7 @@ commands:
     direct: false
     model: gpt-3.5-turbo
     prompt: write a haiku about this project
-    repo: PR-Pilot-AI/pr-pilot-cli
+    repo: arc-eng/cli
     snap: false
     spinner: true
     sync: false

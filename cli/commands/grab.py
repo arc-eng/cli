@@ -28,7 +28,7 @@ def grab(ctx):
 def grab_commands(ctx, repo):
     """🤲 Grab commands from a Github repository (owner/repo).
 
-    Example: pilot grab commands pr-pilot-ai/pr-pilot-cli
+    Example: pilot grab commands arc-eng/cli
     """
     console = Console()
     status_indicator = StatusIndicator(
@@ -64,7 +64,7 @@ def grab_commands(ctx, repo):
 def grab_skills(ctx, repo):
     """🤲 Grab skills from a Github repository (owner/repo).
 
-    Example: pilot grab skills pr-pilot-ai/pr-pilot-cli
+    Example: pilot grab skills arc-eng/cli
     """
     console = Console()
     status_indicator = StatusIndicator(

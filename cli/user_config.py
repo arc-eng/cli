@@ -98,7 +98,7 @@ class UserConfig:
 
     def collect_user_preferences(self):
         console.print(
-            "Since it's the first time you're using PR Pilot, " "let's set some default values."
+            "Since it's the first time you're using Arcane Engine, " "let's set some default values."
         )
         auto_sync = Confirm.ask(
             "When a new PR/branch is created, do you want it checked out automatically?",
@@ -124,7 +124,7 @@ class UserConfig:
         return self.config.get("verbose", False)
 
     def authenticate(self) -> str:
-        """Authenticate the CLI with PR Pilot."""
+        """Authenticate the CLI with Arcane Engine."""
         key_name = f"CLI on {socket.gethostname()}"
         callback_url = f"http://localhost:{PORT}/callback"
         auth_url = f"{get_api_host()}/dashboard/cli-auth/?name={key_name}&callback={callback_url}"
