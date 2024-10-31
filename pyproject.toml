@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "arcane-engine-cli"
+name = "arcane-cli"
 version = "1.20.2"
 description = "CLI for Arcane Engine, a text-to-task automation platform."
 authors = ["Marco Lamina <marco@arcane.engineer>"]
