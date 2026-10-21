@@ -1,3 +1,5 @@
+> **Legacy project (2024).** Arcane Engine, also shipped as PR Pilot, was my first venture as an independent founder: a platform that gave AI agents the ability to read, write and change code. It's no longer maintained, and this repo is archived (read-only). JourneyLoop came next, and today I work as Arcane Engineering. More about the journey: https://blog.marcolamina.me/ — Marco
+
 <div align="center">
 <img src="https://avatars.githubusercontent.com/ml/17635?s=140&v=" width="100" alt="Arcane Engine Logo">
 </div>
